@@ -3,13 +3,12 @@ import {
   Mesh,
   MeshBuilder,
   PhysicsHelper,
-  PhysicsRadialImpulseFalloff,
   StandardMaterial,
   Vector3,
 } from '@babylonjs/core';
 import type { PhysicsRadialExplosionEventOptions } from '@babylonjs/core';
 
-export type RadialExplosionPayload = {
+export type VortexPayload = {
   radius: number;
   position: {
     x: number;
@@ -17,70 +16,66 @@ export type RadialExplosionPayload = {
     z: number;
   };
   strength: number;
+  height: number;
+  duration: number;
 };
 
-export default class RadialExplosionAction {
+export default class VortexAction {
   readonly #scene: Scene;
   readonly #physicsHelper: PhysicsHelper;
   #sphere: Mesh | null = null;
-  #event: ReturnType<
-    typeof PhysicsHelper.prototype.applyRadialExplosionImpulse
-  > | null = null;
+  #event: ReturnType<typeof PhysicsHelper.prototype.vortex> | null = null;
 
   #delayTimeoutId: number | null = null;
   #durationTimeoutId: number | null = null;
-  #loopIntervalId: number | null = null;
 
   constructor(options: {
     physicsHelper: PhysicsHelper;
     scene: Scene;
-    payload: RadialExplosionPayload;
+    payload: VortexPayload;
   }) {
     this.#scene = options.scene;
     this.#physicsHelper = options.physicsHelper;
 
-    const gravitationalFieldOrigin = new Vector3(
+    const actionOrigin = new Vector3(
       options.payload.position.x,
       options.payload.position.y,
       options.payload.position.z
     );
+    const eventOrigin = new Vector3(
+      options.payload.position.x,
+      options.payload.position.y - options.payload.height / 2,
+      options.payload.position.z
+    );
 
-    this.#loopIntervalId = setInterval(() => {
-      if (this.#sphere && this.#sphere.scaling.x < options.payload.radius) {
-        this.#sphere.scaling.x += 2;
-        this.#sphere.scaling.y += 2;
-        this.#sphere.scaling.z += 2;
-      }
-    }, 30);
+    this.#event = this.#physicsHelper.vortex(
+      eventOrigin,
+      options.payload.radius,
+      options.payload.strength,
+      options.payload.height
+    );
 
     this.#delayTimeoutId = setTimeout(() => {
       this.#startAction(
-        gravitationalFieldOrigin,
-        options.payload.radius - 2,
-        options.payload.strength
+        actionOrigin,
+        options.payload.radius,
+        options.payload.height
       );
-    }, 100);
+    }, 1000);
 
     this.#durationTimeoutId = setTimeout(() => {
       this.dispose();
-    }, 300);
+    }, options.payload.duration + 1000);
   }
 
   #startAction(
     gravitationalFieldOrigin: Vector3,
     radius: number,
-    strength: number
+    height: number
   ) {
-    this.#event = this.#physicsHelper.applyRadialExplosionImpulse(
-      gravitationalFieldOrigin,
-      {
-        radius: radius,
-        strength: strength,
-        falloff: PhysicsRadialImpulseFalloff.Linear,
-      } as PhysicsRadialExplosionEventOptions
-    );
+    this.#event?.enable();
 
-    this.#sphere = this.#createSphere();
+    this.#sphere = this.#createCylinder(radius, height);
     this.#addMaterialToMesh(this.#sphere);
     this.#sphere.position = gravitationalFieldOrigin;
   }
@@ -92,15 +87,11 @@ export default class RadialExplosionAction {
     sphere.material = sphereMaterial;
   }
 
-  #createSphere() {
-    return MeshBuilder.CreateSphere(
-      `action-radial-explosion-${Math.random()}`,
-      {
-        segments: 32,
-        diameter: 1,
-        sideOrientation: Mesh.FRONTSIDE,
-      }
-    );
+  #createCylinder(radius: number, height: number) {
+    return MeshBuilder.CreateCylinder(`action-Vortex-${Math.random()}`, {
+      height: height,
+      diameter: radius * 2,
+    });
   }
 
   public dispose() {
@@ -110,10 +101,8 @@ export default class RadialExplosionAction {
     if (this.#durationTimeoutId) {
       clearTimeout(this.#durationTimeoutId);
     }
-    if (this.#loopIntervalId) {
-      clearInterval(this.#loopIntervalId);
-    }
     this.#sphere?.dispose();
+    this.#event?.disable();
     this.#event?.dispose();
   }
 }

@@ -91,11 +91,14 @@ export default class GravitationAction {
   }
 
   #createSphere(radius: number) {
-    return MeshBuilder.CreateSphere(`gravitation-action-${Math.random()}`, {
-      segments: 32,
-      diameter: radius * 2 - 1,
-      sideOrientation: Mesh.FRONTSIDE,
-    });
+    return MeshBuilder.CreateSphere(
+      `action-gravitation-action-${Math.random()}`,
+      {
+        segments: 32,
+        diameter: radius * 2 - 1,
+        sideOrientation: Mesh.FRONTSIDE,
+      }
+    );
   }
 
   public dispose() {
@@ -110,5 +113,6 @@ export default class GravitationAction {
     }
     this.#sphere?.dispose();
     this.#event?.disable();
+    this.#event?.dispose();
   }
 }

@@ -37,6 +37,19 @@ import {
 import RadialExplosionAction, {
   type RadialExplosionPayload,
 } from '@/entities/Game/effects/RadialExplosionAction';
+import UpdraftAction, {
+  type UpdraftPayload,
+} from '@/entities/Game/effects/UpdraftAction';
+import {
+  startUpdraftLevel,
+  upUpdraftLevel,
+} from '@/entities/Game/effects/getUpdraftLevel';
+import type { VortexPayload } from '@/entities/Game/effects/VortexAction';
+import {
+  startVortexLevel,
+  upVortexLevel,
+} from '@/entities/Game/effects/getVortexLevel';
+import VortexAction from '@/entities/Game/effects/VortexAction';
 
 export type CAMERA_DIRECTION = 'CAMERA_LEFT' | 'CAMERA_RIGHT';
 export type DIRECTION = MOVEMENT_DIRECTION | CAMERA_DIRECTION;
@@ -55,9 +68,20 @@ export type MultiPlayerActionRadialExplosion = {
   name: 'RADIAL_EXPLOSION';
   payload: RadialExplosionPayload;
 };
+export type MultiPlayerActionUpdraft = {
+  name: 'UPDRAFT';
+  payload: UpdraftPayload;
+};
+export type MultiPlayerActionVortex = {
+  name: 'VORTEX';
+  payload: VortexPayload;
+};
+
 export type MultiPlayerActions =
   | MultiPlayerActionGravitation
-  | MultiPlayerActionRadialExplosion;
+  | MultiPlayerActionRadialExplosion
+  | MultiPlayerActionUpdraft
+  | MultiPlayerActionVortex;
 
 export default class Game {
   #canvas: HTMLCanvasElement;
@@ -74,6 +98,8 @@ export default class Game {
 
   #skillGravitation = startGravitationLevel;
   #skillRadialExplosion = startRadialExplosionLevel;
+  #skillUpdraft = startUpdraftLevel;
+  #skillVortex = startVortexLevel;
 
   public multiplayerSubject$ = new Subject<MultiPlayerActions>();
 
@@ -178,6 +204,8 @@ export default class Game {
     this.#player?.dispose();
     this.#skillGravitation = startGravitationLevel;
     this.#skillRadialExplosion = startRadialExplosionLevel;
+    this.#skillUpdraft = startUpdraftLevel;
+    this.#skillVortex = startVortexLevel;
 
     this.#player = new Player({
       scene: this.#scene,
@@ -284,6 +312,12 @@ export default class Game {
     if (data.name === 'GRAVITATION') {
       this.#callGravitationAction(data.payload);
     }
+    if (data.name === 'UPDRAFT') {
+      this.#callUpdraftAction(data.payload);
+    }
+    if (data.name === 'VORTEX') {
+      this.#callVortexAction(data.payload);
+    }
   }
 
   public setPlayerDirection(direction: DIRECTION, isPressed: boolean) {
@@ -315,8 +349,10 @@ export default class Game {
         this.#callPlayerRadialExplosionAction();
         break;
       case 'ACTION3':
+        this.#callPlayerUpdraftAction();
         break;
       case 'ACTION4':
+        this.#callPlayerVortexAction();
         break;
     }
   }
@@ -410,6 +446,110 @@ export default class Game {
       return;
     }
     new RadialExplosionAction({
+      physicsHelper: this.#physicsHelper,
+      scene: this.#scene,
+      payload,
+    });
+  }
+
+  #callPlayerUpdraftAction() {
+    // todo dispose
+    if (!this.#physicsHelper) {
+      return;
+    }
+    const updraftLevel = this.#skillUpdraft;
+    this.#skillUpdraft = upUpdraftLevel(updraftLevel);
+
+    const playerPosition = this.#player.playerMesh.getAbsolutePosition();
+    const { maxRandomPosition } = updraftLevel;
+    const x =
+      playerPosition.x +
+      Math.random() * maxRandomPosition -
+      maxRandomPosition / 2;
+    const y =
+      playerPosition.y +
+      Math.random() * maxRandomPosition -
+      maxRandomPosition / 2;
+    const z =
+      playerPosition.z +
+      Math.random() * maxRandomPosition -
+      maxRandomPosition / 2;
+    const payload: UpdraftPayload = {
+      radius: updraftLevel.radius,
+      strength: updraftLevel.strength,
+      position: {
+        x,
+        y,
+        z,
+      },
+      height: updraftLevel.height,
+      duration: updraftLevel.duration,
+    };
+    this.multiplayerSubject$.next({
+      name: 'UPDRAFT',
+      payload,
+    });
+    this.#callUpdraftAction(payload);
+  }
+
+  #callUpdraftAction(payload: UpdraftPayload) {
+    // todo dispose
+    if (!this.#physicsHelper) {
+      return;
+    }
+    new UpdraftAction({
+      physicsHelper: this.#physicsHelper,
+      scene: this.#scene,
+      payload,
+    });
+  }
+
+  #callPlayerVortexAction() {
+    // todo dispose
+    if (!this.#physicsHelper) {
+      return;
+    }
+    const vortexLevel = this.#skillVortex;
+    this.#skillVortex = upVortexLevel(vortexLevel);
+
+    const playerPosition = this.#player.playerMesh.getAbsolutePosition();
+    const { maxRandomPosition } = vortexLevel;
+    const x =
+      playerPosition.x +
+      Math.random() * maxRandomPosition -
+      maxRandomPosition / 2;
+    const y =
+      playerPosition.y +
+      Math.random() * maxRandomPosition -
+      maxRandomPosition / 2;
+    const z =
+      playerPosition.z +
+      Math.random() * maxRandomPosition -
+      maxRandomPosition / 2;
+    const payload: VortexPayload = {
+      radius: vortexLevel.radius,
+      strength: vortexLevel.strength,
+      position: {
+        x,
+        y,
+        z,
+      },
+      height: vortexLevel.height,
+      duration: vortexLevel.duration,
+    };
+    this.multiplayerSubject$.next({
+      name: 'VORTEX',
+      payload,
+    });
+    this.#callVortexAction(payload);
+  }
+
+  #callVortexAction(payload: VortexPayload) {
+    // todo dispose
+    if (!this.#physicsHelper) {
+      return;
+    }
+    new VortexAction({
       physicsHelper: this.#physicsHelper,
       scene: this.#scene,
       payload,
