@@ -9,7 +9,7 @@ import {
   StandardMaterial,
   Texture,
   Vector3,
-} from 'babylonjs';
+} from '@babylonjs/core';
 import flareTexture from '@/shared/assets/flare.png';
 
 export default class MultiPlayer {

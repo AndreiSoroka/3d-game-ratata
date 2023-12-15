@@ -7,7 +7,7 @@ import {
   SceneLoader,
   ShadowGenerator,
   Vector3,
-} from 'babylonjs';
+} from '@babylonjs/core';
 import { from, lastValueFrom, map, mergeAll, scan } from 'rxjs';
 
 async function loadMesh(pathToMesh: string, scene: Scene) {

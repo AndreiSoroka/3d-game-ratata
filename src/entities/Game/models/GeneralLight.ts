@@ -1,5 +1,5 @@
-import type { Scene } from 'babylonjs';
-import { HemisphericLight, Vector3 } from 'babylonjs';
+import type { Scene } from '@babylonjs/core';
+import { HemisphericLight, Vector3 } from '@babylonjs/core';
 
 export default class GeneralLight {
   #scene: Scene;

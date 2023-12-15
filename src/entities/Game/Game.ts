@@ -15,7 +15,7 @@ import {
   StandardMaterial,
   Texture,
   Vector3,
-} from 'babylonjs';
+} from '@babylonjs/core';
 import { type HavokPhysicsWithBindings } from '@babylonjs/havok';
 import Player, { type MOVEMENT_DIRECTION } from '@/entities/Game/models/Player';
 import MultiPlayer from '@/entities/Game/models/MultiPlayer';
@@ -24,7 +24,7 @@ import GravitationAction, {
 } from '@/entities/Game/effects/GravitationAction';
 import { interval, Subject, throttle } from 'rxjs';
 
-import 'babylonjs-loaders';
+import '@babylonjs/loaders';
 import loadEnvironment from '@/entities/Game/envirement/loadEnvironment';
 import {
   startGravitationLevel,

@@ -1,4 +1,4 @@
-import type { Scene } from 'babylonjs';
+import type { Scene } from '@babylonjs/core';
 import {
   Mesh,
   MeshBuilder,
@@ -6,8 +6,8 @@ import {
   PhysicsRadialImpulseFalloff,
   StandardMaterial,
   Vector3,
-} from 'babylonjs';
-import type { PhysicsRadialExplosionEventOptions } from 'babylonjs';
+} from '@babylonjs/core';
+import type { PhysicsRadialExplosionEventOptions } from '@babylonjs/core';
 
 export type GravitationPayload = {
   radius: number;

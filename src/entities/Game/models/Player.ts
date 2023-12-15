@@ -3,15 +3,15 @@ import {
   MeshBuilder,
   ParticleSystem,
   PhysicsAggregate,
+  PhysicsEventType,
   PhysicsShapeType,
   Scene,
   ShadowGenerator,
   StandardMaterial,
   Texture,
   Vector3,
-} from 'babylonjs';
+} from '@babylonjs/core';
 import sphereTexture from '@/shared/assets/sphere_bg.jpg';
-import type { PhysicsEventType } from 'babylonjs/Physics/v2/IPhysicsEnginePlugin';
 import flareTexture from '@/shared/assets/flare.png';
 
 export type MOVEMENT_DIRECTION = 'FORWARD' | 'BACKWARD' | 'LEFT' | 'RIGHT';

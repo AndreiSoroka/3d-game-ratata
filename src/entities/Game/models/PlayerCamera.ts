@@ -1,5 +1,5 @@
-import type { Mesh, Scene } from 'babylonjs';
-import { ArcRotateCamera, Vector3 } from 'babylonjs';
+import type { Mesh, Scene } from '@babylonjs/core';
+import { ArcRotateCamera, Vector3 } from '@babylonjs/core';
 
 export default class PlayerCamera {
   #scene: Scene;

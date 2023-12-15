@@ -1,7 +1,7 @@
 import environmentUrl from './coordinates.json?url';
 import getMesh from '@/entities/Game/envirement/getMesh';
-import type { Scene, ShadowGenerator } from 'babylonjs';
-import { Vector3 } from 'babylonjs';
+import type { Scene, ShadowGenerator } from '@babylonjs/core';
+import { Vector3 } from '@babylonjs/core';
 
 type Environment = {
   name: string;
