@@ -2,12 +2,14 @@ import type { Scene } from '@babylonjs/core';
 import {
   Mesh,
   MeshBuilder,
+  ParticleSystem,
   PhysicsHelper,
   PhysicsRadialImpulseFalloff,
-  StandardMaterial,
+  Texture,
   Vector3,
 } from '@babylonjs/core';
-import type { PhysicsRadialExplosionEventOptions } from '@babylonjs/core';
+import AbstractAction from '@/entities/Game/effects/AbstractAction';
+import flareTexture from '@/shared/assets/flare.png';
 
 export type RadialExplosionPayload = {
   radius: number;
@@ -19,101 +21,110 @@ export type RadialExplosionPayload = {
   strength: number;
 };
 
-export default class RadialExplosionAction {
-  readonly #scene: Scene;
-  readonly #physicsHelper: PhysicsHelper;
-  #sphere: Mesh | null = null;
-  #event: ReturnType<
-    typeof PhysicsHelper.prototype.applyRadialExplosionImpulse
-  > | null = null;
+type ApplyRadialExplosionImpulse = ReturnType<
+  typeof PhysicsHelper.prototype.applyRadialExplosionImpulse
+>;
 
-  #delayTimeoutId: number | null = null;
-  #durationTimeoutId: number | null = null;
-  #loopIntervalId: number | null = null;
+export default class RadialExplosionAction extends AbstractAction {
+  private readonly payload: RadialExplosionPayload;
+  private readonly sphere: Mesh;
+  private readonly actionPosition: Vector3;
+  private readonly physicsHelper: PhysicsHelper;
+  private readonly particleSystem: ParticleSystem;
+  private event: ApplyRadialExplosionImpulse | null = null;
 
   constructor(options: {
     physicsHelper: PhysicsHelper;
     scene: Scene;
     payload: RadialExplosionPayload;
   }) {
-    this.#scene = options.scene;
-    this.#physicsHelper = options.physicsHelper;
+    super({
+      scene: options.scene,
+      actionPrefix: 'action-radial-explosion',
+      delayStartAction: 500,
+      delayEndAction: 800,
+      delayDisposeAction: 4000,
+      intervalLoopAction: 30,
+    });
+    this.payload = options.payload;
+    this.physicsHelper = options.physicsHelper;
 
-    const gravitationalFieldOrigin = new Vector3(
+    this.actionPosition = new Vector3(
       options.payload.position.x,
-      options.payload.position.y,
+      options.payload.position.y - 0.3,
       options.payload.position.z
     );
 
-    this.#loopIntervalId = setInterval(() => {
-      if (this.#sphere && this.#sphere.scaling.x < options.payload.radius) {
-        this.#sphere.scaling.x += 2;
-        this.#sphere.scaling.y += 2;
-        this.#sphere.scaling.z += 2;
-      }
-    }, 30);
+    this.sphere = MeshBuilder.CreateSphere(this.getEventName('sphere'), {
+      segments: 32,
+      diameter: 1,
+      sideOrientation: Mesh.FRONTSIDE,
+    });
+    this.sphere.position = this.actionPosition;
+    this.addDefaultMaterialToMesh(this.sphere);
 
-    this.#delayTimeoutId = setTimeout(() => {
-      this.#startAction(
-        gravitationalFieldOrigin,
-        options.payload.radius - 2,
-        options.payload.strength
-      );
-    }, 100);
-
-    this.#durationTimeoutId = setTimeout(() => {
-      this.dispose();
-    }, 300);
-  }
-
-  #startAction(
-    gravitationalFieldOrigin: Vector3,
-    radius: number,
-    strength: number
-  ) {
-    this.#event = this.#physicsHelper.applyRadialExplosionImpulse(
-      gravitationalFieldOrigin,
-      {
-        radius: radius,
-        strength: strength,
-        falloff: PhysicsRadialImpulseFalloff.Linear,
-      } as PhysicsRadialExplosionEventOptions
+    const particleSystem = new ParticleSystem(
+      this.getEventName('particles'),
+      2000,
+      this.scene
     );
+    this.particleSystem = particleSystem;
+    particleSystem.particleTexture = new Texture(flareTexture, this.scene);
+    particleSystem.minSize = 0.2;
+    particleSystem.maxSize = 0.3;
+    particleSystem.maxLifeTime = 0.3;
+    particleSystem.minLifeTime = 0.1;
+    particleSystem.blendMode = ParticleSystem.BLENDMODE_ONEONE;
+    particleSystem.emitter = this.actionPosition;
+    particleSystem.gravity = new Vector3(0, -1, 0);
+    particleSystem.emitRate = 300;
+    particleSystem.createSphereEmitter(options.payload.radius, 0);
+    particleSystem.maxEmitPower = -4;
 
-    this.#sphere = this.#createSphere();
-    this.#addMaterialToMesh(this.#sphere);
-    this.#sphere.position = gravitationalFieldOrigin;
+    particleSystem.start();
   }
 
-  #addMaterialToMesh(sphere: any) {
-    const sphereMaterial = new StandardMaterial('sphereMaterial', this.#scene);
-    sphereMaterial.alpha = 0.2;
-    sphereMaterial.disableLighting = true;
-    sphere.material = sphereMaterial;
-  }
-
-  #createSphere() {
-    return MeshBuilder.CreateSphere(
-      `action-radial-explosion-${Math.random()}`,
-      {
-        segments: 32,
-        diameter: 1,
-        sideOrientation: Mesh.FRONTSIDE,
+  loopAction() {
+    if (this.status === 'started') {
+      if (this.sphere.material && this.sphere.material.alpha < 0.1) {
+        this.sphere.material.alpha = Math.min(
+          this.sphere.material.alpha + 0.035,
+          0.1
+        );
       }
+    }
+    if (this.status === 'ended' && this.sphere.material) {
+      this.sphere.material.alpha -= 0.01;
+    }
+    if (
+      ['started', 'ended'].includes(this.status) &&
+      this.sphere.scaling.x < this.payload.radius * 2
+    ) {
+      this.sphere.scaling.x += 2;
+      this.sphere.scaling.y += 2;
+      this.sphere.scaling.z += 2;
+    }
+  }
+
+  endAction() {
+    this.particleSystem.stop();
+  }
+
+  startAction() {
+    this.event = this.physicsHelper.applyRadialExplosionImpulse(
+      this.actionPosition,
+      this.payload.radius,
+      this.payload.strength,
+      PhysicsRadialImpulseFalloff.Linear
     );
+    this.particleSystem.stop();
   }
 
   public dispose() {
-    if (this.#delayTimeoutId) {
-      clearTimeout(this.#delayTimeoutId);
-    }
-    if (this.#durationTimeoutId) {
-      clearTimeout(this.#durationTimeoutId);
-    }
-    if (this.#loopIntervalId) {
-      clearInterval(this.#loopIntervalId);
-    }
-    this.#sphere?.dispose();
-    this.#event?.dispose();
+    super.dispose();
+    this.sphere.dispose();
+    this.event?.dispose();
+    this.particleSystem.stop();
+    this.particleSystem.dispose();
   }
 }

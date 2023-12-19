@@ -1,17 +1,22 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router';
-import { ElContainer, ElHeader, ElMain } from 'element-plus';
+import { ElContainer, ElFooter, ElHeader, ElMain } from 'element-plus';
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import Game from '@/entities/Game/Game';
 import HavokPhysics from '@babylonjs/havok';
 import { usePeerStore } from '@/stores/peer';
-import {
-  actionEvents$,
-  movementEvents$,
-} from '@/entities/Game/keyBoardController';
+import ActionsWrapper from '@/entities/GameActions/ui/ActionsWrapper/ActionsWrapper.vue';
+import ActionVortexButton from '@/entities/GameActions/ui/ActionButtons/ActionVortexButton.vue';
+import ActionUpdraftButton from '@/entities/GameActions/ui/ActionButtons/ActionUpdraftButton.vue';
+import ActionRadialExplosionButton from '@/entities/GameActions/ui/ActionButtons/ActionRadialExplosionButton.vue';
+import ActionGravitationButton from '@/entities/GameActions/ui/ActionButtons/ActionGravitationButton.vue';
+import ActionForwardImpulseButton from '@/entities/GameActions/ui/ActionButtons/ActionForwardImpulseButton.vue';
+import KeyBoardController from '@/entities/Game/controllers/KeyBoardController';
+import AdapterControllerWithGame from '@/entities/Game/AdapterControllerWithGame';
 
 const gameCanvas = ref<HTMLCanvasElement>();
 let game: Game;
+let adapterController: ReturnType<typeof AdapterControllerWithGame>;
 
 const store = usePeerStore();
 
@@ -47,11 +52,13 @@ onMounted(() => {
         game.callWordAction(payload.data);
       }
     });
+    adapterController = AdapterControllerWithGame(KeyBoardController, game);
   });
 });
 
 onBeforeUnmount(() => {
   game.dispose();
+  adapterController.destroy();
 });
 
 watch(
@@ -70,18 +77,17 @@ window.addEventListener('resize', function () {
 });
 
 // controller
-movementEvents$.subscribe((payload) => {
-  if (!game) {
-    return;
-  }
-  game.setPlayerDirection(payload.direction, payload.isPressed);
-});
-actionEvents$.subscribe((payload) => {
-  if (!game) {
-    return;
-  }
-  game.callPlayerAction(payload);
-});
+const buttonAction1Timestamp = ref<number>(0);
+const buttonAction2Timestamp = ref<number>(0);
+const buttonAction3Timestamp = ref<number>(0);
+const buttonAction4Timestamp = ref<number>(0);
+const buttonAction5Timestamp = ref<number>(0);
+
+const COOLDOWN_ACTION1 = 400;
+const COOLDOWN_ACTION2 = 400;
+const COOLDOWN_ACTION3 = 3000;
+const COOLDOWN_ACTION4 = 5000;
+const COOLDOWN_ACTION5 = 5000;
 </script>
 
 <template>
@@ -95,6 +101,31 @@ actionEvents$.subscribe((payload) => {
     <el-main>
       <RouterView />
     </el-main>
+    <el-footer height="120">
+      <!-- move to features -->
+      <ActionsWrapper>
+        <ActionGravitationButton
+          :action-timestamp="buttonAction1Timestamp"
+          :cooldown="COOLDOWN_ACTION1"
+          keyboard-tip="1" />
+        <ActionRadialExplosionButton
+          :action-timestamp="buttonAction2Timestamp"
+          keyboard-tip="2"
+          :cooldown="COOLDOWN_ACTION2" />
+        <ActionUpdraftButton
+          :action-timestamp="buttonAction3Timestamp"
+          keyboard-tip="3"
+          :cooldown="COOLDOWN_ACTION3" />
+        <ActionVortexButton
+          :action-timestamp="buttonAction4Timestamp"
+          keyboard-tip="4"
+          :cooldown="COOLDOWN_ACTION4" />
+        <ActionForwardImpulseButton
+          :action-timestamp="buttonAction5Timestamp"
+          :cooldown="COOLDOWN_ACTION5"
+          keyboard-tip="W+W" />
+      </ActionsWrapper>
+    </el-footer>
   </el-container>
 </template>
 

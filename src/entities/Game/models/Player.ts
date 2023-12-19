@@ -19,7 +19,7 @@ export type MOVEMENT_DIRECTION = 'FORWARD' | 'BACKWARD' | 'LEFT' | 'RIGHT';
 export default class Player {
   readonly #scene: Scene;
   readonly #material: StandardMaterial;
-  #playerPhysics: PhysicsAggregate | null = null;
+  public playerPhysics: PhysicsAggregate | null = null;
   readonly #moveSpeed = 10;
   #isColliding = false;
   #collisionList = new Set<string>();
@@ -55,12 +55,12 @@ export default class Player {
     particleSystem.start();
 
     this.#scene.whenReadyAsync().then(() => {
-      this.#playerPhysics = this.#createPlayerPhysics();
+      this.playerPhysics = this.#createPlayerPhysics();
 
       const observableStartCollision =
-        this.#playerPhysics.body.getCollisionObservable();
+        this.playerPhysics.body.getCollisionObservable();
       const observableEndCollision =
-        this.#playerPhysics.body.getCollisionEndedObservable();
+        this.playerPhysics.body.getCollisionEndedObservable();
       if (!observableStartCollision || !observableEndCollision) {
         throw new Error('No collision observable');
       }
@@ -135,7 +135,7 @@ export default class Player {
     if (directions.size === 0) {
       return;
     }
-    if (!this.#playerPhysics) {
+    if (!this.playerPhysics) {
       return;
     }
 
@@ -160,29 +160,43 @@ export default class Player {
     const directionVector = new Vector3(x, 0, z);
 
     directionVector.normalize();
-    this.#playerPhysics.body.setAngularVelocity(
+    this.playerPhysics.body.setAngularVelocity(
       directionVector.scale(this.#moveSpeed)
     );
   }
 
   public jump() {
-    if (!this.#isColliding || !this.#playerPhysics) {
+    if (!this.#isColliding || !this.playerPhysics) {
       return;
     }
     // remove y velocity
-    const linearVelocity = this.#playerPhysics.body.getLinearVelocity();
-    this.#playerPhysics.body.setLinearVelocity(
+    const linearVelocity = this.playerPhysics.body.getLinearVelocity();
+    this.playerPhysics.body.setLinearVelocity(
       new Vector3(linearVelocity.x, 0, linearVelocity.z)
     );
     // apply impulse
-    this.#playerPhysics.body.applyImpulse(
+    this.playerPhysics.body.applyImpulse(
       new Vector3(0, 15, 0),
       this.playerMesh.getAbsolutePosition()
     );
   }
 
+  public forwardImpulse(cameraViewAngle: number) {
+    if (!this.playerPhysics) {
+      return;
+    }
+    const x = -Math.cos(cameraViewAngle);
+    const z = -Math.sin(cameraViewAngle);
+    const directionVector = new Vector3(x, 0, z);
+    directionVector.normalize();
+    this.playerPhysics.body.applyImpulse(
+      directionVector.scale(20),
+      this.playerMesh.getAbsolutePosition()
+    );
+  }
+
   public dispose() {
-    this.#playerPhysics?.dispose();
+    this.playerPhysics?.dispose();
     this.playerMesh.dispose();
     this.#material.dispose();
   }

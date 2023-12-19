@@ -1,4 +1,4 @@
-import type { Scene } from '@babylonjs/core';
+import { ParticleSystem, type Scene, Texture } from '@babylonjs/core';
 import {
   Mesh,
   MeshBuilder,
@@ -9,6 +9,8 @@ import {
   Vector3,
 } from '@babylonjs/core';
 import type { PhysicsRadialExplosionEventOptions } from '@babylonjs/core';
+import AbstractAction from '@/entities/Game/effects/AbstractAction';
+import flareTexture from '@/shared/assets/flare.png';
 
 export type UpdraftPayload = {
   radius: number;
@@ -22,90 +24,126 @@ export type UpdraftPayload = {
   duration: number;
 };
 
-export default class UpdraftAction {
-  readonly #scene: Scene;
-  readonly #physicsHelper: PhysicsHelper;
-  #sphere: Mesh | null = null;
-  #event: ReturnType<typeof PhysicsHelper.prototype.updraft> | null = null;
+type Updraft = ReturnType<typeof PhysicsHelper.prototype.updraft>;
 
-  #delayTimeoutId: number | null = null;
-  #durationTimeoutId: number | null = null;
+export default class UpdraftAction extends AbstractAction {
+  private readonly payload: UpdraftPayload;
+  private readonly physicsHelper: PhysicsHelper;
+  private readonly sphere: Mesh;
+  private readonly event: Updraft;
+  private readonly event2: Updraft;
+  private readonly particleSystem: ParticleSystem;
 
   constructor(options: {
     physicsHelper: PhysicsHelper;
     scene: Scene;
     payload: UpdraftPayload;
   }) {
-    this.#scene = options.scene;
-    this.#physicsHelper = options.physicsHelper;
+    super({
+      scene: options.scene,
+      actionPrefix: 'action-updraft',
+      delayStartAction: 1000,
+      delayEndAction: options.payload.duration + 1000,
+      delayDisposeAction: options.payload.duration + 2000,
+      intervalLoopAction: 30,
+    });
+    this.physicsHelper = options.physicsHelper;
+    this.payload = options.payload;
 
-    const actionOrigin = new Vector3(
+    const actionPosition = new Vector3(
       options.payload.position.x,
-      options.payload.position.y,
+      options.payload.position.y +
+        options.payload.height / 2 -
+        options.payload.height / 4,
       options.payload.position.z
     );
-    const eventOrigin = new Vector3(
+
+    const eventPosition = new Vector3(
       options.payload.position.x,
-      options.payload.position.y - options.payload.height / 2,
+      options.payload.position.y - options.payload.height / 4,
       options.payload.position.z
     );
 
-    this.#event = this.#physicsHelper.updraft(
-      eventOrigin,
+    this.event = this.physicsHelper.updraft(
+      eventPosition,
       options.payload.radius,
-      options.payload.strength,
+      options.payload.strength / 2,
       options.payload.height,
       PhysicsUpdraftMode.Center
     );
+    this.event2 = this.physicsHelper.updraft(
+      eventPosition,
+      options.payload.radius,
+      options.payload.strength,
+      options.payload.height,
+      // PhysicsUpdraftMode.Center
+      PhysicsUpdraftMode.Perpendicular
+    );
 
-    this.#delayTimeoutId = setTimeout(() => {
-      this.#startAction(
-        actionOrigin,
-        options.payload.radius,
-        options.payload.height
-      );
-    }, 1000);
-
-    this.#durationTimeoutId = setTimeout(() => {
-      this.dispose();
-    }, options.payload.duration + 1000);
-  }
-
-  #startAction(
-    gravitationalFieldOrigin: Vector3,
-    radius: number,
-    height: number
-  ) {
-    this.#event?.enable();
-
-    this.#sphere = this.#createCylinder(radius, height);
-    this.#addMaterialToMesh(this.#sphere);
-    this.#sphere.position = gravitationalFieldOrigin;
-  }
-
-  #addMaterialToMesh(sphere: any) {
-    const sphereMaterial = new StandardMaterial('sphereMaterial', this.#scene);
-    sphereMaterial.alpha = 0.2;
-    sphereMaterial.disableLighting = true;
-    sphere.material = sphereMaterial;
-  }
-
-  #createCylinder(radius: number, height: number) {
-    return MeshBuilder.CreateCylinder(`action-updraft-${Math.random()}`, {
-      height: height,
-      diameter: radius * 2,
+    this.sphere = MeshBuilder.CreateCylinder(this.getEventName('cylinder'), {
+      height: this.payload.height,
+      diameter: this.payload.radius * 2,
     });
+    this.addDefaultMaterialToMesh(this.sphere);
+    this.sphere.position = actionPosition;
+
+    const particleSystem = new ParticleSystem(
+      this.getEventName('particles'),
+      2000,
+      this.scene
+    );
+    this.particleSystem = particleSystem;
+    particleSystem.particleTexture = new Texture(flareTexture, this.scene);
+    particleSystem.minSize = 0.2;
+    particleSystem.maxSize = 0.7;
+    particleSystem.maxLifeTime = 1;
+    particleSystem.minLifeTime = 0;
+    particleSystem.emitter = actionPosition;
+    particleSystem.gravity = new Vector3(0, 10, 0);
+    particleSystem.emitRate = 50;
+    particleSystem.minEmitPower = -1;
+    particleSystem.maxEmitPower = -4;
+    particleSystem.createCylinderEmitter(
+      options.payload.radius,
+      options.payload.height,
+      0.3
+    );
+    particleSystem.start();
+  }
+
+  loopAction() {
+    if (this.status === 'started') {
+      if (this.sphere.material && this.sphere.material.alpha < 0.1) {
+        this.sphere.material.alpha += 0.02;
+      }
+      return;
+    }
+    if (this.status === 'ended') {
+      if (this.sphere?.material) {
+        this.sphere.material.alpha -= 0.01;
+      }
+    }
+  }
+
+  startAction() {
+    this.event?.enable();
+    this.event2?.enable();
+  }
+
+  endAction() {
+    this.event?.disable();
+    this.event2?.disable();
+    this.particleSystem?.stop();
   }
 
   public dispose() {
-    if (this.#delayTimeoutId) {
-      clearTimeout(this.#delayTimeoutId);
-    }
-    if (this.#durationTimeoutId) {
-      clearTimeout(this.#durationTimeoutId);
-    }
-    this.#sphere?.dispose();
-    this.#event?.disable();
-    this.#event?.dispose();
+    super.dispose();
+    this.sphere?.dispose();
+    this.event?.disable();
+    this.event?.dispose();
+    this.event2?.disable();
+    this.event2?.dispose();
+    this.particleSystem?.stop();
+    this.particleSystem?.dispose();
   }
 }

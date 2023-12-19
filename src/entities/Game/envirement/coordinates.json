@@ -2,13 +2,14 @@
     {
         "name": "wallFortifiedPaint.001",
         "location": [
-            0.0,
-            52.70207214355469,
-            0.0
+            30.445390701293945,
+            -10.661632537841797,
+            0.7396882772445679
         ],
+        "rotation_mode": "XYZ",
         "rotation": [
-            0.0,
-            0.0,
+            -0.07574821263551712,
+            -0.05639297515153885,
             0.0
         ],
         "scale": [
@@ -24,9 +25,10 @@
             0.0,
             0.0
         ],
+        "rotation_mode": "XYZ",
         "rotation": [
             0.0,
-            0.0,
+            -0.0,
             0.0
         ],
         "scale": [
@@ -42,9 +44,10 @@
             39.1708984375,
             0.0
         ],
+        "rotation_mode": "XYZ",
         "rotation": [
             0.0,
-            0.0,
+            -0.0,
             0.0
         ],
         "scale": [
@@ -56,13 +59,14 @@
     {
         "name": "wall.001",
         "location": [
-            41.780723571777344,
-            -36.33945083618164,
+            60.0,
+            -65.0,
             0.0
         ],
+        "rotation_mode": "XYZ",
         "rotation": [
-            0.0,
-            0.0,
+            -0.0,
+            -0.0,
             0.0
         ],
         "scale": [
@@ -74,13 +78,14 @@
     {
         "name": "wallFortifiedPaint.002",
         "location": [
-            0.0,
-            -10.0,
+            15.0,
+            -85.0,
             0.0
         ],
+        "rotation_mode": "XYZ",
         "rotation": [
             0.0,
-            0.0,
+            -0.0,
             0.0
         ],
         "scale": [
@@ -92,13 +97,14 @@
     {
         "name": "wallFortifiedPaint.003",
         "location": [
-            0.0,
-            -40.0,
-            0.0
+            238.5489044189453,
+            -92.61305236816406,
+            10.0
         ],
+        "rotation_mode": "XYZ",
         "rotation": [
             0.0,
-            0.0,
+            -0.0,
             0.0
         ],
         "scale": [
@@ -110,13 +116,14 @@
     {
         "name": "wallFortifiedPaint.004",
         "location": [
-            0.0,
-            68.12413024902344,
+            32.704246520996094,
+            92.35758972167969,
             0.0
         ],
+        "rotation_mode": "XYZ",
         "rotation": [
             0.0,
-            0.0,
+            0.1988963484764099,
             0.0
         ],
         "scale": [
@@ -128,13 +135,14 @@
     {
         "name": "wallFortifiedPaint.005",
         "location": [
-            0.0,
-            48.12413024902344,
+            31.50069808959961,
+            105.86614990234375,
             0.0
         ],
+        "rotation_mode": "XYZ",
         "rotation": [
             0.0,
-            0.0,
+            -0.23666416108608246,
             0.0
         ],
         "scale": [
@@ -150,9 +158,10 @@
             58.12413024902344,
             0.0
         ],
+        "rotation_mode": "XYZ",
         "rotation": [
             0.0,
-            0.0,
+            -0.0,
             0.0
         ],
         "scale": [
@@ -168,9 +177,10 @@
             0.0,
             0.0
         ],
+        "rotation_mode": "XYZ",
         "rotation": [
             0.0,
-            0.0,
+            -0.0,
             0.0
         ],
         "scale": [
@@ -186,9 +196,10 @@
             0.0,
             0.0
         ],
+        "rotation_mode": "XYZ",
         "rotation": [
             0.0,
-            0.0,
+            -0.0,
             0.0
         ],
         "scale": [
@@ -200,13 +211,14 @@
     {
         "name": "wallPaint.004",
         "location": [
-            -20.0,
-            0.0,
+            5.0,
+            -55.0,
             0.0
         ],
+        "rotation_mode": "XYZ",
         "rotation": [
             0.0,
-            0.0,
+            -0.0,
             0.0
         ],
         "scale": [
@@ -222,9 +234,10 @@
             0.0,
             0.0
         ],
+        "rotation_mode": "XYZ",
         "rotation": [
             0.0,
-            0.0,
+            -0.0,
             0.0
         ],
         "scale": [
@@ -237,12 +250,13 @@
         "name": "structure_wall.001",
         "location": [
             0.0,
-            -40.0,
+            91.74974060058594,
             10.0
         ],
+        "rotation_mode": "XYZ",
         "rotation": [
             0.0,
-            0.0,
+            -0.0,
             0.0
         ],
         "scale": [
@@ -254,13 +268,14 @@
     {
         "name": "structure_poles.001",
         "location": [
-            0.0,
-            -30.0,
-            0.0
+            15.0,
+            -75.0,
+            0.5
         ],
+        "rotation_mode": "XYZ",
         "rotation": [
             0.0,
-            0.0,
+            -0.0,
             0.0
         ],
         "scale": [
@@ -272,13 +287,14 @@
     {
         "name": "structure_poles.002",
         "location": [
-            0.0,
-            -10.0,
+            15.0,
+            -85.0,
             10.0
         ],
+        "rotation_mode": "XYZ",
         "rotation": [
             0.0,
-            0.0,
+            -0.0,
             0.0
         ],
         "scale": [
@@ -290,13 +306,14 @@
     {
         "name": "structure_wall.002",
         "location": [
-            0.0,
-            -10.0,
+            15.0,
+            -85.0,
             20.0
         ],
+        "rotation_mode": "XYZ",
         "rotation": [
             0.0,
-            0.0,
+            -0.0,
             0.0
         ],
         "scale": [
@@ -308,14 +325,15 @@
     {
         "name": "floor_stairsCornerInner.001",
         "location": [
-            39.36451721191406,
-            -17.564144134521484,
-            0.0
+            21.27366828918457,
+            82.00753784179688,
+            3.5362329483032227
         ],
+        "rotation_mode": "XYZ",
         "rotation": [
-            0.0,
-            0.0,
-            0.0
+            -0.04862597584724426,
+            -0.10726673901081085,
+            0.4266289174556732
         ],
         "scale": [
             10.0,
@@ -330,10 +348,11 @@
             10.0,
             0.0
         ],
+        "rotation_mode": "XYZ",
         "rotation": [
             0.0,
-            0.0,
-            0.0
+            -0.0,
+            3.141592502593994
         ],
         "scale": [
             10.0,
@@ -348,9 +367,10 @@
             20.0,
             0.0
         ],
+        "rotation_mode": "XYZ",
         "rotation": [
             0.0,
-            0.0,
+            -0.0,
             0.0
         ],
         "scale": [
@@ -366,10 +386,11 @@
             10.0,
             0.0
         ],
+        "rotation_mode": "XYZ",
         "rotation": [
             0.0,
-            0.0,
-            0.0
+            -0.0,
+            3.141592502593994
         ],
         "scale": [
             10.0,
@@ -384,10 +405,11 @@
             10.0,
             0.0
         ],
+        "rotation_mode": "XYZ",
         "rotation": [
             0.0,
-            0.0,
-            0.0
+            -0.0,
+            3.141592502593994
         ],
         "scale": [
             10.0,
@@ -402,9 +424,10 @@
             20.0,
             0.0
         ],
+        "rotation_mode": "XYZ",
         "rotation": [
             0.0,
-            0.0,
+            -0.0,
             0.0
         ],
         "scale": [
@@ -420,9 +443,4741 @@
             20.0,
             0.0
         ],
+        "rotation_mode": "XYZ",
         "rotation": [
             0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_gate.002",
+        "location": [
+            50.0,
+            -65.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
             0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_gate.003",
+        "location": [
+            50.0,
+            -55.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall.002",
+        "location": [
+            60.0,
+            -55.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall.003",
+        "location": [
+            40.0,
+            -65.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall.004",
+        "location": [
+            40.0,
+            -55.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.003",
+        "location": [
+            50.0,
+            -65.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            1.570796251296997
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "battlement.001",
+        "location": [
+            40.0,
+            -65.5,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "battlement.002",
+        "location": [
+            168.86019897460938,
+            -72.02230834960938,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "battlement.004",
+        "location": [
+            40.0,
+            -54.5,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            3.141592502593994
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "roof.001",
+        "location": [
+            50.0,
+            -65.0,
+            30.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_gate.004",
+        "location": [
+            50.0,
+            -60.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            1.570796251296997
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.001",
+        "location": [
+            50.0,
+            -50.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            1.570796251296997
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall.006",
+        "location": [
+            50.0,
+            -55.0,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "roof.002",
+        "location": [
+            50.0,
+            -55.0,
+            30.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_gate.005",
+        "location": [
+            70.0,
+            -60.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            1.570796251296997
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_gate.006",
+        "location": [
+            40.0,
+            -60.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            1.570796251296997
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_gate.007",
+        "location": [
+            50.0,
+            -65.0,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "overhang.002",
+        "location": [
+            49.0,
+            -60.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            1.570796251296997
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "detail_barrel.001",
+        "location": [
+            43.0,
+            -66.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "fence.001",
+        "location": [
+            50.0,
+            -51.0,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "fence.002",
+        "location": [
+            50.0,
+            -51.0,
+            3.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "fence.003",
+        "location": [
+            50.0,
+            -69.0,
+            19.141555786132812
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "fence.004",
+        "location": [
+            50.0,
+            -69.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "detail_barrel.002",
+        "location": [
+            40.5,
+            -66.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall.005",
+        "location": [
+            70.0,
+            -65.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall.007",
+        "location": [
+            90.0,
+            -55.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall.008",
+        "location": [
+            80.0,
+            -65.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall.009",
+        "location": [
+            70.0,
+            -55.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_gate.008",
+        "location": [
+            60.0,
+            -60.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            1.570796251296997
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "battlement.005",
+        "location": [
+            60.0,
+            -54.5,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            3.141592502593994
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "battlement.007",
+        "location": [
+            60.0,
+            -65.5,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "battlement.008",
+        "location": [
+            70.0,
+            -65.5,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall.010",
+        "location": [
+            80.0,
+            -55.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.004",
+        "location": [
+            100.0,
+            -65.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "battlement.009",
+        "location": [
+            70.0,
+            -54.5,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            3.141592502593994
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "battlement.010",
+        "location": [
+            80.0,
+            -54.5,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            3.141592502593994
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall.011",
+        "location": [
+            90.0,
+            -75.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower.001",
+        "location": [
+            97.0,
+            -53.5,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower.002",
+        "location": [
+            97.0,
+            -53.5,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "battlement.012",
+        "location": [
+            80.0,
+            -54.5,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            3.141592502593994
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "battlement.013",
+        "location": [
+            90.0,
+            -54.5,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            3.141592502593994
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.005",
+        "location": [
+            100.0,
+            -55.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wallFortifiedPaint.008",
+        "location": [
+            -6.5856781005859375,
+            69.881591796875,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor_stairsCornerInner.002",
+        "location": [
+            30.0,
+            -130.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor_stairs.004",
+        "location": [
+            100.0,
+            -85.0,
+            2.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "detail_crateSmall.001",
+        "location": [
+            86.5127182006836,
+            -86.50714111328125,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            -0.0,
+            -0.0,
+            1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "detail_crate.001",
+        "location": [
+            86.0,
+            -53.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "detail_barrel.003",
+        "location": [
+            86.11764526367188,
+            -89.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "battlement.003",
+        "location": [
+            241.4298858642578,
+            -71.05477905273438,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "battlement_half.001",
+        "location": [
+            88.0,
+            -83.5,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "fence.005",
+        "location": [
+            157.62939453125,
+            -81.80856323242188,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.002",
+        "location": [
+            100.0,
+            -65.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.006",
+        "location": [
+            100.0,
+            -55.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall.012",
+        "location": [
+            90.0,
+            -65.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor_stairs.005",
+        "location": [
+            40.0,
+            -130.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor_stepsCornerOuter.001",
+        "location": [
+            75.0,
+            -90.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor_steps.001",
+        "location": [
+            100.0,
+            -95.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            -0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor_stairsCornerOuter.001",
+        "location": [
+            100.0,
+            -75.0,
+            5.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "overhang_round.001",
+        "location": [
+            97.0,
+            -53.5,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall.013",
+        "location": [
+            90.0,
+            -85.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "battlement_cornerInner.001",
+        "location": [
+            80.0,
+            -73.5,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wallFortifiedPaint.009",
+        "location": [
+            206.27085876464844,
+            -95.90220642089844,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "structure_wall.003",
+        "location": [
+            90.0,
+            -115.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wallFortified_gate.001",
+        "location": [
+            90.0,
+            -105.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wallFortified.001",
+        "location": [
+            90.0,
+            -95.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wallFortified.002",
+        "location": [
+            90.0,
+            -105.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "structure_poles.003",
+        "location": [
+            70.0,
+            -85.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "structure.001",
+        "location": [
+            100.0999984741211,
+            -105.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "battlement_half.002",
+        "location": [
+            35.0,
+            -65.5,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "overhang.001",
+        "location": [
+            90.0,
+            -98.5,
+            12.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            3.1415927410125732
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "column_damaged.001",
+        "location": [
+            104.0,
+            -98.9000015258789,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "column.001",
+        "location": [
+            74.0,
+            -56.0,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower_top.001",
+        "location": [
+            97.0,
+            -53.5,
+            25.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower_edge.001",
+        "location": [
+            97.0,
+            -53.5,
+            21.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.004",
+        "location": [
+            110.0,
+            -105.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.005",
+        "location": [
+            90.0,
+            -105.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.006",
+        "location": [
+            100.0,
+            -115.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.007",
+        "location": [
+            90.0,
+            -115.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.009",
+        "location": [
+            80.0,
+            -105.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.010",
+        "location": [
+            100.0,
+            -85.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.011",
+        "location": [
+            100.0,
+            -75.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.012",
+        "location": [
+            100.0,
+            -65.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.013",
+        "location": [
+            100.0,
+            -55.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.014",
+        "location": [
+            50.0,
+            -75.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.015",
+        "location": [
+            50.0,
+            -65.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.016",
+        "location": [
+            50.0,
+            -55.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.018",
+        "location": [
+            50.0,
+            -85.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.019",
+        "location": [
+            50.0,
+            -95.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.020",
+        "location": [
+            50.0,
+            -105.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.021",
+        "location": [
+            60.0,
+            -105.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.022",
+        "location": [
+            70.0,
+            -105.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.007",
+        "location": [
+            175.83181762695312,
+            -71.52230834960938,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "fence.006",
+        "location": [
+            50.0,
+            -69.0,
+            4.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor_stepsCornerOuter.002",
+        "location": [
+            65.0,
+            -90.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "structure_wall.004",
+        "location": [
+            192.00331115722656,
+            -90.47007751464844,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "overhang_fence.001",
+        "location": [
+            199.12478637695312,
+            -116.99272918701172,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "overhang.003",
+        "location": [
+            177.23886108398438,
+            -116.99272918701172,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "detail_crateSmall.002",
+        "location": [
+            171.78053283691406,
+            -116.43688201904297,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            -0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "detail_crate.002",
+        "location": [
+            166.2218780517578,
+            -116.43688201904297,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "detail_barrel.004",
+        "location": [
+            33.285789489746094,
+            -159.2233428955078,
+            0.5
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "columnPaint_damaged.001",
+        "location": [
+            70.0,
+            -85.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "columnPaint.001",
+        "location": [
+            169.13462829589844,
+            -86.4368896484375,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "column_damaged.002",
+        "location": [
+            74.0,
+            -64.0,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "column.002",
+        "location": [
+            41.0,
+            -161.0,
+            0.5
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "towerPaint.001",
+        "location": [
+            13.0,
+            -53.5,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor_stepsCornerOuter.003",
+        "location": [
+            75.0,
+            -80.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor_stepsCornerOuter.004",
+        "location": [
+            65.0,
+            -80.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            3.1415927410125732
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "column.003",
+        "location": [
+            56.0,
+            -56.0,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "column.004",
+        "location": [
+            56.0,
+            -64.0,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall.014",
+        "location": [
+            30.0,
+            -65.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall.015",
+        "location": [
+            30.0,
+            -55.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall.016",
+        "location": [
+            20.0,
+            -65.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall.017",
+        "location": [
+            20.0,
+            -55.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.008",
+        "location": [
+            15.0,
+            -75.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower.003",
+        "location": [
+            236.5489044189453,
+            -98.57759094238281,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.010",
+        "location": [
+            215.23155212402344,
+            -21.98120880126953,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wallPaint_half.002",
+        "location": [
+            15.0,
+            -65.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower_top.002",
+        "location": [
+            13.0,
+            -53.5,
+            14.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "towerPaint_base.002",
+        "location": [
+            13.0,
+            -191.87374877929688,
+            40.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            3.1415927410125732,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "towerPaint.003",
+        "location": [
+            13.0,
+            -191.87374877929688,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "towerPaint.004",
+        "location": [
+            13.0,
+            -191.87374877929688,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower_top.003",
+        "location": [
+            13.046067237854004,
+            -191.87374877929688,
+            44.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower_edge.004",
+        "location": [
+            13.0,
+            -191.87374877929688,
+            44.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            3.1415927410125732,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower.004",
+        "location": [
+            13.0,
+            -191.87374877929688,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wallPaint_half.001",
+        "location": [
+            15.0,
+            -55.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wallFortifiedPaint.010",
+        "location": [
+            36.649417877197266,
+            -20.517789840698242,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wallFortifiedPaint_half.002",
+        "location": [
+            38.5019645690918,
+            -42.74214172363281,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "battlement.006",
+        "location": [
+            30.0,
+            -54.5,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            3.141592502593994
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "battlement.011",
+        "location": [
+            20.0,
+            -54.5,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            3.141592502593994
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wallPaint_half.004",
+        "location": [
+            221.05136108398438,
+            -136.2730255126953,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "roof_edge.001",
+        "location": [
+            218.57850646972656,
+            -71.92045593261719,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -3.1415927410125732
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower_edge.002",
+        "location": [
+            13.0,
+            -53.5,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "battlement.014",
+        "location": [
+            14.5,
+            -65.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "battlement_half.003",
+        "location": [
+            14.5,
+            -60.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "detail_barrel.005",
+        "location": [
+            18.88823890686035,
+            -56.61995315551758,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "detail_crateSmall.003",
+        "location": [
+            20.740619659423828,
+            -53.82780456542969,
+            13.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            -0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "detail_crate.003",
+        "location": [
+            21.113367080688477,
+            -53.75605010986328,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "detail_crateSmall.004",
+        "location": [
+            214.51988220214844,
+            -108.07377624511719,
+            13.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            -0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "detail_crate.004",
+        "location": [
+            214.8926239013672,
+            -108.00201416015625,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "detail_barrel.006",
+        "location": [
+            212.66749572753906,
+            -110.86592864990234,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "overhang_fence.002",
+        "location": [
+            24.899999618530273,
+            -69.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower_edge.003",
+        "location": [
+            203.1955108642578,
+            -125.52184295654297,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wallPaint.006",
+        "location": [
+            15.0,
+            -95.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wallPaint.007",
+        "location": [
+            15.0,
+            -105.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wallPaint.008",
+        "location": [
+            15.0,
+            -115.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor_stairs.006",
+        "location": [
+            50.0,
+            -130.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor_stairs.007",
+        "location": [
+            60.0,
+            -130.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor_stairsCornerInner.003",
+        "location": [
+            70.0,
+            -130.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.01745329611003399,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "overhang_round.002",
+        "location": [
+            49.642547607421875,
+            -151.91624450683594,
+            0.5
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.017",
+        "location": [
+            55.0,
+            -147.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.023",
+        "location": [
+            45.0,
+            -147.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.024",
+        "location": [
+            45.0,
+            -157.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.025",
+        "location": [
+            55.0,
+            -157.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "detail_crateSmall.005",
+        "location": [
+            60.19416427612305,
+            -155.11366271972656,
+            3.4000000953674316
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -0.7274824380874634
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "detail_crate.005",
+        "location": [
+            60.19887161254883,
+            -155.04190063476562,
+            0.5
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.026",
+        "location": [
+            35.0,
+            -157.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.027",
+        "location": [
+            65.0,
+            -157.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "detail_barrel.007",
+        "location": [
+            33.285789489746094,
+            -155.0150909423828,
+            2.1139369010925293
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            1.5707963705062866,
+            -0.0,
+            0.6981316804885864
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor_stairs.008",
+        "location": [
+            30.0,
+            -140.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor_stairs.009",
+        "location": [
+            70.0,
+            -140.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "column.005",
+        "location": [
+            59.0,
+            -161.0,
+            0.5
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall.018",
+        "location": [
+            179.57568359375,
+            -19.286590576171875,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "structure_poles.004",
+        "location": [
+            -10.0,
+            -70.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "structure_poles.005",
+        "location": [
+            -5.0,
+            -55.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.028",
+        "location": [
+            -5.0,
+            -55.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "column.006",
+        "location": [
+            183.57568359375,
+            -28.258914947509766,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "column.007",
+        "location": [
+            192.08578491210938,
+            -20.86966323852539,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall.019",
+        "location": [
+            169.57568359375,
+            -19.95974349975586,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.008",
+        "location": [
+            -25.0,
+            -60.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.011",
+        "location": [
+            -25.0,
+            -80.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.012",
+        "location": [
+            -25.0,
+            -60.0,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "battlement_half.004",
+        "location": [
+            180.07568359375,
+            -22.626131057739258,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "battlement_half.005",
+        "location": [
+            177.57568359375,
+            -20.43772315979004,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            3.1415927410125732
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.013",
+        "location": [
+            -30.0,
+            -55.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.014",
+        "location": [
+            -40.0,
+            -55.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.015",
+        "location": [
+            -30.0,
+            -55.0,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "fence.007",
+        "location": [
+            -25.0,
+            -70.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.016",
+        "location": [
+            -25.0,
+            -80.0,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.017",
+        "location": [
+            -50.0,
+            -55.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.018",
+        "location": [
+            -40.0,
+            -55.0,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.019",
+        "location": [
+            -50.0,
+            -55.0,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.020",
+        "location": [
+            -30.0,
+            -90.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.021",
+        "location": [
+            -30.0,
+            -90.0,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.022",
+        "location": [
+            -40.0,
+            -90.0,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.023",
+        "location": [
+            -40.0,
+            -90.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.024",
+        "location": [
+            -50.0,
+            -90.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.025",
+        "location": [
+            -50.0,
+            -90.0,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.026",
+        "location": [
+            -55.0,
+            -55.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.027",
+        "location": [
+            -55.0,
+            -65.0,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.028",
+        "location": [
+            -55.0,
+            -75.0,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.029",
+        "location": [
+            -55.0,
+            -85.0,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.030",
+        "location": [
+            -55.0,
+            -55.0,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.031",
+        "location": [
+            -55.0,
+            -65.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.032",
+        "location": [
+            -55.0,
+            -75.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.033",
+        "location": [
+            -55.0,
+            -85.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.034",
+        "location": [
+            -55.0,
+            -55.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.035",
+        "location": [
+            -55.0,
+            -65.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.036",
+        "location": [
+            -55.0,
+            -75.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.037",
+        "location": [
+            -55.0,
+            -85.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.038",
+        "location": [
+            -50.0,
+            -90.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.040",
+        "location": [
+            -30.0,
+            -90.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.041",
+        "location": [
+            -25.0,
+            -80.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.042",
+        "location": [
+            -25.0,
+            -70.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.043",
+        "location": [
+            -25.0,
+            -60.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.044",
+        "location": [
+            -30.0,
+            -55.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.045",
+        "location": [
+            -40.0,
+            -55.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_half.046",
+        "location": [
+            -50.0,
+            -55.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.029",
+        "location": [
+            -37.0,
+            -71.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.030",
+        "location": [
+            -35.0,
+            -70.0,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.031",
+        "location": [
+            -50.0,
+            -60.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.032",
+        "location": [
+            -50.0,
+            -76.0,
+            24.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.033",
+        "location": [
+            -50.0,
+            -66.0,
+            24.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "overhang.004",
+        "location": [
+            -38.0,
+            -83.5,
+            24.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            -3.1415927410125732
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor_stairs.010",
+        "location": [
+            -49.023189544677734,
+            -75.2594223022461,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "overhang_fence.003",
+        "location": [
+            -27.0,
+            -70.35407257080078,
+            20.95606803894043
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "floor.034",
+        "location": [
+            -35.0,
+            -60.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_gate.001",
+        "location": [
+            -30.0,
+            -70.0,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            1.570796251296997
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "fence.008",
+        "location": [
+            -34.0,
+            -70.0,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            1.5707963705062866
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower.005",
+        "location": [
+            -28.0,
+            -52.5,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower.006",
+        "location": [
+            -28.0,
+            -52.5,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower.007",
+        "location": [
+            -28.0,
+            -52.5,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower.008",
+        "location": [
+            -58.0,
+            -52.5,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower.009",
+        "location": [
+            -58.0,
+            -52.5,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower.010",
+        "location": [
+            -58.0,
+            -52.5,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower.011",
+        "location": [
+            -58.0,
+            -88.5,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower.012",
+        "location": [
+            -58.0,
+            -88.5,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower.013",
+        "location": [
+            -58.0,
+            -88.5,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower.014",
+        "location": [
+            -26.0,
+            -88.5,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower.015",
+        "location": [
+            -26.0,
+            -88.5,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower.016",
+        "location": [
+            -26.0,
+            -88.5,
+            20.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower_top.004",
+        "location": [
+            -58.0,
+            -52.5,
+            34.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower_edge.005",
+        "location": [
+            -58.0,
+            -52.5,
+            30.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower_edge.006",
+        "location": [
+            -28.0,
+            -52.5,
+            30.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower_edge.007",
+        "location": [
+            -58.0,
+            -88.5,
+            30.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower_edge.008",
+        "location": [
+            -26.0,
+            -88.5,
+            30.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower_top.005",
+        "location": [
+            -28.0,
+            -52.5,
+            34.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower_top.006",
+        "location": [
+            -58.0,
+            -88.5,
+            34.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "tower_top.007",
+        "location": [
+            -26.0,
+            -88.5,
+            34.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_low.002",
+        "location": [
+            -20.0,
+            -70.0,
+            15.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall_low.001",
+        "location": [
+            -1.0,
+            -70.0,
+            15.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "overhang_fence.004",
+        "location": [
+            -10.5,
+            -73.0,
+            16.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "overhang_fence.005",
+        "location": [
+            -10.5,
+            -67.0,
+            16.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            3.1415927410125732
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "fence.009",
+        "location": [
+            -40.0,
+            -90.0,
+            10.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall.020",
+        "location": [
+            -55.0,
+            -95.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall.021",
+        "location": [
+            -55.0,
+            -115.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall.022",
+        "location": [
+            -55.0,
+            -105.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall.023",
+        "location": [
+            -55.0,
+            -125.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall.024",
+        "location": [
+            -55.0,
+            -135.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
+            0.0
+        ],
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ]
+    },
+    {
+        "name": "wall.025",
+        "location": [
+            -55.0,
+            -145.0,
+            0.0
+        ],
+        "rotation_mode": "XYZ",
+        "rotation": [
+            0.0,
+            -0.0,
             0.0
         ],
         "scale": [

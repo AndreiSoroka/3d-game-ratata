@@ -1,8 +1,12 @@
 import retroMedievalKit from './retroMedievalKit';
+import checkpoint from './checkpoint';
 import {
+  InstancedMesh,
+  Matrix,
   type Mesh,
   PhysicsAggregate,
   PhysicsShapeType,
+  Quaternion,
   type Scene,
   SceneLoader,
   ShadowGenerator,
@@ -45,7 +49,7 @@ async function loadMesh(pathToMesh: string, scene: Scene) {
 }
 
 function loadMeshes(scene: Scene) {
-  const meshes$ = from([...retroMedievalKit]).pipe(
+  const meshes$ = from([...retroMedievalKit, ...checkpoint]).pipe(
     mergeAll(),
     map((module) => module.default),
     map((linkToMesh) => loadMesh(linkToMesh, scene)),
@@ -73,14 +77,15 @@ export default function getMesh(paylaod: {
   scene: Scene;
   shadow: ShadowGenerator;
   position: Vector3;
-  rotation: Vector3;
+  rotation: Vector3 | Quaternion;
   scale: Vector3;
-}) {
+}): Promise<InstancedMesh[]> {
   if (!listOfMeshesPromise) {
     listOfMeshesPromise = loadMeshes(paylaod.scene);
   }
 
   return listOfMeshesPromise.then((listOfMeshes) => {
+    const meshes: InstancedMesh[] = [];
     const mesh = listOfMeshes[paylaod.name];
     if (!mesh) {
       throw new Error(`Mesh ${paylaod.name} not found`);
@@ -94,11 +99,19 @@ export default function getMesh(paylaod: {
       if (!clonedChildMesh) {
         throw new Error(`Mesh ${childMesh.name} not found`);
       }
+      meshes.push(clonedChildMesh);
       clonedChildMesh.isVisible = true;
       // clonedChildMesh.parent = newMesh;
       clonedChildMesh.position = paylaod.position;
-      clonedChildMesh.rotation = paylaod.rotation;
+      if (paylaod.rotation instanceof Quaternion) {
+        console.log(paylaod.rotation.clone());
+        clonedChildMesh.rotationQuaternion = paylaod.rotation.clone();
+      } else {
+        clonedChildMesh.rotation = paylaod.rotation.clone();
+      }
       clonedChildMesh.scaling = paylaod.scale;
+
+      clonedChildMesh.updatePoseMatrix(Matrix.Identity());
 
       clonedChildMesh.receiveShadows = true;
       paylaod.shadow.addShadowCaster(clonedChildMesh);
@@ -113,5 +126,6 @@ export default function getMesh(paylaod: {
         paylaod.scene
       );
     });
+    return meshes;
   });
 }

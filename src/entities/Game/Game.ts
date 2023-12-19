@@ -25,12 +25,16 @@ import GravitationAction, {
 import { interval, Subject, throttle } from 'rxjs';
 
 import '@babylonjs/loaders';
-import loadEnvironment from '@/entities/Game/envirement/loadEnvironment';
+import loadEnvironment, {
+  listOfInstancedMeshes,
+} from '@/entities/Game/envirement/loadEnvironment';
 import {
+  downGravitationLevel,
   startGravitationLevel,
   upGravitationLevel,
 } from '@/entities/Game/effects/getGravitationLevel';
 import {
+  downRadialExplosionLevel,
   startRadialExplosionLevel,
   upRadialExplosionLevel,
 } from '@/entities/Game/effects/getRadialExplosionLevel';
@@ -41,6 +45,7 @@ import UpdraftAction, {
   type UpdraftPayload,
 } from '@/entities/Game/effects/UpdraftAction';
 import {
+  downUpdraftLevel,
   startUpdraftLevel,
   upUpdraftLevel,
 } from '@/entities/Game/effects/getUpdraftLevel';
@@ -50,6 +55,10 @@ import {
   upVortexLevel,
 } from '@/entities/Game/effects/getVortexLevel';
 import VortexAction from '@/entities/Game/effects/VortexAction';
+import type AbstractAction from '@/entities/Game/effects/AbstractAction';
+import calculateRandomPosition from '@/entities/Game/utils/calculateRandomPosition';
+
+const IS_DEBUGING = document.location.hash === '#debug';
 
 export type CAMERA_DIRECTION = 'CAMERA_LEFT' | 'CAMERA_RIGHT';
 export type DIRECTION = MOVEMENT_DIRECTION | CAMERA_DIRECTION;
@@ -58,7 +67,19 @@ export type PLAYER_ACTION =
   | 'ACTION1'
   | 'ACTION2'
   | 'ACTION3'
-  | 'ACTION4';
+  | 'ACTION4'
+  | 'ACTION5';
+
+export type ActionsCoolDown = Record<PLAYER_ACTION, number>;
+
+export const actionsCoolDown: ActionsCoolDown = {
+  JUMP: 0,
+  ACTION1: 200,
+  ACTION2: 1000,
+  ACTION3: 5000,
+  ACTION4: 5000,
+  ACTION5: 1000,
+};
 
 export type MultiPlayerActionGravitation = {
   name: 'GRAVITATION';
@@ -101,6 +122,9 @@ export default class Game {
   #skillUpdraft = startUpdraftLevel;
   #skillVortex = startVortexLevel;
 
+  #actions: Record<string, AbstractAction> = {};
+  #playerCancelableActions: Record<string, AbstractAction> = {};
+
   public multiplayerSubject$ = new Subject<MultiPlayerActions>();
 
   #playerPositionSubject = new Subject<{
@@ -123,18 +147,25 @@ export default class Game {
     this.#engine = new Engine(canvas, true, {
       preserveDrawingBuffer: true,
       stencil: true,
+      deterministicLockstep: true,
+      // lockstepMaxSteps: 4,
+      // timeStep: 1 / 60,
     });
 
     this.#havokInstance = havokInstance;
     this.#scene = this.#createScene();
     this.#physicsHelper = new PhysicsHelper(this.#scene);
 
-    if (document.location.hash === '#debug') {
-      this.#scene.debugLayer
-        .show({
-          embedMode: true,
-          showExplorer: true,
-          showInspector: true,
+    this.#setFps(1000 / 60);
+
+    if (IS_DEBUGING) {
+      import('@babylonjs/inspector')
+        .then(({ Inspector }) => {
+          Inspector.Show(this.#scene, {
+            embedMode: true,
+            showExplorer: true,
+            showInspector: true,
+          });
         })
         .then(() => {
           const $el = window.document.getElementById('embed-host');
@@ -202,14 +233,17 @@ export default class Game {
 
   initNewPlayer() {
     this.#player?.dispose();
-    this.#skillGravitation = startGravitationLevel;
-    this.#skillRadialExplosion = startRadialExplosionLevel;
-    this.#skillUpdraft = startUpdraftLevel;
+    this.#skillGravitation = downGravitationLevel(this.#skillGravitation);
+    this.#skillRadialExplosion = downRadialExplosionLevel(
+      this.#skillRadialExplosion
+    );
+    this.#skillUpdraft = downUpdraftLevel(this.#skillUpdraft);
     this.#skillVortex = startVortexLevel;
 
     this.#player = new Player({
       scene: this.#scene,
       startPosition: new Vector3(0, 30, 0),
+      // startPosition: new Vector3(-90, 15, 60),
       shadow: this.#shadow,
     });
     this.playerCamera.setTarget(this.#player.playerMesh);
@@ -225,7 +259,6 @@ export default class Game {
 
     const scene = new Scene(this.#engine);
 
-    // scene.ambientColor = new Color3(0, 0, 0);
     scene.enablePhysics(gravityVector, physicsPlugin);
 
     return scene;
@@ -257,7 +290,38 @@ export default class Game {
     // Return the created scene
   }
 
+  /**
+   * https://forum.babylonjs.com/t/inconsistent-physics-behavior-in-babylon-js-on-different-fps/46475
+   */
+  #syncFpsAndPhysics() {
+    this.#scene.getPhysicsEngine()?.setTimeStep(1 / this.#engine.getFps());
+  }
+
+  #setFps(frameDuration: number) {
+    let lastTime = 0;
+    let accumulatedTime = 0;
+
+    this.#engine.customAnimationFrameRequester = {
+      requestAnimationFrame(boundedRenderFunction: () => void) {
+        function frameRequestCallback(time: number) {
+          accumulatedTime += time - lastTime;
+          lastTime = time;
+
+          if (accumulatedTime >= frameDuration) {
+            accumulatedTime -= frameDuration;
+            boundedRenderFunction();
+            return;
+          }
+          requestAnimationFrame(frameRequestCallback);
+        }
+
+        requestAnimationFrame(frameRequestCallback);
+      },
+    };
+  }
+
   #loop() {
+    this.#syncFpsAndPhysics();
     this.#handleChangeCameraAngle();
     // move player
     this.#player.move(-this.#cameraAngle, this.#movementDirection);
@@ -293,7 +357,6 @@ export default class Game {
       z: number;
     }
   ) {
-    // console.log('setMultiPlayerPosition', id, position);
     const Vector3Position = new Vector3(position.x, position.y, position.z);
     if (!this.#multiplayers[id]) {
       this.#multiplayers[id] = new MultiPlayer({
@@ -341,6 +404,9 @@ export default class Game {
     switch (action) {
       case 'JUMP':
         this.#player.jump();
+        Object.values(this.#playerCancelableActions).forEach((action) => {
+          action.callEndActionStatus();
+        });
         break;
       case 'ACTION1':
         this.#callPlayerGravitationAction();
@@ -354,37 +420,26 @@ export default class Game {
       case 'ACTION4':
         this.#callPlayerVortexAction();
         break;
+      case 'ACTION5':
+        this.#callPlayerForwardImpulseAction();
+        break;
     }
   }
 
   #callPlayerGravitationAction() {
     const gravitationLevel = this.#skillGravitation;
-
-    this.#skillGravitation = upGravitationLevel(gravitationLevel);
+    this.#skillGravitation = upGravitationLevel(this.#skillGravitation);
+    if (IS_DEBUGING) {
+      console.log('gravitationLevel', gravitationLevel);
+    }
 
     const playerPosition = this.#player.playerMesh.getAbsolutePosition();
     const { maxRandomPosition } = gravitationLevel;
-    const x =
-      playerPosition.x +
-      Math.random() * maxRandomPosition -
-      maxRandomPosition / 2;
-    const y =
-      playerPosition.y +
-      Math.random() * maxRandomPosition -
-      maxRandomPosition / 2;
-    const z =
-      playerPosition.z +
-      Math.random() * maxRandomPosition -
-      maxRandomPosition / 2;
 
     const payload: GravitationPayload = {
       radius: gravitationLevel.radius,
       strength: gravitationLevel.strength,
-      position: {
-        x,
-        y,
-        z,
-      },
+      position: calculateRandomPosition(playerPosition, maxRandomPosition),
       duration: gravitationLevel.duration,
     };
 
@@ -392,46 +447,53 @@ export default class Game {
       name: 'GRAVITATION',
       payload,
     });
-    this.#callGravitationAction(payload);
+    const action = this.#callGravitationAction(payload);
+    if (action) {
+      const key = Date.now();
+      this.#playerCancelableActions[key] = action;
+      action.onDispose(() => {
+        delete this.#playerCancelableActions[key];
+      });
+    }
+  }
+
+  #autoClearFromActionsList(action: AbstractAction) {
+    const key = Date.now();
+    this.#actions[key] = action;
+    action.onDispose(() => {
+      delete this.#actions[key];
+    });
   }
 
   #callGravitationAction(payload: GravitationPayload) {
-    // todo dispose
     if (!this.#physicsHelper) {
       return;
     }
-    new GravitationAction({
+    const action = new GravitationAction({
       physicsHelper: this.#physicsHelper,
       scene: this.#scene,
       payload,
     });
+    this.#autoClearFromActionsList(action);
+    return action;
   }
 
   #callPlayerRadialExplosionAction() {
     const radialExplosionLevel = this.#skillRadialExplosion;
 
     this.#skillRadialExplosion = upRadialExplosionLevel(radialExplosionLevel);
-    console.log('radialExplosionLevel', radialExplosionLevel);
+    if (IS_DEBUGING) {
+      console.log('radialExplosionLevel', radialExplosionLevel);
+    }
 
     const playerPosition = this.#player.playerMesh.getAbsolutePosition();
-    const { maxRandomPosition } = radialExplosionLevel;
-    const x =
-      playerPosition.x +
-      (Math.random() * maxRandomPosition) / maxRandomPosition / 2;
-    const y =
-      playerPosition.y +
-      (Math.random() * maxRandomPosition) / maxRandomPosition / 2;
-    const z =
-      playerPosition.z +
-      (Math.random() * maxRandomPosition) / maxRandomPosition / 2;
     const payload: RadialExplosionPayload = {
       radius: radialExplosionLevel.radius,
       strength: radialExplosionLevel.strength,
-      position: {
-        x,
-        y,
-        z,
-      },
+      position: calculateRandomPosition(
+        playerPosition,
+        radialExplosionLevel.maxRandomPosition
+      ),
     };
     this.multiplayerSubject$.next({
       name: 'RADIAL_EXPLOSION',
@@ -441,47 +503,35 @@ export default class Game {
   }
 
   #callRadialExplosionAction(payload: RadialExplosionPayload) {
-    // todo dispose
     if (!this.#physicsHelper) {
       return;
     }
-    new RadialExplosionAction({
+    const action = new RadialExplosionAction({
       physicsHelper: this.#physicsHelper,
       scene: this.#scene,
       payload,
     });
+    this.#autoClearFromActionsList(action);
+    return action;
   }
 
   #callPlayerUpdraftAction() {
-    // todo dispose
     if (!this.#physicsHelper) {
       return;
     }
     const updraftLevel = this.#skillUpdraft;
     this.#skillUpdraft = upUpdraftLevel(updraftLevel);
+    if (IS_DEBUGING) {
+      console.log('updraftLevel', updraftLevel);
+    }
 
     const playerPosition = this.#player.playerMesh.getAbsolutePosition();
     const { maxRandomPosition } = updraftLevel;
-    const x =
-      playerPosition.x +
-      Math.random() * maxRandomPosition -
-      maxRandomPosition / 2;
-    const y =
-      playerPosition.y +
-      Math.random() * maxRandomPosition -
-      maxRandomPosition / 2;
-    const z =
-      playerPosition.z +
-      Math.random() * maxRandomPosition -
-      maxRandomPosition / 2;
+    const position = calculateRandomPosition(playerPosition, maxRandomPosition);
     const payload: UpdraftPayload = {
       radius: updraftLevel.radius,
       strength: updraftLevel.strength,
-      position: {
-        x,
-        y,
-        z,
-      },
+      position,
       height: updraftLevel.height,
       duration: updraftLevel.duration,
     };
@@ -493,47 +543,35 @@ export default class Game {
   }
 
   #callUpdraftAction(payload: UpdraftPayload) {
-    // todo dispose
     if (!this.#physicsHelper) {
       return;
     }
-    new UpdraftAction({
+    const action = new UpdraftAction({
       physicsHelper: this.#physicsHelper,
       scene: this.#scene,
       payload,
     });
+    this.#autoClearFromActionsList(action);
+    return action;
   }
 
   #callPlayerVortexAction() {
-    // todo dispose
     if (!this.#physicsHelper) {
       return;
     }
     const vortexLevel = this.#skillVortex;
     this.#skillVortex = upVortexLevel(vortexLevel);
+    if (IS_DEBUGING) {
+      console.log('vortexLevel', vortexLevel);
+    }
 
     const playerPosition = this.#player.playerMesh.getAbsolutePosition();
     const { maxRandomPosition } = vortexLevel;
-    const x =
-      playerPosition.x +
-      Math.random() * maxRandomPosition -
-      maxRandomPosition / 2;
-    const y =
-      playerPosition.y +
-      Math.random() * maxRandomPosition -
-      maxRandomPosition / 2;
-    const z =
-      playerPosition.z +
-      Math.random() * maxRandomPosition -
-      maxRandomPosition / 2;
+    const position = calculateRandomPosition(playerPosition, maxRandomPosition);
     const payload: VortexPayload = {
       radius: vortexLevel.radius,
       strength: vortexLevel.strength,
-      position: {
-        x,
-        y,
-        z,
-      },
+      position,
       height: vortexLevel.height,
       duration: vortexLevel.duration,
     };
@@ -545,19 +583,28 @@ export default class Game {
   }
 
   #callVortexAction(payload: VortexPayload) {
-    // todo dispose
     if (!this.#physicsHelper) {
       return;
     }
-    new VortexAction({
+    const action = new VortexAction({
       physicsHelper: this.#physicsHelper,
       scene: this.#scene,
       payload,
     });
+    this.#autoClearFromActionsList(action);
+    return action;
   }
 
   public dispose() {
     this.#engine.stopRenderLoop();
     this.#scene.dispose();
+    this.#engine.dispose();
+    Object.values(this.#actions).forEach((action) => action.dispose());
+    listOfInstancedMeshes.forEach((mesh) => mesh.dispose());
+    listOfInstancedMeshes.clear();
+  }
+
+  #callPlayerForwardImpulseAction() {
+    this.#player.forwardImpulse(this.#cameraAngle);
   }
 }
