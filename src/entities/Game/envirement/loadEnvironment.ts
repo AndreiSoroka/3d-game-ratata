@@ -1,9 +1,11 @@
 import environmentUrl from './coordinates.json?url';
-import getMesh from '@/entities/Game/envirement/getMesh';
-import type { InstancedMesh, Scene, ShadowGenerator } from '@babylonjs/core';
+import getMesh, {
+  destroyListOfMeshes,
+} from '@/entities/Game/envirement/getMesh';
+import type { Mesh, Scene, ShadowGenerator } from '@babylonjs/core';
 import { Vector3 } from '@babylonjs/core';
 
-export const listOfInstancedMeshes: Set<InstancedMesh> = new Set();
+export const listOfInstancedMeshes: Set<Mesh> = new Set();
 
 type Environment = {
   name: string;
@@ -18,37 +20,13 @@ function convertBlenderToBabylonCoordinates(vector: Environment['location']) {
   return new Vector3(x, z, -y);
 }
 
-const { PI } = Math;
-const TWO_PI = PI * 2;
-const HALF_PI = PI / 2;
-
-function normalizeYAngle(angleInRadians: number) {
-  // return angleInRadians;
-  // if (angleInRadians === 0) {
-  //   return PI;
-  // }
-  return angleInRadians;
-  // if (angle === Math.PI /2) {
-  //
-  // }
-  // if (angleInRadians === 0) {
-  //   return Math.PI;
-  // } else if (angleInRadians > 0) {
-  //   return Math.PI - angleInRadians;
-  // } else {
-  //   return Math.PI + angleInRadians;
-  // }
-  // console.log(angle);
-  // return -((angle % TWO_PI) + TWO_PI) % TWO_PI;
-}
-
 function convertBlenderToBabylonRotation(
   vector: Environment['rotation'],
   rotation_mode: Environment['rotation_mode']
 ): Vector3 {
   if (rotation_mode === 'XYZ') {
     const [x, y, z] = vector;
-    return new Vector3(x, normalizeYAngle(z), y);
+    return new Vector3(x, z, y);
   }
   throw new Error(`Unknown rotation mode ${rotation_mode}`);
 }
@@ -85,4 +63,6 @@ export default async function loadEnvironment(
       listOfInstancedMeshes.add(mesh);
     });
   }
+
+  await destroyListOfMeshes();
 }

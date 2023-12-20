@@ -59,7 +59,7 @@ export default class GravitationAction extends AbstractAction {
 
     this.gravitationalPosition = new Vector3(
       options.payload.position.x,
-      options.payload.position.y - 1,
+      options.payload.position.y - 0.5,
       options.payload.position.z
     );
 

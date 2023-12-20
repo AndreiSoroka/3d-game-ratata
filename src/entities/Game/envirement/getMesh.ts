@@ -10,6 +10,7 @@ import {
   type Scene,
   SceneLoader,
   ShadowGenerator,
+  TransformNode,
   Vector3,
 } from '@babylonjs/core';
 import { from, lastValueFrom, map, mergeAll, scan } from 'rxjs';
@@ -70,8 +71,26 @@ function loadMeshes(scene: Scene) {
 }
 
 let listOfMeshesPromise: ReturnType<typeof loadMeshes> | null = null;
+let envParent: TransformNode | null = null;
 
-export default function getMesh(paylaod: {
+export async function destroyListOfMeshes() {
+  if (!listOfMeshesPromise) {
+    return;
+  }
+  const listOfMeshes = await listOfMeshesPromise;
+
+  for (const mesh of Object.values(listOfMeshes)) {
+    if (!mesh) {
+      continue;
+    }
+    mesh.rootMesh.dispose();
+    for (const childMesh of mesh.meshes) {
+      childMesh.dispose();
+    }
+  }
+}
+
+export default async function getMesh(paylaod: {
   id: string;
   name: string;
   scene: Scene;
@@ -79,53 +98,52 @@ export default function getMesh(paylaod: {
   position: Vector3;
   rotation: Vector3 | Quaternion;
   scale: Vector3;
-}): Promise<InstancedMesh[]> {
+}): Promise<Mesh[]> {
   if (!listOfMeshesPromise) {
     listOfMeshesPromise = loadMeshes(paylaod.scene);
+    envParent = new TransformNode(`env`, paylaod.scene);
   }
 
-  return listOfMeshesPromise.then((listOfMeshes) => {
-    const meshes: InstancedMesh[] = [];
-    const mesh = listOfMeshes[paylaod.name];
-    if (!mesh) {
-      throw new Error(`Mesh ${paylaod.name} not found`);
+  const listOfMeshes = await listOfMeshesPromise;
+
+  const mesh = listOfMeshes[paylaod.name];
+  if (!mesh) {
+    throw new Error(`Mesh ${paylaod.name} not found`);
+  }
+
+  const meshes: Mesh[] = [];
+  mesh.meshes.forEach((childMesh, index) => {
+    const clonedChildMesh = childMesh.clone(
+      `${paylaod.id}-${index}`,
+      envParent
+    );
+    if (!clonedChildMesh) {
+      throw new Error(`Mesh ${childMesh.name} not found`);
     }
+    meshes.push(clonedChildMesh);
+    clonedChildMesh.isVisible = true;
+    // clonedChildMesh.parent = newMesh;
+    clonedChildMesh.position = paylaod.position;
+    if (paylaod.rotation instanceof Quaternion) {
+      clonedChildMesh.rotationQuaternion = paylaod.rotation.clone();
+    } else {
+      clonedChildMesh.rotation = paylaod.rotation.clone();
+    }
+    clonedChildMesh.scaling = paylaod.scale.clone();
+    clonedChildMesh.updatePoseMatrix(Matrix.Identity());
 
-    mesh.meshes.forEach((childMesh, index) => {
-      const clonedChildMesh = childMesh.createInstance(
-        `${paylaod.id}-${index}`
-        // newMesh
-      );
-      if (!clonedChildMesh) {
-        throw new Error(`Mesh ${childMesh.name} not found`);
-      }
-      meshes.push(clonedChildMesh);
-      clonedChildMesh.isVisible = true;
-      // clonedChildMesh.parent = newMesh;
-      clonedChildMesh.position = paylaod.position;
-      if (paylaod.rotation instanceof Quaternion) {
-        console.log(paylaod.rotation.clone());
-        clonedChildMesh.rotationQuaternion = paylaod.rotation.clone();
-      } else {
-        clonedChildMesh.rotation = paylaod.rotation.clone();
-      }
-      clonedChildMesh.scaling = paylaod.scale;
+    clonedChildMesh.receiveShadows = true;
+    paylaod.shadow.addShadowCaster(clonedChildMesh);
 
-      clonedChildMesh.updatePoseMatrix(Matrix.Identity());
-
-      clonedChildMesh.receiveShadows = true;
-      paylaod.shadow.addShadowCaster(clonedChildMesh);
-
-      new PhysicsAggregate(
-        clonedChildMesh,
-        PhysicsShapeType.MESH,
-        {
-          mass: 0,
-          friction: 1,
-        },
-        paylaod.scene
-      );
-    });
-    return meshes;
+    new PhysicsAggregate(
+      clonedChildMesh,
+      PhysicsShapeType.MESH,
+      {
+        mass: 0,
+        friction: 1,
+      },
+      paylaod.scene
+    );
   });
+  return meshes;
 }
