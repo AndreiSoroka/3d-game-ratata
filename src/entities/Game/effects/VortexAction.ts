@@ -122,10 +122,10 @@ export default class VortexAction extends AbstractAction {
 
   public dispose() {
     super.dispose();
-    this.sphere.dispose();
+    this.sphere.dispose(false, true);
     this.event?.disable();
-    this.event?.dispose();
+    this.event?.dispose(true);
     this.particleSystem.stop();
-    this.particleSystem.dispose();
+    this.particleSystem.dispose(true);
   }
 }

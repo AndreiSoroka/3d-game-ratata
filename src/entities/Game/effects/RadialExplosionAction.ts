@@ -122,9 +122,9 @@ export default class RadialExplosionAction extends AbstractAction {
 
   public dispose() {
     super.dispose();
-    this.sphere.dispose();
+    this.sphere.dispose(false, true);
     this.event?.dispose();
     this.particleSystem.stop();
-    this.particleSystem.dispose();
+    this.particleSystem.dispose(true);
   }
 }

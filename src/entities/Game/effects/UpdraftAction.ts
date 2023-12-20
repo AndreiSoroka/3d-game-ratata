@@ -138,12 +138,12 @@ export default class UpdraftAction extends AbstractAction {
 
   public dispose() {
     super.dispose();
-    this.sphere?.dispose();
+    this.sphere?.dispose(false, true);
     this.event?.disable();
     this.event?.dispose();
     this.event2?.disable();
     this.event2?.dispose();
     this.particleSystem?.stop();
-    this.particleSystem?.dispose();
+    this.particleSystem?.dispose(true);
   }
 }
