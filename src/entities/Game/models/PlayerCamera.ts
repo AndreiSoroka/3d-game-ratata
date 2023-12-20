@@ -10,10 +10,15 @@ import {
 
 const IS_DEBUGING = document.location.hash === '#debug';
 
+const CAMERA_ZOOM_STEPS = 30;
 const CAMERA_MAX_RADIUS = 30;
 const CAMERA_MIN_RADIUS = 20;
+const CAMERA_RADIUS_SPEED =
+  (CAMERA_MAX_RADIUS - CAMERA_MIN_RADIUS) / CAMERA_ZOOM_STEPS;
 const CAMERA_MAX_BETA = 1.3;
 const CAMERA_MIN_BETA = 1;
+const CAMERA_BETA_SPEED =
+  (CAMERA_MAX_BETA - CAMERA_MIN_BETA) / CAMERA_ZOOM_STEPS;
 const CAMERA_ADJUST_DELAY = 500;
 
 export default class PlayerCamera {
@@ -65,7 +70,7 @@ export default class PlayerCamera {
     }
 
     this._slowLoopInterval = setInterval(this._slowLoop.bind(this), 200);
-    this._loopInterval = setInterval(this._loop.bind(this), 30);
+    this._loopInterval = setInterval(this._loop.bind(this), 15);
   }
 
   private _updateRaysPosition() {
@@ -177,16 +182,22 @@ export default class PlayerCamera {
     }
     if (this._isZooming) {
       this._camera.radius = Math.max(
-        this._camera.radius - 0.5,
+        this._camera.radius - CAMERA_RADIUS_SPEED,
         CAMERA_MIN_RADIUS
       );
-      this._camera.beta = Math.min(this._camera.beta + 0.01, CAMERA_MAX_BETA);
+      this._camera.beta = Math.min(
+        this._camera.beta + CAMERA_BETA_SPEED,
+        CAMERA_MAX_BETA
+      );
     } else {
       this._camera.radius = Math.min(
-        this._camera.radius + 0.5,
+        this._camera.radius + CAMERA_RADIUS_SPEED,
         CAMERA_MAX_RADIUS
       );
-      this._camera.beta = Math.max(this._camera.beta - 0.01, CAMERA_MIN_BETA);
+      this._camera.beta = Math.max(
+        this._camera.beta - CAMERA_BETA_SPEED,
+        CAMERA_MIN_BETA
+      );
     }
   }
 
