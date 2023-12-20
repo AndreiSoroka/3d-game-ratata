@@ -12,7 +12,6 @@ import {
   mergeMap,
   distinctUntilChanged,
   scan,
-  tap,
 } from 'rxjs';
 import AbstractController, {
   type PlayerActionPayload,
@@ -145,7 +144,6 @@ export default class KeyBoardController extends AbstractController {
       direction: this._bindDirectionKeys[keyCode],
       isPressed: !!this._pressedKeys.get(keyCode),
     })),
-    tap((log) => console.log(log)),
     distinctUntilChanged(
       (prev, curr) =>
         prev.direction === curr.direction && prev.isPressed === curr.isPressed

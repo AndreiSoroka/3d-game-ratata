@@ -14,11 +14,25 @@ import ActionForwardImpulseButton from '@/entities/GameActions/ui/ActionButtons/
 import KeyBoardController from '@/entities/Game/controllers/KeyBoardController';
 import AdapterControllerWithGame from '@/entities/Game/AdapterControllerWithGame';
 
+2;
 const gameCanvas = ref<HTMLCanvasElement>();
 let game: Game;
 let adapterController: ReturnType<typeof AdapterControllerWithGame>;
 
 const store = usePeerStore();
+
+// controller
+const buttonAction1Timestamp = ref<number>(0);
+const buttonAction2Timestamp = ref<number>(0);
+const buttonAction3Timestamp = ref<number>(0);
+const buttonAction4Timestamp = ref<number>(0);
+const buttonAction5Timestamp = ref<number>(0);
+
+const COOLDOWN_ACTION1 = ref<number>(0);
+const COOLDOWN_ACTION2 = ref<number>(0);
+const COOLDOWN_ACTION3 = ref<number>(0);
+const COOLDOWN_ACTION4 = ref<number>(0);
+const COOLDOWN_ACTION5 = ref<number>(0);
 
 onMounted(() => {
   HavokPhysics().then((HK) => {
@@ -52,7 +66,30 @@ onMounted(() => {
         game.callWordAction(payload.data);
       }
     });
-    adapterController = AdapterControllerWithGame(KeyBoardController, game);
+    adapterController = AdapterControllerWithGame(KeyBoardController, game, {
+      actionsFn(payload) {
+        if (payload.action === 'ACTION1') {
+          buttonAction1Timestamp.value = payload.timestamp;
+          COOLDOWN_ACTION1.value = payload.cooldown;
+        }
+        if (payload.action === 'ACTION2') {
+          buttonAction2Timestamp.value = payload.timestamp;
+          COOLDOWN_ACTION2.value = payload.cooldown;
+        }
+        if (payload.action === 'ACTION3') {
+          buttonAction3Timestamp.value = payload.timestamp;
+          COOLDOWN_ACTION3.value = payload.cooldown;
+        }
+        if (payload.action === 'ACTION4') {
+          buttonAction4Timestamp.value = payload.timestamp;
+          COOLDOWN_ACTION4.value = payload.cooldown;
+        }
+        if (payload.action === 'ACTION5') {
+          buttonAction5Timestamp.value = payload.timestamp;
+          COOLDOWN_ACTION5.value = payload.cooldown;
+        }
+      },
+    });
   });
 });
 
@@ -75,19 +112,6 @@ window.addEventListener('resize', function () {
   gameCanvas.value.height = window.innerHeight;
   game.resize();
 });
-
-// controller
-const buttonAction1Timestamp = ref<number>(0);
-const buttonAction2Timestamp = ref<number>(0);
-const buttonAction3Timestamp = ref<number>(0);
-const buttonAction4Timestamp = ref<number>(0);
-const buttonAction5Timestamp = ref<number>(0);
-
-const COOLDOWN_ACTION1 = 400;
-const COOLDOWN_ACTION2 = 400;
-const COOLDOWN_ACTION3 = 3000;
-const COOLDOWN_ACTION4 = 5000;
-const COOLDOWN_ACTION5 = 5000;
 </script>
 
 <template>
