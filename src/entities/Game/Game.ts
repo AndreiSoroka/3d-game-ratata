@@ -599,6 +599,7 @@ export default class Game {
     this.#engine.stopRenderLoop();
     this.#scene.dispose();
     this.#engine.dispose();
+    this.playerCamera.dispose();
     Object.values(this.#actions).forEach((action) => action.dispose());
     listOfInstancedMeshes.forEach((mesh) => mesh.dispose());
     listOfInstancedMeshes.clear();

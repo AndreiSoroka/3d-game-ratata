@@ -12,16 +12,19 @@ const IS_DEBUGING = document.location.hash === '#debug';
 
 const CAMERA_MAX_RADIUS = 30;
 const CAMERA_MIN_RADIUS = 20;
-const CAMERA_MAX_BETA = 1.2;
+const CAMERA_MAX_BETA = 1.3;
 const CAMERA_MIN_BETA = 1;
 const CAMERA_ADJUST_DELAY = 500;
 
 export default class PlayerCamera {
   private readonly _scene: Scene;
   private readonly _camera: ArcRotateCamera;
+  private readonly _payerUpRay: Ray;
   private readonly _ray: Ray;
   private readonly _diagonalRays: Ray[];
   private readonly _slowLoopInterval: number;
+  private readonly _loopInterval: number;
+  private _isZooming = false;
   private lastAdjustmentTime = Date.now();
   private readonly _hits = new Map<
     AbstractMesh,
@@ -48,6 +51,7 @@ export default class PlayerCamera {
       { length: 4 },
       () => new Ray(this._camera.position, Vector3.Forward(), 0)
     );
+    this._payerUpRay = new Ray(Vector3.Zero(), Vector3.Up(), 10);
 
     if (IS_DEBUGING) {
       const rayHelper = new RayHelper(this._ray);
@@ -56,10 +60,12 @@ export default class PlayerCamera {
         const rayHelper = new RayHelper(ray);
         rayHelper.show(scene);
       });
+      const rayHelperUp = new RayHelper(this._payerUpRay);
+      rayHelperUp.show(scene);
     }
 
     this._slowLoopInterval = setInterval(this._slowLoop.bind(this), 200);
-    setInterval(this._loop.bind(this), 30);
+    this._loopInterval = setInterval(this._loop.bind(this), 30);
   }
 
   private _updateRaysPosition() {
@@ -100,15 +106,29 @@ export default class PlayerCamera {
   }
 
   private _getHits() {
-    const directHits = this._scene.multiPickWithRay(this._ray) ?? [];
+    const directHits =
+      this._scene.multiPickWithRay(this._ray, this.isEnvMesh) ?? [];
     const diagonalHits = this._diagonalRays.flatMap(
-      (ray) => this._scene.multiPickWithRay(ray) ?? []
+      (ray) => this._scene.multiPickWithRay(ray, this.isEnvMesh) ?? []
     );
     return [...directHits, ...diagonalHits];
   }
 
+  private _getPayerUpHit() {
+    return this._scene.pickWithRay(this._payerUpRay, this.isEnvMesh);
+  }
+
+  private isEnvMesh(mesh: AbstractMesh) {
+    return mesh.parent?.name === 'env';
+  }
+
   private _slowLoop() {
     this._updateRaysPosition();
+
+    const playerUpHit = this._getPayerUpHit();
+    this._isZooming = !!playerUpHit?.pickedMesh;
+    console.log(playerUpHit?.pickedMesh?.name);
+
     const hits = this._getHits();
 
     // make transparent
@@ -117,10 +137,6 @@ export default class PlayerCamera {
         continue;
       }
       if (this._hits.has(hit.pickedMesh)) {
-        continue;
-      }
-
-      if (hit.pickedMesh.parent?.name !== 'env') {
         continue;
       }
 
@@ -159,7 +175,7 @@ export default class PlayerCamera {
     if (Date.now() - this.lastAdjustmentTime < CAMERA_ADJUST_DELAY) {
       return;
     }
-    if (this._hits.size) {
+    if (this._isZooming) {
       this._camera.radius = Math.max(
         this._camera.radius - 0.5,
         CAMERA_MIN_RADIUS
@@ -176,6 +192,7 @@ export default class PlayerCamera {
 
   public setTarget(target: Mesh) {
     this._camera.lockedTarget = target;
+    this._payerUpRay.origin = target.position;
   }
 
   public setAngle(angle: number) {
@@ -185,5 +202,6 @@ export default class PlayerCamera {
   dispose() {
     this._camera.dispose();
     clearInterval(this._slowLoopInterval);
+    clearInterval(this._loopInterval);
   }
 }
