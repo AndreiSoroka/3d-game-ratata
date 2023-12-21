@@ -132,7 +132,6 @@ export default class PlayerCamera {
 
     const playerUpHit = this._getPayerUpHit();
     this._isZooming = !!playerUpHit?.pickedMesh;
-    console.log(playerUpHit?.pickedMesh?.name);
 
     const hits = this._getHits();
 

@@ -57,6 +57,7 @@ import {
 import VortexAction from '@/entities/Game/effects/VortexAction';
 import type AbstractAction from '@/entities/Game/effects/AbstractAction';
 import calculateRandomPosition from '@/entities/Game/utils/calculateRandomPosition';
+import Fog from '@/entities/Game/models/Fog';
 
 const IS_DEBUGING = document.location.hash === '#debug';
 
@@ -109,6 +110,7 @@ export default class Game {
   #player!: Player;
   #engine: Engine;
   #scene: Scene;
+  #fog: Fog;
   #cameraAngle = 0;
   playerCamera: PlayerCamera;
   #havokInstance: HavokPhysicsWithBindings;
@@ -209,9 +211,9 @@ export default class Game {
     // );
     // this.#scene.createDefaultSkybox(envTexture, true, 1000);
 
-    this.#scene.fogMode = Scene.FOGMODE_LINEAR;
-    this.#scene.fogStart = 30.0;
-    this.#scene.fogEnd = 70.0;
+    this.#fog = new Fog({
+      scene: this.#scene,
+    });
 
     this.#scene.environmentTexture = CubeTexture.CreateFromPrefilteredData(
       'https://playground.babylonjs.com/textures/environment.env',
@@ -416,9 +418,11 @@ export default class Game {
         break;
       case 'ACTION3':
         this.#callPlayerUpdraftAction();
+        this.#fog.addVisibility();
         break;
       case 'ACTION4':
         this.#callPlayerVortexAction();
+        this.#fog.addVisibility();
         break;
       case 'ACTION5':
         this.#callPlayerForwardImpulseAction();
@@ -600,6 +604,8 @@ export default class Game {
     this.#scene.dispose();
     this.#engine.dispose();
     this.playerCamera.dispose();
+    this.#player.dispose();
+    this.#fog.dispose();
     Object.values(this.#actions).forEach((action) => action.dispose());
     listOfInstancedMeshes.forEach((mesh) => mesh.dispose());
     listOfInstancedMeshes.clear();
