@@ -23,18 +23,21 @@ export type VortexPayload = {
 };
 
 type Vortex = ReturnType<typeof PhysicsHelper.prototype.vortex>;
+type VortexInLoopFn = (vortex: Mesh) => void;
 
 export default class VortexAction extends AbstractAction {
-  private readonly payload: VortexPayload;
-  private readonly sphere: Mesh;
-  private readonly physicsHelper: PhysicsHelper;
-  private readonly event: Vortex;
-  private readonly particleSystem: ParticleSystem;
+  private readonly _payload: VortexPayload;
+  private readonly _object: Mesh;
+  private readonly _physicsHelper: PhysicsHelper;
+  private readonly _event: Vortex;
+  private readonly _particleSystem: ParticleSystem;
+  private readonly _vortexInLoopFn: VortexInLoopFn;
 
   constructor(options: {
     physicsHelper: PhysicsHelper;
     scene: Scene;
     payload: VortexPayload;
+    vortexInLoopFn: VortexInLoopFn;
   }) {
     super({
       scene: options.scene,
@@ -44,9 +47,10 @@ export default class VortexAction extends AbstractAction {
       delayDisposeAction: options.payload.duration + 2000,
       intervalLoopAction: 30,
     });
-    this.payload = options.payload;
+    this._vortexInLoopFn = options.vortexInLoopFn;
+    this._payload = options.payload;
 
-    this.physicsHelper = options.physicsHelper;
+    this._physicsHelper = options.physicsHelper;
 
     const actionPosition = new Vector3(
       options.payload.position.x,
@@ -59,26 +63,26 @@ export default class VortexAction extends AbstractAction {
       options.payload.position.z
     );
 
-    this.event = this.physicsHelper.vortex(
+    this._event = this._physicsHelper.vortex(
       eventPosition,
       options.payload.radius,
       options.payload.strength,
       options.payload.height
     );
 
-    this.sphere = MeshBuilder.CreateCylinder(this.getEventName('sphere'), {
-      height: this.payload.height,
-      diameter: this.payload.radius * 2,
+    this._object = MeshBuilder.CreateCylinder(this.getEventName('sphere'), {
+      height: this._payload.height,
+      diameter: this._payload.radius * 2,
     });
-    this.sphere.position = actionPosition;
-    this.addDefaultMaterialToMesh(this.sphere);
+    this._object.position = actionPosition;
+    this.addDefaultMaterialToMesh(this._object);
 
     const particleSystem = new ParticleSystem(
       this.getEventName('particles'),
       2000,
       this.scene
     );
-    this.particleSystem = particleSystem;
+    this._particleSystem = particleSystem;
     particleSystem.particleTexture = new Texture(flareTexture, this.scene);
     particleSystem.minSize = 0.2;
     particleSystem.maxSize = 0.7;
@@ -99,33 +103,34 @@ export default class VortexAction extends AbstractAction {
 
   loopAction() {
     if (this.status === 'started') {
-      if (this.sphere.material && this.sphere.material.alpha < 0.1) {
-        this.sphere.material.alpha += 0.02;
+      if (this._object.material && this._object.material.alpha < 0.1) {
+        this._object.material.alpha += 0.02;
       }
+      this._vortexInLoopFn(this._object);
       return;
     }
     if (this.status === 'ended') {
-      if (this.sphere?.material) {
-        this.sphere.material.alpha -= 0.01;
+      if (this._object?.material) {
+        this._object.material.alpha -= 0.01;
       }
     }
   }
 
   startAction() {
-    this.event?.enable();
+    this._event?.enable();
   }
 
   endAction() {
-    this.event?.disable();
-    this.particleSystem.stop();
+    this._event?.disable();
+    this._particleSystem.stop();
   }
 
   public dispose() {
     super.dispose();
-    this.sphere.dispose(false, true);
-    this.event?.disable();
-    this.event?.dispose(true);
-    this.particleSystem.stop();
-    this.particleSystem.dispose(true);
+    this._object.dispose(false, true);
+    this._event?.disable();
+    this._event?.dispose(true);
+    this._particleSystem.stop();
+    this._particleSystem.dispose(true);
   }
 }

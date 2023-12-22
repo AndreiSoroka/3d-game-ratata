@@ -58,6 +58,19 @@ onMounted(() => {
       });
     });
 
+    game.actionStateSubject$.subscribe((data) => {
+      buttonAction1Timestamp.value = data.ACTION1.timestamp;
+      COOLDOWN_ACTION1.value = data.ACTION1.cooldown;
+      buttonAction2Timestamp.value = data.ACTION2.timestamp;
+      COOLDOWN_ACTION2.value = data.ACTION2.cooldown;
+      buttonAction3Timestamp.value = data.ACTION3.timestamp;
+      COOLDOWN_ACTION3.value = data.ACTION3.cooldown;
+      buttonAction4Timestamp.value = data.ACTION4.timestamp;
+      COOLDOWN_ACTION4.value = data.ACTION4.cooldown;
+      buttonAction5Timestamp.value = data.ACTION5.timestamp;
+      COOLDOWN_ACTION5.value = data.ACTION5.cooldown;
+    });
+
     store.multiplayerDataSubject.subscribe(({ id, payload }) => {
       if (payload.type === 'PLAYER_POSITION') {
         game.setMultiPlayerPosition(id, payload.data);
@@ -66,30 +79,7 @@ onMounted(() => {
         game.callWordAction(payload.data);
       }
     });
-    adapterController = AdapterControllerWithGame(KeyBoardController, game, {
-      actionsFn(payload) {
-        if (payload.action === 'ACTION1') {
-          buttonAction1Timestamp.value = payload.timestamp;
-          COOLDOWN_ACTION1.value = payload.cooldown;
-        }
-        if (payload.action === 'ACTION2') {
-          buttonAction2Timestamp.value = payload.timestamp;
-          COOLDOWN_ACTION2.value = payload.cooldown;
-        }
-        if (payload.action === 'ACTION3') {
-          buttonAction3Timestamp.value = payload.timestamp;
-          COOLDOWN_ACTION3.value = payload.cooldown;
-        }
-        if (payload.action === 'ACTION4') {
-          buttonAction4Timestamp.value = payload.timestamp;
-          COOLDOWN_ACTION4.value = payload.cooldown;
-        }
-        if (payload.action === 'ACTION5') {
-          buttonAction5Timestamp.value = payload.timestamp;
-          COOLDOWN_ACTION5.value = payload.cooldown;
-        }
-      },
-    });
+    adapterController = AdapterControllerWithGame(KeyBoardController, game);
   });
 });
 

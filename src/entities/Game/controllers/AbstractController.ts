@@ -1,11 +1,7 @@
 import type { DIRECTION, PLAYER_ACTION } from '@/entities/Game/Game';
 import { Observable } from 'rxjs';
 
-export type PlayerActionPayload = {
-  action: PLAYER_ACTION;
-  timestamp: number;
-  cooldown: number;
-};
+export type PlayerActionPayload = PLAYER_ACTION;
 export type MovementPayload = {
   direction: DIRECTION;
   isPressed: boolean;

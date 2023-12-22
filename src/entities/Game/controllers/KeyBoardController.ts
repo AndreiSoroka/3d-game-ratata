@@ -1,8 +1,4 @@
-import {
-  actionsCoolDown,
-  type DIRECTION,
-  type PLAYER_ACTION,
-} from '@/entities/Game/Game';
+import { type DIRECTION, type PLAYER_ACTION } from '@/entities/Game/Game';
 import {
   merge,
   filter,
@@ -96,33 +92,7 @@ export default class KeyBoardController extends AbstractController {
         action: this._bindDoubleActionsKeys[event.code],
       }))
     )
-  ).pipe(
-    scan(
-      (acc, payload) => {
-        const now = Date.now();
-        const lastActionTime = acc.state[payload.action] || 0;
-        const cooldown = actionsCoolDown[payload.action];
-
-        if (now - lastActionTime >= cooldown) {
-          return {
-            state: { ...acc.state, [payload.action]: now },
-            payload: {
-              action: payload.action,
-              timestamp: now,
-              cooldown: cooldown,
-            },
-          };
-        }
-        return { ...acc, payload: null };
-      },
-      {
-        state: {} as Record<string, number>,
-        payload: null as PlayerActionPayload | null,
-      }
-    ),
-    map((acc) => acc.payload),
-    filter((payload): payload is PlayerActionPayload => !!payload)
-  );
+  ).pipe(map((acc) => acc.action));
 
   public readonly movementEvents$ = merge(
     this._keyDown$,

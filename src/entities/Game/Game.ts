@@ -22,7 +22,7 @@ import MultiPlayer from '@/entities/Game/models/MultiPlayer';
 import GravitationAction, {
   type GravitationPayload,
 } from '@/entities/Game/effects/GravitationAction';
-import { interval, Subject, throttle } from 'rxjs';
+import { interval, scan, Subject, tap, throttle } from 'rxjs';
 
 import '@babylonjs/loaders';
 import loadEnvironment, {
@@ -78,9 +78,17 @@ export const actionsCoolDown: ActionsCoolDown = {
   ACTION1: 200,
   ACTION2: 1000,
   ACTION3: 5000,
-  ACTION4: 5000,
+  ACTION4: 10000,
   ACTION5: 1000,
 };
+
+type ActionState = Record<
+  PLAYER_ACTION,
+  {
+    cooldown: number;
+    timestamp: number;
+  }
+>;
 
 export type MultiPlayerActionGravitation = {
   name: 'GRAVITATION';
@@ -134,6 +142,64 @@ export default class Game {
     y: number;
     z: number;
   }>();
+
+  #actionState: ActionState = {
+    JUMP: {
+      cooldown: 0,
+      timestamp: 0,
+    },
+    ACTION1: {
+      cooldown: 0,
+      timestamp: 0,
+    },
+    ACTION2: {
+      cooldown: 0,
+      timestamp: 0,
+    },
+    ACTION3: {
+      cooldown: 0,
+      timestamp: 0,
+    },
+    ACTION4: {
+      cooldown: 0,
+      timestamp: 0,
+    },
+    ACTION5: {
+      cooldown: 0,
+      timestamp: 0,
+    },
+  };
+
+  public actionStateSubject$ = new Subject<ActionState>();
+
+  private _updateActionState(action: PLAYER_ACTION) {
+    this.#actionState[action].timestamp = Date.now();
+    this.#actionState[action].cooldown = actionsCoolDown[action];
+    this.actionStateSubject$.next(this.#actionState);
+  }
+
+  private _cooldownAllActions(time: number) {
+    const now = Date.now();
+    (Object.keys(this.#actionState) as PLAYER_ACTION[]).forEach((action) => {
+      const actionEndTime =
+        this.#actionState[action].timestamp +
+        this.#actionState[action].cooldown;
+      const newEndTime = now + time;
+
+      if (actionEndTime < newEndTime) {
+        this.#actionState[action].timestamp = now;
+        this.#actionState[action].cooldown = time;
+      }
+    });
+    this.actionStateSubject$.next(this.#actionState);
+  }
+
+  private isActionReady(action: PLAYER_ACTION) {
+    return (
+      this.#actionState[action].timestamp + this.#actionState[action].cooldown <
+      Date.now()
+    );
+  }
 
   public playerPositionSubject$ = this.#playerPositionSubject
     .asObservable()
@@ -403,6 +469,11 @@ export default class Game {
   }
 
   callPlayerAction(action: PLAYER_ACTION) {
+    if (!this.isActionReady(action)) {
+      return;
+    }
+    this._updateActionState(action);
+
     switch (action) {
       case 'JUMP':
         this.#player.jump();
@@ -423,6 +494,7 @@ export default class Game {
       case 'ACTION4':
         this.#callPlayerVortexAction();
         this.#fog.addVisibility();
+        this._cooldownAllActions(1500);
         break;
       case 'ACTION5':
         this.#callPlayerForwardImpulseAction();
@@ -594,6 +666,11 @@ export default class Game {
       physicsHelper: this.#physicsHelper,
       scene: this.#scene,
       payload,
+      vortexInLoopFn: (vortex) => {
+        if (vortex.intersectsMesh(this.#player.playerMesh, true)) {
+          this._cooldownAllActions(1000);
+        }
+      },
     });
     this.#autoClearFromActionsList(action);
     return action;

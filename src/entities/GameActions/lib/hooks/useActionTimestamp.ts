@@ -1,18 +1,18 @@
 import { computed, onUnmounted, readonly, ref, watch } from 'vue';
 
-export default function useActionTimestamp(nextCooldown: number = 100) {
-  const timestamp = ref(0);
-  const cooldown = ref(nextCooldown);
+export default function useActionTimestamp(cooldown: number = 100) {
+  const actionStartTimestamp = ref(0); // 0 - action is not started
+  const actionCooldown = ref(cooldown);
   const now = ref(Date.now());
   let intervalId: number;
 
-  watch(timestamp, (value) => {
+  watch(actionStartTimestamp, () => {
     clearInterval(intervalId);
     intervalId = setInterval(() => {
       now.value = Date.now();
-      if (timestamp.value + cooldown.value < now.value) {
+      if (actionStartTimestamp.value + actionCooldown.value < now.value) {
         clearInterval(intervalId);
-        timestamp.value = 0;
+        actionStartTimestamp.value = 0;
       }
     }, 30);
   });
@@ -22,7 +22,7 @@ export default function useActionTimestamp(nextCooldown: number = 100) {
   });
 
   function setTimestamp(nextTimestamp = Date.now()) {
-    timestamp.value = nextTimestamp;
+    actionStartTimestamp.value = nextTimestamp;
     now.value = Date.now();
   }
 
@@ -30,20 +30,28 @@ export default function useActionTimestamp(nextCooldown: number = 100) {
     if (isNaN(nextCooldown)) {
       return;
     }
-    cooldown.value = nextCooldown;
+    actionCooldown.value = nextCooldown;
   }
 
   const progress = computed(() => {
-    if (timestamp.value === 0) {
+    if (actionStartTimestamp.value === 0) {
       return 0;
     }
-    return Math.max(0, Math.min(cooldown.value, now.value - timestamp.value));
+    return Math.max(
+      0,
+      Math.min(actionCooldown.value, now.value - actionStartTimestamp.value)
+    );
+  });
+
+  const isDisabledButton = computed(() => {
+    return actionStartTimestamp.value !== 0;
   });
 
   return {
     setTimestamp,
     setCooldown,
     progress: readonly(progress),
-    progressEnd: readonly(cooldown),
+    progressEnd: readonly(actionCooldown),
+    isDisabled: readonly(isDisabledButton),
   };
 }

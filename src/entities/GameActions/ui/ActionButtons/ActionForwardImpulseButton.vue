@@ -9,7 +9,7 @@ const props = defineProps<{
   actionTimestamp: number;
 }>();
 
-const { setTimestamp, setCooldown, progress, progressEnd } =
+const { setTimestamp, setCooldown, progress, progressEnd, isDisabled } =
   useActionTimestamp();
 
 watch(() => props.actionTimestamp, setTimestamp, { immediate: true });
@@ -20,6 +20,6 @@ watch(() => props.cooldown, setCooldown, { immediate: true });
   <ActionBaseButton
     :keyboard-tip="keyboardTip"
     :progress="progress"
-    :is-disabled="progress > 0"
+    :is-disabled="isDisabled"
     :progress-end="progressEnd" />
 </template>
