@@ -64,7 +64,6 @@ const IS_DEBUGING = document.location.hash === '#debug';
 export type CAMERA_DIRECTION = 'CAMERA_LEFT' | 'CAMERA_RIGHT';
 export type DIRECTION = MOVEMENT_DIRECTION | CAMERA_DIRECTION;
 export type PLAYER_ACTION =
-  | 'JUMP'
   | 'ACTION1'
   | 'ACTION2'
   | 'ACTION3'
@@ -74,7 +73,6 @@ export type PLAYER_ACTION =
 export type ActionsCoolDown = Record<PLAYER_ACTION, number>;
 
 export const actionsCoolDown: ActionsCoolDown = {
-  JUMP: 0,
   ACTION1: 200,
   ACTION2: 1000,
   ACTION3: 5000,
@@ -144,10 +142,6 @@ export default class Game {
   }>();
 
   #actionState: ActionState = {
-    JUMP: {
-      cooldown: 0,
-      timestamp: 0,
-    },
     ACTION1: {
       cooldown: 0,
       timestamp: 0,
@@ -452,6 +446,11 @@ export default class Game {
   }
 
   public setPlayerDirection(direction: DIRECTION, isPressed: boolean) {
+    if (direction === 'JUMP' && isPressed) {
+      Object.values(this.#playerCancelableActions).forEach((action) => {
+        action.callEndActionStatus();
+      });
+    }
     // todo refactor
     if (direction === 'CAMERA_LEFT' || direction === 'CAMERA_RIGHT') {
       if (isPressed) {
@@ -475,12 +474,6 @@ export default class Game {
     this._updateActionState(action);
 
     switch (action) {
-      case 'JUMP':
-        this.#player.jump();
-        Object.values(this.#playerCancelableActions).forEach((action) => {
-          action.callEndActionStatus();
-        });
-        break;
       case 'ACTION1':
         this.#callPlayerGravitationAction();
         break;

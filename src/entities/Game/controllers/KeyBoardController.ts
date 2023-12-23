@@ -24,9 +24,9 @@ export const DEFAULT_DIRECTION_KEYS: BindDirectionKeys = {
   KeyD: 'RIGHT',
   KeyQ: 'CAMERA_LEFT',
   KeyE: 'CAMERA_RIGHT',
+  Space: 'JUMP',
 };
 export const DEFAULT_ACTIONS_KEYS: BindActionsKeys = {
-  Space: 'JUMP',
   Digit1: 'ACTION1',
   Digit2: 'ACTION2',
   Digit3: 'ACTION3',

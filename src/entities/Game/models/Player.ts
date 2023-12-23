@@ -1,9 +1,9 @@
 import {
+  type IPhysicsCollisionEvent,
   Mesh,
   MeshBuilder,
   ParticleSystem,
   PhysicsAggregate,
-  PhysicsEventType,
   PhysicsShapeType,
   Scene,
   ShadowGenerator,
@@ -13,16 +13,31 @@ import {
 } from '@babylonjs/core';
 import sphereTexture from '@/shared/assets/sphere_bg.jpg';
 import flareTexture from '@/shared/assets/flare.png';
+import type { IBasePhysicsCollisionEvent } from '@babylonjs/core/Physics/v2/IPhysicsEnginePlugin';
 
-export type MOVEMENT_DIRECTION = 'FORWARD' | 'BACKWARD' | 'LEFT' | 'RIGHT';
+export type MOVEMENT_DIRECTION =
+  | 'FORWARD'
+  | 'BACKWARD'
+  | 'LEFT'
+  | 'RIGHT'
+  | 'JUMP';
+
+const PLAYER_RADIUS = 1;
+const PLAYER_RESTITUTION = 0.5;
+const JUMP_IMPULSE = 15;
 
 export default class Player {
   readonly #scene: Scene;
   readonly #material: StandardMaterial;
   public playerPhysics: PhysicsAggregate | null = null;
   readonly #moveSpeed = 10;
-  #isColliding = false;
-  #collisionList = new Set<string>();
+  #collisionList = new Map<
+    string,
+    {
+      allowImmediateJump: boolean;
+      correctPositionForJump: boolean;
+    }
+  >();
   #shadow: ShadowGenerator;
 
   public readonly playerMesh: Mesh;
@@ -65,16 +80,10 @@ export default class Player {
         throw new Error('No collision observable');
       }
       observableStartCollision.add((collisionEvent) => {
-        this.#onCollision(
-          collisionEvent.type,
-          collisionEvent.collidedAgainst.transformNode.id
-        );
+        this.#onCollisionStart(collisionEvent);
       });
       observableEndCollision.add((collisionEvent) => {
-        this.#onCollision(
-          collisionEvent.type,
-          collisionEvent.collidedAgainst.transformNode.id
-        );
+        this.#onCollisionEnd(collisionEvent);
       });
     });
   }
@@ -90,8 +99,8 @@ export default class Player {
     return MeshBuilder.CreateSphere(
       name,
       {
-        segments: 32,
-        diameter: 2,
+        segments: 64,
+        diameter: PLAYER_RADIUS * 2,
         sideOrientation: Mesh.FRONTSIDE,
       },
       this.#scene
@@ -104,7 +113,7 @@ export default class Player {
       PhysicsShapeType.SPHERE,
       {
         mass: 1,
-        restitution: 0.5,
+        restitution: PLAYER_RESTITUTION,
         friction: 1,
       },
       this.#scene
@@ -115,20 +124,52 @@ export default class Player {
     return physicsAggregate;
   }
 
-  #onCollision(collisionType: PhysicsEventType, collidedObjectId: string) {
-    // if (!collidedObjectId.startsWith('ground')) {
-    //   return;
-    // }
-    if (
-      collisionType === 'COLLISION_STARTED' ||
-      collisionType === 'COLLISION_CONTINUED'
-    ) {
-      this.#collisionList.add(collidedObjectId);
+  #getCollidedAgainstId(collisionEvent: IBasePhysicsCollisionEvent) {
+    return collisionEvent.collidedAgainst.transformNode.id;
+  }
+
+  #onCollisionStart(collisionEvent: IPhysicsCollisionEvent) {
+    // ignore collisions with objects that are not in the env
+    if (collisionEvent.collidedAgainst.transformNode?.parent?.name !== 'env') {
+      return;
     }
-    if (collisionType === 'COLLISION_FINISHED') {
-      this.#collisionList.delete(collidedObjectId);
+    const collidedObjectId = this.#getCollidedAgainstId(collisionEvent);
+
+    // for jump: the object should not touch the side and top
+    const touchYPosition =
+      this.playerMesh.position.y -
+      (collisionEvent.point?.y || this.playerMesh.position.y);
+    const isCorrectPositionForJump = touchYPosition > PLAYER_RADIUS * 0.4;
+
+    if (collisionEvent.type === 'COLLISION_STARTED') {
+      const fallImpulse =
+        (collisionEvent.normal?.y || 0) * -collisionEvent.impulse;
+
+      this.#collisionList.set(collidedObjectId, {
+        allowImmediateJump: fallImpulse < JUMP_IMPULSE / PLAYER_RESTITUTION,
+        correctPositionForJump: isCorrectPositionForJump,
+      });
     }
-    this.#isColliding = this.#collisionList.size > 0;
+
+    if (collisionEvent.type === 'COLLISION_CONTINUED') {
+      if (!this.#collisionList.has(collidedObjectId)) {
+        this.#collisionList.set(collidedObjectId, {
+          allowImmediateJump: true,
+          correctPositionForJump: isCorrectPositionForJump,
+        });
+      }
+
+      const collision = this.#collisionList.get(collidedObjectId);
+      if (!collision) {
+        throw new Error('No collision');
+      }
+      collision.correctPositionForJump = isCorrectPositionForJump;
+    }
+  }
+
+  #onCollisionEnd(collisionEvent: IBasePhysicsCollisionEvent) {
+    const collidedObjectId = this.#getCollidedAgainstId(collisionEvent);
+    this.#collisionList.delete(collidedObjectId);
   }
 
   public move(cameraViewAngle: number, directions: Set<MOVEMENT_DIRECTION>) {
@@ -137,6 +178,10 @@ export default class Player {
     }
     if (!this.playerPhysics) {
       return;
+    }
+
+    if (directions.has('JUMP')) {
+      this.jump();
     }
 
     let x = 0;
@@ -166,7 +211,14 @@ export default class Player {
   }
 
   public jump() {
-    if (!this.#isColliding || !this.playerPhysics) {
+    if (!this.#collisionList.size || !this.playerPhysics) {
+      return;
+    }
+    const allowJump = Array.from(this.#collisionList.values()).every(
+      (collision) =>
+        collision.allowImmediateJump && collision.correctPositionForJump
+    );
+    if (!allowJump) {
       return;
     }
     // remove y velocity
@@ -176,7 +228,7 @@ export default class Player {
     );
     // apply impulse
     this.playerPhysics.body.applyImpulse(
-      new Vector3(0, 15, 0),
+      new Vector3(0, JUMP_IMPULSE, 0),
       this.playerMesh.getAbsolutePosition()
     );
   }
