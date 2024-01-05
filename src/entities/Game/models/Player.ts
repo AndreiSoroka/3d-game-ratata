@@ -14,6 +14,7 @@ import {
 import sphereTexture from '@/shared/assets/sphere_bg.jpg';
 import flareTexture from '@/shared/assets/flare.png';
 import type { IBasePhysicsCollisionEvent } from '@babylonjs/core/Physics/v2/IPhysicsEnginePlugin';
+import type { TypeOfMesh } from '@/entities/Game/envirement/utils/getTypeOfMesh';
 
 export type MOVEMENT_DIRECTION =
   | 'FORWARD'
@@ -130,7 +131,10 @@ export default class Player {
 
   #onCollisionStart(collisionEvent: IPhysicsCollisionEvent) {
     // ignore collisions with objects that are not in the env
-    if (collisionEvent.collidedAgainst.transformNode?.parent?.name !== 'env') {
+    if (
+      collisionEvent.collidedAgainst.transformNode?.parent?.name !==
+      ('environment' satisfies TypeOfMesh)
+    ) {
       return;
     }
     const collidedObjectId = this.#getCollidedAgainstId(collisionEvent);

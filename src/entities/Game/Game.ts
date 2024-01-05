@@ -22,12 +22,9 @@ import MultiPlayer from '@/entities/Game/models/MultiPlayer';
 import GravitationAction, {
   type GravitationPayload,
 } from '@/entities/Game/effects/GravitationAction';
-import { interval, scan, Subject, tap, throttle } from 'rxjs';
+import { interval, Subject, throttle } from 'rxjs';
 
 import '@babylonjs/loaders';
-import loadEnvironment, {
-  listOfInstancedMeshes,
-} from '@/entities/Game/envirement/loadEnvironment';
 import {
   downGravitationLevel,
   startGravitationLevel,
@@ -58,6 +55,7 @@ import VortexAction from '@/entities/Game/effects/VortexAction';
 import type AbstractAction from '@/entities/Game/effects/AbstractAction';
 import calculateRandomPosition from '@/entities/Game/utils/calculateRandomPosition';
 import Fog from '@/entities/Game/models/Fog';
+import LevelEnvironment from '@/entities/Game/envirement/LevelEnvironment';
 
 const IS_DEBUGING = document.location.hash === '#debug';
 
@@ -124,6 +122,7 @@ export default class Game {
   #movementDirection: Set<MOVEMENT_DIRECTION> = new Set([]);
   #cameraDirection: Set<CAMERA_DIRECTION> = new Set([]);
   #physicsHelper: PhysicsHelper | null = null;
+  readonly #levelEnvironment: LevelEnvironment;
 
   #skillGravitation = startGravitationLevel;
   #skillRadialExplosion = startRadialExplosionLevel;
@@ -257,7 +256,10 @@ export default class Game {
     this.#shadow.forceBackFacesOnly = true;
     this.#shadow.useBlurExponentialShadowMap = true;
 
-    loadEnvironment(this.#scene, this.#shadow).then(() => {});
+    this.#levelEnvironment = new LevelEnvironment({
+      scene: this.#scene,
+      shadow: this.#shadow,
+    });
     this.playerCamera = new PlayerCamera(this.#scene);
     // this.generalLight = new GeneralLight(this.#scene);
     this.initNewPlayer();
@@ -676,9 +678,8 @@ export default class Game {
     this.playerCamera.dispose();
     this.#player.dispose();
     this.#fog.dispose();
+    this.#levelEnvironment.dispose().then();
     Object.values(this.#actions).forEach((action) => action.dispose());
-    listOfInstancedMeshes.forEach((mesh) => mesh.dispose());
-    listOfInstancedMeshes.clear();
   }
 
   #callPlayerForwardImpulseAction() {
