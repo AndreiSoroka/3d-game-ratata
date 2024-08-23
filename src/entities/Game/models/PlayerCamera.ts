@@ -124,7 +124,7 @@ export default class PlayerCamera {
   }
 
   private isEnvMesh(mesh: AbstractMesh) {
-    return mesh.parent?.name === 'env';
+    return mesh.parent?.name === 'environment'; // todo make const
   }
 
   private _slowLoop() {
