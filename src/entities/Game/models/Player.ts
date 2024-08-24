@@ -3,6 +3,7 @@ import {
   Mesh,
   MeshBuilder,
   ParticleSystem,
+  PBRMaterial,
   PhysicsAggregate,
   PhysicsShapeType,
   Scene,
@@ -29,7 +30,7 @@ const JUMP_IMPULSE = 15;
 
 export default class Player {
   readonly #scene: Scene;
-  readonly #material: StandardMaterial;
+  readonly #material: PBRMaterial;
   public playerPhysics: PhysicsAggregate | null = null;
   readonly #moveSpeed = 10;
   #collisionList = new Map<
@@ -57,6 +58,7 @@ export default class Player {
 
     this.playerMesh.material = this.#material;
     this.playerMesh.position = options.startPosition;
+    this.playerMesh.applyFog = false;
 
     this.#shadow.addShadowCaster(this.playerMesh);
 
@@ -90,8 +92,9 @@ export default class Player {
   }
 
   #createMaterial() {
-    const material = new StandardMaterial('material', this.#scene);
-    material.emissiveTexture = new Texture(sphereTexture, this.#scene);
+    const material = new PBRMaterial('playerMaterial', this.#scene);
+    material.albedoTexture = new Texture(sphereTexture, this.#scene);
+    material.metallic = 0;
     material.maxSimultaneousLights = 10;
     return material;
   }
@@ -252,6 +255,7 @@ export default class Player {
   }
 
   public dispose() {
+    this.#shadow.removeShadowCaster(this.playerMesh);
     this.playerPhysics?.dispose();
     this.playerMesh.dispose();
     this.#material.dispose();

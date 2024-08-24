@@ -4,6 +4,7 @@ import isEnvironmentsGuard from '@/entities/Game/envirement/utils/isEnvironments
 import {
   Matrix,
   type Mesh,
+  PBRMaterial,
   PhysicsAggregate,
   PhysicsShapeType,
   Quaternion,
@@ -62,6 +63,11 @@ export default class LevelEnvironment {
       });
       meshes.forEach((mesh) => {
         this._listOfEnvironmentMeshes.add(mesh);
+        // todo merge materials by name
+        if (mesh.material instanceof PBRMaterial) {
+          // we don't have env textures for mirror and glass
+          mesh.material.metallic = 0;
+        }
       });
     }
   }

@@ -2,17 +2,17 @@ import PlayerCamera from '@/entities/Game/models/PlayerCamera';
 import groundTexture from '@/shared/assets/ground_bg.png';
 import {
   Color3,
-  CubeTexture,
   DirectionalLight,
   Engine,
   HavokPlugin,
+  HemisphericLight,
   MeshBuilder,
+  PBRMaterial,
   PhysicsAggregate,
   PhysicsHelper,
   PhysicsShapeType,
   Scene,
   ShadowGenerator,
-  StandardMaterial,
   Texture,
   Vector3,
 } from '@babylonjs/core';
@@ -242,19 +242,26 @@ export default class Game {
     //   this.#scene
     // );
     // pointLight.intensity = 1;
+    const hemisphericLight = new HemisphericLight(
+      'hemiLight',
+      new Vector3(0, 1, 0),
+      this.#scene
+    );
+    hemisphericLight.intensity = 0.005;
     const light = new DirectionalLight(
       'dirLight',
       new Vector3(-1, -2, -1),
       this.#scene
     );
     light.specular = new Color3(0, 0, 0);
-    light.intensity = 0.3;
+    light.intensity = 1;
+    // light.shadowMinZ = 0;
+    // light.shadowMaxZ = 10;
 
     light.position = new Vector3(20, 40, 20);
-    this.#shadow = new ShadowGenerator(2024, light);
-    this.#shadow.blurBoxOffset = 4;
-    this.#shadow.forceBackFacesOnly = true;
-    this.#shadow.useBlurExponentialShadowMap = true;
+    this.#shadow = new ShadowGenerator(4096, light);
+    this.#shadow.usePoissonSampling = true;
+    this.#shadow.bias = 0.0001;
 
     this.#levelEnvironment = new LevelEnvironment({
       scene: this.#scene,
@@ -273,14 +280,21 @@ export default class Game {
     // );
     // this.#scene.createDefaultSkybox(envTexture, true, 1000);
 
+    const env = this.#scene.createDefaultEnvironment({
+      createGround: false,
+      createSkybox: false,
+      setupImageProcessing: false,
+      toneMappingEnabled: false,
+    });
+
     this.#fog = new Fog({
       scene: this.#scene,
     });
 
-    this.#scene.environmentTexture = CubeTexture.CreateFromPrefilteredData(
-      'https://playground.babylonjs.com/textures/environment.env',
-      this.#scene
-    );
+    // this.#scene.environmentTexture = CubeTexture.CreateFromPrefilteredData(
+    //   'https://playground.babylonjs.com/textures/environment.env',
+    //   this.#scene
+    // );
   }
 
   onBeforeRenderObservable() {
@@ -340,9 +354,10 @@ export default class Game {
       },
       this.#scene
     );
-    const material = new StandardMaterial('material', this.#scene);
-    material.emissiveTexture = new Texture(groundTexture, this.#scene);
-    material.diffuseColor = new Color3(0.1, 0.5, 0.5);
+    const material = new PBRMaterial('material1', this.#scene);
+    material.albedoTexture = new Texture(groundTexture, this.#scene);
+    // material.diffuseColor = new Color3(0.1, 0.5, 0.5);
+    material.metallic = 0;
     ground.material = material;
     ground.receiveShadows = true;
     new PhysicsAggregate(
