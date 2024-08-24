@@ -7,7 +7,7 @@ export default function convertBlenderToBabylonRotation(
 ): Vector3 {
   if (rotation_mode === 'XYZ') {
     const [x, y, z] = vector;
-    return new Vector3(x, z, -y);
+    return new Vector3(x, z, y).scale(-1);
   }
   throw new Error(`Unknown rotation mode ${rotation_mode}`);
 }

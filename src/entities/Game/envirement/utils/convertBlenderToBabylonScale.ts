@@ -5,5 +5,5 @@ export default function convertBlenderToBabylonScale(
   vector: Environment['scale']
 ) {
   const [x, y, z] = vector;
-  return new Vector3(x, z, y);
+  return new Vector3(x, z, -y);
 }
