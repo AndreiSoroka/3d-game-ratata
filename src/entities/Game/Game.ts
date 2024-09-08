@@ -1,4 +1,4 @@
-import PlayerCamera from '@/entities/Game/models/PlayerCamera';
+import PlayerCamera from '@/entities/Game/services/PlayerCamera';
 import groundTexture from '@/shared/assets/ground_bg.png';
 import {
   Color3,
@@ -17,8 +17,10 @@ import {
   Vector3,
 } from '@babylonjs/core';
 import { type HavokPhysicsWithBindings } from '@babylonjs/havok';
-import Player, { type MOVEMENT_DIRECTION } from '@/entities/Game/models/Player';
-import MultiPlayer from '@/entities/Game/models/MultiPlayer';
+import Player, {
+  type MOVEMENT_DIRECTION,
+} from '@/entities/Game/services/Player';
+import MultiPlayer from '@/entities/Game/services/MultiPlayer';
 import GravitationAction, {
   type GravitationPayload,
 } from '@/entities/Game/effects/GravitationAction';
@@ -54,8 +56,9 @@ import {
 import VortexAction from '@/entities/Game/effects/VortexAction';
 import type AbstractAction from '@/entities/Game/effects/AbstractAction';
 import calculateRandomPosition from '@/entities/Game/utils/calculateRandomPosition';
-import Fog from '@/entities/Game/models/Fog';
+import Fog from '@/entities/Game/services/Fog';
 import LevelEnvironment from '@/entities/Game/envirement/LevelEnvironment';
+import { CheckPointService } from '@/entities/Game/services/CheckPointService';
 
 const IS_DEBUGING = document.location.hash === '#debug';
 
@@ -118,11 +121,14 @@ export default class Game {
   #cameraAngle = 0;
   playerCamera: PlayerCamera;
   #havokInstance: HavokPhysicsWithBindings;
+  #checkPointPosition: Vector3 = new Vector3(0, 30, 0);
   #shadow: ShadowGenerator;
   #movementDirection: Set<MOVEMENT_DIRECTION> = new Set([]);
   #cameraDirection: Set<CAMERA_DIRECTION> = new Set([]);
   #physicsHelper: PhysicsHelper | null = null;
   readonly #levelEnvironment: LevelEnvironment;
+
+  #checkPointServices: CheckPointService[] = [];
 
   #skillGravitation = startGravitationLevel;
   #skillRadialExplosion = startRadialExplosionLevel;
@@ -271,6 +277,19 @@ export default class Game {
     // this.generalLight = new GeneralLight(this.#scene);
     this.initNewPlayer();
 
+    this.#levelEnvironment.isReadyPromise.then(() => {
+      // todo add method .getCheckPointsCoordinates(): Promise<Vector3> instead this one:
+      this.#levelEnvironment.checkPointsCoordinates.forEach((position) => {
+        const checkPoint = new CheckPointService({
+          scene: this.#scene,
+          position,
+        });
+        this.#checkPointServices.push(checkPoint);
+      });
+    });
+
+    // new Vector3(0, 30, 0),
+
     this.#engine.runRenderLoop(this.#loop.bind(this));
     // this.#createGround();
 
@@ -320,7 +339,7 @@ export default class Game {
 
     this.#player = new Player({
       scene: this.#scene,
-      startPosition: new Vector3(0, 30, 0),
+      startPosition: this.#checkPointPosition,
       // startPosition: new Vector3(-90, 15, 60),
       shadow: this.#shadow,
     });
@@ -408,6 +427,12 @@ export default class Game {
     this.playerCamera.setAngle(this.#cameraAngle);
     // render scene
     this.#scene.render();
+
+    this.#checkPointServices.forEach((checkPoint) => {
+      if (checkPoint.mesh.intersectsMesh(this.#player.playerMesh, true)) {
+        this.#checkPointPosition = checkPoint.mesh.position.clone();
+      }
+    });
   }
 
   #handleChangeCameraAngle() {

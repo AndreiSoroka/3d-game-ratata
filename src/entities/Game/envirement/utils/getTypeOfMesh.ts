@@ -4,7 +4,7 @@ export type TypeOfMesh = 'environment' | 'checkpoint';
 
 export default function getTypeOfMesh(meshOrName: Mesh | string): TypeOfMesh {
   const name = typeof meshOrName === 'string' ? meshOrName : meshOrName.name;
-  if (name.includes('checkpoint')) {
+  if (name.includes('Checkpoint')) {
     return 'checkpoint';
   }
 

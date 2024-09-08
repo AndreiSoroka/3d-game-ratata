@@ -75,6 +75,7 @@ export default class Player {
     this.#scene.whenReadyAsync().then(() => {
       this.playerPhysics = this.#createPlayerPhysics();
 
+      // todo: detach the observable
       const observableStartCollision =
         this.playerPhysics.body.getCollisionObservable();
       const observableEndCollision =

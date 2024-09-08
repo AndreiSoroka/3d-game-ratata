@@ -26,11 +26,13 @@ export default class LevelEnvironment {
     typeof loadAllMeshes
   > | null = null;
   private readonly _listOfEnvironmentMeshes: Set<Mesh> = new Set();
-  private readonly _isReadyPromise: Promise<void>;
+  public readonly isReadyPromise: Promise<void>;
   private _isReady = false;
   private _environmentCoordinates: Environment[] = [];
   private readonly _parentEnvironment: TransformNode;
   private readonly _parentCheckpoint: TransformNode;
+
+  public checkPointsCoordinates: Vector3[] = [];
 
   constructor(payload: { scene: Scene; shadow: ShadowGenerator }) {
     this._scene = payload.scene;
@@ -40,7 +42,7 @@ export default class LevelEnvironment {
     this._parentEnvironment = new TransformNode(`environment`, this._scene);
     this._parentCheckpoint = new TransformNode(`checkpoint`, this._scene);
 
-    this._isReadyPromise = Promise.all([
+    this.isReadyPromise = Promise.all([
       this._init(),
       this._listOfMeshesPromise,
     ]).then(() => {
@@ -52,8 +54,27 @@ export default class LevelEnvironment {
   async _init() {
     this._environmentCoordinates = await this._getEnvironmentCoordinates();
 
-    for (const { name, location, rotation, rotation_mode, scale } of this
-      ._environmentCoordinates) {
+    // todo create util function
+    const environmentCoordinates = this._environmentCoordinates.filter(
+      ({ name }) => getTypeOfMesh(name) === 'environment'
+    );
+    const checkpointCoordinates = this._environmentCoordinates.filter(
+      ({ name }) => getTypeOfMesh(name) === 'checkpoint'
+    );
+
+    // checkpoints
+    this.checkPointsCoordinates = checkpointCoordinates.map(({ location }) =>
+      convertBlenderToBabylonCoordinates(location)
+    );
+
+    // environment
+    for (const {
+      name,
+      location,
+      rotation,
+      rotation_mode,
+      scale,
+    } of environmentCoordinates) {
       const meshes = await this._getMesh({
         id: name,
         name: name.split('.')[0],
@@ -89,6 +110,7 @@ export default class LevelEnvironment {
       throw new Error(`Mesh ${payload.name} not found`);
     }
 
+    // todo rudiment, checkpoint don't have mesh at the moment
     const typeOfMesh = getTypeOfMesh(payload.name);
     const envParent = (() => {
       switch (typeOfMesh) {
@@ -165,7 +187,7 @@ export default class LevelEnvironment {
   }
 
   public async dispose() {
-    await this._isReadyPromise;
+    await this.isReadyPromise;
 
     for (const mesh of this._listOfEnvironmentMeshes) {
       mesh.dispose();
