@@ -14,5 +14,6 @@ const app = createApp(App);
 app.use(createPinia());
 app.use(ElementPlus);
 app.use(router);
+import('./app/interactors');
 
 app.mount('#app');
