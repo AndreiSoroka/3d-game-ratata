@@ -14,6 +14,11 @@ const router = createRouter({
       name: 'MultiplayerPage',
       component: () => import('@/pages/MultiplayerPage.vue'),
     },
+    {
+      path: '/chat',
+      name: 'ChatPage',
+      component: () => import('@/pages/ChatPage.vue'),
+    },
   ],
 });
 
