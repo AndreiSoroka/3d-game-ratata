@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ElInput } from 'element-plus';
-import { usePeerStore } from '@/entities/Multiplayer/module/peerStore';
+import { usePeerStore } from '@/entities/PeerToPeer/module/peerStore';
 import { ref } from 'vue';
 
 const store = usePeerStore();

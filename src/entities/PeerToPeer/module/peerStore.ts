@@ -2,6 +2,7 @@ import { type DataConnection, Peer } from 'peerjs';
 import { defineStore } from 'pinia';
 import { computed, ref, toRaw } from 'vue';
 import { Subject } from 'rxjs';
+import { generateRandomId } from '@/shared/libs/crypto/generateRandomId';
 
 type PeerId = string;
 type MessagePayload = unknown;
@@ -18,36 +19,28 @@ type PeersSubject = {
 type Peers = Record<PeerId, { connection: DataConnection }>;
 
 export const usePeerStore = defineStore('peer', () => {
-  const id = `ratata-player-${
-    window?.crypto?.randomUUID?.() ||
-    (
-      window?.crypto?.getRandomValues?.(new Uint32Array(1))?.at(0) ||
-      Math.random()
-    ).toString(36) + Date.now().toString(36)
-  }`;
+  const id = `ratata-player-${generateRandomId()}`;
   const peer = new Peer(id);
 
   const peers$ = new Subject<PeersSubject>();
   const messages$ = new Subject<MessageSubject>();
-  const multiplayerPeers = ref<Peers>({});
-  const multiplayerPeersIds = computed(() => {
-    return Object.keys(multiplayerPeers.value);
+  const peers = ref<Peers>({});
+  const peersIds = computed(() => {
+    return Object.keys(peers.value);
   });
 
-  function addMultiplayerPeer(connection: DataConnection) {
+  function addPeer(connection: DataConnection) {
+    peers.value[connection.peer] = {
+      connection,
+    };
     peers$.next({
       type: 'add',
       id: connection.peer,
     });
-    multiplayerPeers.value[connection.peer] = {
-      connection,
-    };
   }
 
-  function removeMultiplayerPeer(connection: DataConnection) {
-    if (
-      connection !== toRaw(multiplayerPeers.value[connection.peer].connection)
-    ) {
+  function removePeer(connection: DataConnection) {
+    if (connection !== toRaw(peers.value[connection.peer].connection)) {
       throw new Error('Connection mismatch');
     }
     peers$.next({
@@ -55,16 +48,16 @@ export const usePeerStore = defineStore('peer', () => {
       id: connection.peer,
     });
     connection.removeAllListeners();
-    delete multiplayerPeers.value[connection.peer];
+    delete peers.value[connection.peer];
   }
 
-  function sendToMultiplayer(data: MessagePayload) {
-    Object.values(multiplayerPeers.value).forEach(({ connection }) => {
+  function sendToPeers(data: MessagePayload) {
+    Object.values(peers.value).forEach(({ connection }) => {
       connection.send(data);
     });
   }
 
-  function handleMultiplayerData(
+  function handleGetDataFromPeer(
     connection: DataConnection,
     payload: MessagePayload
   ) {
@@ -74,39 +67,39 @@ export const usePeerStore = defineStore('peer', () => {
     });
   }
 
-  function initDefaultMultiplayerEvents(connection: DataConnection) {
+  function subscribeToPeerConnection(connection: DataConnection) {
     connection.on('data', (data: MessagePayload) => {
-      handleMultiplayerData(connection, data);
+      handleGetDataFromPeer(connection, data);
     });
     connection.on('iceStateChanged', (state) => {
       switch (state) {
         case 'connected':
-          addMultiplayerPeer(connection);
+          addPeer(connection);
           break;
         case 'closed':
         case 'disconnected':
         case 'failed':
-          removeMultiplayerPeer(connection);
+          removePeer(connection);
           break;
       }
     });
   }
 
   // if someone connects to us
-  peer.on('connection', initDefaultMultiplayerEvents);
+  peer.on('connection', subscribeToPeerConnection);
 
   // if we connect to someone
   function connectToPeer(id: string) {
     const connection = peer.connect(id);
-    initDefaultMultiplayerEvents(connection);
+    subscribeToPeerConnection(connection);
   }
 
   return {
-    connectToPeer,
-    sendToMultiplayer,
-    multiplayerPeersIds,
-    multiplayerPeers,
     id,
+    connectToPeer,
+    sendToPeers,
+    peersIds,
+    peers,
     messages$,
     peers$,
   };

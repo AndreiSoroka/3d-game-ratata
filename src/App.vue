@@ -4,7 +4,7 @@ import { ElTabPane, ElTabs } from 'element-plus';
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import Game from '@/entities/Game/Game';
 import HavokPhysics from '@babylonjs/havok';
-import { usePeerStore } from '@/entities/Multiplayer/module/peerStore';
+import { usePeerStore } from '@/entities/PeerToPeer/module/peerStore';
 import ActionsWrapper from '@/entities/GameActions/ui/ActionsWrapper/ActionsWrapper.vue';
 import ActionVortexButton from '@/entities/GameActions/ui/ActionButtons/ActionVortexButton.vue';
 import ActionUpdraftButton from '@/entities/GameActions/ui/ActionButtons/ActionUpdraftButton.vue';
@@ -46,14 +46,14 @@ onMounted(() => {
     game = new Game(gameCanvas.value, HK);
 
     game.multiplayerSubject$.subscribe((data) => {
-      store.sendToMultiplayer({
+      store.sendToPeers({
         type: 'WORLD_ACTION',
         data,
       });
     });
 
     game.playerPositionSubject$.subscribe((data) => {
-      store.sendToMultiplayer({
+      store.sendToPeers({
         type: 'PLAYER_POSITION',
         data,
       });
@@ -91,7 +91,7 @@ onBeforeUnmount(() => {
 });
 
 watch(
-  () => store.multiplayerPeers,
+  () => store.peers,
   () => {
     console.log('multiplayerPeers changed');
   }

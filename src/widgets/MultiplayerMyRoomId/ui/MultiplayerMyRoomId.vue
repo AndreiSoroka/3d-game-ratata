@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 // todo entity
-import { usePeerStore } from '@/entities/Multiplayer/module/peerStore';
+import { usePeerStore } from '@/entities/PeerToPeer/module/peerStore';
 import { ElMessage } from 'element-plus';
 
 const store = usePeerStore();
