@@ -29,6 +29,9 @@ watch(
         message: message,
       });
     }
+    for (const message of rawMessages) {
+      chatStore.addMessage(peerStore.id, message);
+    }
   }
 );
 
