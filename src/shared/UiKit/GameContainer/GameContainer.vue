@@ -15,9 +15,7 @@ const { isMenuVisible } = defineProps<{
     </div>
     <div class="container__item container__item-menu">
       <el-card v-if="isMenuVisible">
-        <div class="container__height-limit">
-          <slot name="menu" />
-        </div>
+        <slot name="menu" />
       </el-card>
     </div>
   </div>
@@ -61,15 +59,6 @@ const { isMenuVisible } = defineProps<{
     @media (max-width: 768px) {
       width: auto;
       right: 15px;
-    }
-  }
-
-  .container__height-limit {
-    overflow-y: scroll;
-    max-height: 75vh;
-
-    @media (max-width: 768px) {
-      max-height: 30vh;
     }
   }
 }

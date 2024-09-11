@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
+import { generateRandomId } from '@/shared/libs/crypto/generateRandomId';
 
 type Message = {
+  id: string;
   user: string;
   content: string;
   timestamp: number;
@@ -24,6 +26,7 @@ export const useChatStore = defineStore('chat', () => {
 
   function addMessage(user: string, content: string) {
     messages.value.push({
+      id: generateRandomId(),
       user,
       content,
       timestamp: Date.now(),

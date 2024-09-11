@@ -13,7 +13,7 @@ import ActionGravitationButton from '@/entities/GameActions/ui/ActionButtons/Act
 import ActionForwardImpulseButton from '@/entities/GameActions/ui/ActionButtons/ActionForwardImpulseButton.vue';
 import KeyBoardController from '@/entities/Game/controllers/KeyBoardController';
 import AdapterControllerWithGame from '@/entities/Game/AdapterControllerWithGame';
-import GameContainer from '@/shared/UiKit/AppContainer/GameContainer.vue';
+import GameContainer from '@/shared/UiKit/GameContainer/GameContainer.vue';
 import router from '@/app/router';
 
 const gameCanvas = ref<HTMLCanvasElement>();
