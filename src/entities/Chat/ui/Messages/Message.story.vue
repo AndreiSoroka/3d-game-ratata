@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import Message from './Message.vue';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
+const avatarSeed = ref('1');
+const avatar = computed(
+  () => `https://api.dicebear.com/9.x/pixel-art/svg?seed=${avatarSeed.value}`
+);
 const content = ref('My message');
 const isUserMessage = ref(true);
 </script>
@@ -9,8 +13,12 @@ const isUserMessage = ref(true);
 <template>
   <Story title="Chat/Message" :layout="{ type: 'grid', width: 300 }">
     <Variant title="Default">
-      <Message :content="content" :is-user-message="isUserMessage" />
+      <Message
+        :content="content"
+        :is-user-message="isUserMessage"
+        :avatar="avatar" />
       <template #controls>
+        <HstText v-model="avatarSeed" title="Avatar seed" />
         <HstText v-model="content" title="Content" />
         <HstCheckbox v-model="isUserMessage" title="Is User Message" />
       </template>

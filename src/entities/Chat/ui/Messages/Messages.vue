@@ -13,11 +13,10 @@ const { messages } = defineProps<{
 </script>
 
 <template>
-  <div class="chat" ref="chatRef">
-    <Message
-      v-for="message in messages"
-      :key="message.id"
-      :is-user-message="message.user === userId"
-      :content="message.content" />
-  </div>
+  <Message
+    v-for="message in messages"
+    :avatar="`https://api.dicebear.com/9.x/bottts-neutral/svg?seed=${message.user}`"
+    :key="message.id"
+    :is-user-message="message.user === userId"
+    :content="message.content" />
 </template>
