@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { nextTick, useTemplateRef, watch } from 'vue';
-import { ChatWrapper, useChatStore } from '@/entities/Chat';
+import { ChatWrapper, ChatMessage, useChatStore } from '@/entities/Chat';
 import { usePeerStore } from '@/entities/PeerToPeer';
 import { SendChatMessage } from '@/features/SendChatMessage';
-import Messages from '@/entities/Chat/ui/Messages/Messages.vue';
+import { useAvatarStore } from '@/entities/Avatar';
 
 const chatWrapperRef =
   useTemplateRef<InstanceType<typeof ChatWrapper>>('chatWrapper');
@@ -17,12 +17,21 @@ watch(chatStore.messages, () => {
     chatWrapperRef.value?.scrollToBottom();
   });
 });
+
+const avatarStore = useAvatarStore();
 </script>
 
 <template>
   <ChatWrapper ref="chatWrapper">
     <template #messages>
-      <Messages :messages="chatStore.messages" :user-id="id" />
+      <ChatMessage
+        v-for="message in chatStore.messages"
+        :key="message.id"
+        :user-id="message.userId"
+        :type="message.type"
+        :avatar="avatarStore.listOfAvatars?.[message.userId]"
+        :is-user-message="message.userId === id"
+        :content="message.content" />
     </template>
     <template #actions>
       <SendChatMessage />

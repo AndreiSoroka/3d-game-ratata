@@ -1,13 +1,7 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 import { generateRandomId } from '@/shared/libs/crypto/generateRandomId';
-
-type Message = {
-  id: string;
-  user: string;
-  content: string;
-  timestamp: number;
-};
+import type { Message } from '../types/Message.type';
 
 const MAX_MESSAGES = 100;
 const CLEAR_MESSAGES = 20;
@@ -24,13 +18,26 @@ export const useChatStore = defineStore('chat', () => {
     }
   }
 
-  function addMessage(user: string, content: string) {
+  function addMessage(
+    userId: string,
+    content: string,
+    type: Message['type'] = 'user'
+  ) {
     messages.value.push({
+      type,
       id: generateRandomId(),
-      user,
+      userId,
       content,
       timestamp: Date.now(),
     });
+  }
+
+  const addSystemMessageUserJoined = (userId: string) => {
+    addMessage(userId, '', 'userJoined');
+  };
+
+  function addSystemMessageUserLeft(userId: string) {
+    addMessage(userId, '', 'userLeft');
   }
 
   function sendMessage(message: string) {
@@ -47,6 +54,8 @@ export const useChatStore = defineStore('chat', () => {
     countOfMessagesForSend,
     sendMessage,
     addMessage,
+    addSystemMessageUserJoined,
+    addSystemMessageUserLeft,
     clearOverflowMessages,
     clearMessageForSend,
   };

@@ -1,6 +1,12 @@
-import { useChatStore, useCryptoChatStore } from '@/entities/Chat';
+import {
+  type ChatTransportPayload,
+  ChatTransportPayloadSchema,
+  useChatStore,
+  useCryptoChatStore,
+} from '@/entities/Chat';
 import { usePeerStore } from '@/entities/PeerToPeer';
 import { watch } from 'vue';
+import * as v from 'valibot';
 
 const chatStore = useChatStore();
 const cryptoChatStore = useCryptoChatStore();
@@ -27,7 +33,7 @@ watch(
       peerStore.sendToPeers({
         type: 'chatMessage',
         message: message,
-      });
+      } satisfies ChatTransportPayload);
     }
     for (const message of rawMessages) {
       chatStore.addMessage(peerStore.id, message);
@@ -39,14 +45,21 @@ watch(
 peerStore.peers$.subscribe(async (peersSubject) => {
   switch (peersSubject.type) {
     case 'add': {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await cryptoChatStore.isReadyPromise;
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // todo check why it is needed
+      if (!cryptoChatStore.publicKey) {
+        console.assert(false, 'Public key is not generated');
+        // todo show error
+        return;
+      }
       peerStore.sendToPeers({
         type: 'chatHandshake',
         publicKey: cryptoChatStore.publicKey,
-      });
+      } satisfies ChatTransportPayload);
       break;
     }
     case 'remove': {
+      chatStore.addSystemMessageUserLeft(peersSubject.id);
       cryptoChatStore.removeUser(peersSubject.id);
     }
   }
@@ -55,22 +68,32 @@ peerStore.peers$.subscribe(async (peersSubject) => {
 // handle messages from peers
 // receive messages from peers
 peerStore.messages$.subscribe(async (messageSubject) => {
-  const { id, payload }: { id: string; payload: any } = messageSubject; // todo zod
-
-  switch (payload.type) {
+  if (!messageSubject.payload) {
+    return;
+  }
+  const peerId = messageSubject.id;
+  const payload = v.safeParse(
+    ChatTransportPayloadSchema,
+    messageSubject.payload
+  );
+  if (!payload.success) {
+    return;
+  }
+  switch (payload.output.type) {
     case 'chatMessage': {
-      if (!payload.message[userId]) {
+      if (!payload.output.message[userId]) {
         break;
       }
       const message = await cryptoChatStore.unzipAndDecryptMessage(
-        payload.message[userId]
+        payload.output.message[userId]
       );
-      chatStore.addMessage(id, message);
+      chatStore.addMessage(peerId, message);
       chatStore.clearOverflowMessages();
       break;
     }
     case 'chatHandshake': {
-      await cryptoChatStore.addUser(id, payload.publicKey);
+      await cryptoChatStore.addUser(peerId, payload.output.publicKey);
+      chatStore.addSystemMessageUserJoined(peerId);
       break;
     }
   }

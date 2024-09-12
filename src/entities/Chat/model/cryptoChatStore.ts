@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { nextTick, ref } from 'vue';
 import { encryptMessage } from '@/shared/libs/crypto/encryptMessage';
 import { importJWK } from '@/shared/libs/crypto/importJWK';
 import { deflateArrayBufferToBase64 } from '@/shared/libs/zip/deflateArrayBufferToBase64';
@@ -15,6 +15,7 @@ export const useCryptoChatStore = defineStore('cryptoChat', () => {
   const users = ref<Users>({});
 
   const generateKeyPromise = generateKeyPairJWK();
+  const isReadyPromise = generateKeyPromise.then(() => nextTick());
 
   generateKeyPromise.then(async (keyPair) => {
     publicKey.value = keyPair.publicKeyJWK;
@@ -49,15 +50,16 @@ export const useCryptoChatStore = defineStore('cryptoChat', () => {
     return decryptMessage(privateKey, inflatedEncryptedMessage);
   }
 
-  async function addUser(user: string, publicKeyJWK: JsonWebKey) {
-    users.value[user] = await importJWK(publicKeyJWK, 'public');
+  async function addUser(userId: string, publicKeyJWK: JsonWebKey) {
+    users.value[userId] = await importJWK(publicKeyJWK, 'public');
   }
 
-  function removeUser(user: string) {
-    delete users.value[user];
+  function removeUser(userId: string) {
+    delete users.value[userId];
   }
 
   return {
+    isReadyPromise,
     publicKey,
     encryptAndZipMessage,
     unzipAndDecryptMessage,
