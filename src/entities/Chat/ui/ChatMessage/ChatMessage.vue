@@ -19,22 +19,34 @@ defineProps<{
         size="small"
         shape="square"
         class="message__avatar" />
-      <strong> {{ isUserMessage ? 'Me' : 'Somebody' }}: </strong>
-      {{ content }}
+      <el-text>
+        <strong> {{ isUserMessage ? 'Me' : 'Somebody' }}: </strong>
+        {{ content }}
+      </el-text>
     </template>
-    <template v-else-if="['userJoined', 'userLeft'].includes(type)">
+    <template v-else-if="type === 'userJoined'">
       <div class="message__center">
         <el-avatar v-if="avatar" :src="avatar" size="large" shape="square" />
         <div>
-          <el-text v-if="type === 'userJoined'">User Joined:</el-text>
-          <el-text v-if="type === 'userLeft'">User Left:</el-text>
+          <el-text>User Joined:</el-text>
         </div>
-        <div>
-          <el-text size="small"> {{ userId }} </el-text>
-        </div>
+        <el-text size="small"> {{ userId }}</el-text>
       </div>
     </template>
-    <template v-else-if="type === 'userLeft'"> User Left</template>
+    <template v-else-if="type === 'userLeft'">
+      <div class="message__center">
+        <div>
+          <el-avatar
+            v-if="avatar"
+            :src="avatar"
+            size="small"
+            shape="square"
+            class="message__avatar" />
+          <el-text v-if="type === 'userLeft'">User Left:</el-text>
+        </div>
+        <el-text size="small"> {{ userId }}</el-text>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -50,5 +62,6 @@ defineProps<{
 
 .message__center {
   text-align: center;
+  margin: 20px 0 11px;
 }
 </style>

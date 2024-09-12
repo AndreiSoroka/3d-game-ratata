@@ -39,6 +39,11 @@ export const usePeerStore = defineStore('peer', () => {
     });
   }
 
+  function disconnectPeer(peerId: string) {
+    const connection = peers.value[peerId].connection;
+    connection.close();
+  }
+
   function removePeer(connection: DataConnection) {
     if (connection !== toRaw(peers.value[connection.peer].connection)) {
       throw new Error('Connection mismatch');
@@ -71,7 +76,11 @@ export const usePeerStore = defineStore('peer', () => {
     connection.on('data', (data: MessagePayload) => {
       handleGetDataFromPeer(connection, data);
     });
+    connection.on('close', () => {
+      removePeer(connection);
+    });
     connection.on('iceStateChanged', (state) => {
+      console.log('iceStateChanged', state);
       switch (state) {
         case 'connected':
           addPeer(connection);
@@ -97,6 +106,7 @@ export const usePeerStore = defineStore('peer', () => {
   return {
     id,
     connectToPeer,
+    disconnectPeer,
     sendToPeers,
     peersIds,
     peers,

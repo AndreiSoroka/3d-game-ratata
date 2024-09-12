@@ -59,7 +59,7 @@ defineExpose({ scrollToBottom });
 }
 
 .chat-wrapper__messages-list {
-  padding: 30px 0;
+  padding: 0 0 30px 0;
 }
 
 // todo change to kind of message container

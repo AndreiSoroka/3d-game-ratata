@@ -14,8 +14,5 @@ peerStore.peers$.subscribe(async (peersSubject) => {
       avatarStore.addAvatar(peersSubject.id);
       break;
     }
-    case 'remove': {
-      avatarStore.removeAvatar(peersSubject.id);
-    }
   }
 });

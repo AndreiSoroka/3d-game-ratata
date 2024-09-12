@@ -2,6 +2,7 @@
 import { ElButton, ElInput } from 'element-plus';
 import { ref } from 'vue';
 
+const inputRef = ref<InstanceType<typeof ElInput> | null>(null);
 const message = ref('');
 const emit = defineEmits<{
   sendMessage: [message: string];
@@ -15,6 +16,11 @@ function sendMessage() {
   clearMessage();
 }
 
+function handleEsc() {
+  clearMessage();
+  inputRef.value?.blur();
+}
+
 function clearMessage() {
   message.value = '';
 }
@@ -22,11 +28,12 @@ function clearMessage() {
 
 <template>
   <el-input
+    ref="inputRef"
     v-model="message"
     clearable
     placeholder="Type your message here"
     @keyup.enter="sendMessage"
-    @keydown.esc="clearMessage"
+    @keydown.esc="handleEsc"
     maxlength="140"
     @keydown.stop>
     <template #append>
