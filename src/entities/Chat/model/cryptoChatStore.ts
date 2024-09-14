@@ -22,7 +22,7 @@ export const useCryptoChatStore = defineStore('cryptoChat', () => {
     privateKey = await importJWK(keyPair.privateKeyJWK, 'private');
   });
 
-  async function encryptAndZipMessage(message: string) {
+  async function encryptAndZipMessageForPeers(message: string) {
     await generateKeyPromise;
     if (!publicKey.value) {
       throw new Error('Public key is not generated');
@@ -39,7 +39,7 @@ export const useCryptoChatStore = defineStore('cryptoChat', () => {
     return messageForSend;
   }
 
-  async function unzipAndDecryptMessage(encryptedMessage: string) {
+  async function unzipAndDecryptMessageFromPeers(encryptedMessage: string) {
     await generateKeyPromise;
     if (!privateKey) {
       throw new Error('Private key is not generated');
@@ -54,6 +54,10 @@ export const useCryptoChatStore = defineStore('cryptoChat', () => {
     users.value[userId] = await importJWK(publicKeyJWK, 'public');
   }
 
+  function hasUser(userId: string) {
+    return userId in users.value;
+  }
+
   function removeUser(userId: string) {
     delete users.value[userId];
   }
@@ -61,9 +65,10 @@ export const useCryptoChatStore = defineStore('cryptoChat', () => {
   return {
     isReadyPromise,
     publicKey,
-    encryptAndZipMessage,
-    unzipAndDecryptMessage,
+    encryptAndZipMessageForPeers,
+    unzipAndDecryptMessageFromPeers,
     addUser,
+    hasUser,
     removeUser,
   };
 });

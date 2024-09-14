@@ -25,15 +25,21 @@ watch(
     const rawMessages = [...chatStore.messagesForSend];
     chatStore.clearMessageForSend();
 
-    const messages = await Promise.all(
-      [...rawMessages].map(cryptoChatStore.encryptAndZipMessage)
+    const messagesForPeers = await Promise.all(
+      [...rawMessages].map(cryptoChatStore.encryptAndZipMessageForPeers)
     );
 
-    for (const message of messages) {
-      peerStore.sendToPeers({
-        type: 'chatMessage',
-        message: message,
-      } satisfies ChatTransportPayload);
+    for (const messageForPeer of messagesForPeers) {
+      for (const [peerId, message] of Object.entries(messageForPeer)) {
+        peerStore.sendToPeer(
+          peerId,
+          {
+            type: 'chatMessage',
+            message: { [peerId]: message },
+          } satisfies ChatTransportPayload,
+          true
+        );
+      }
     }
     for (const message of rawMessages) {
       chatStore.addMessage(peerStore.id, message);
@@ -48,7 +54,7 @@ peerStore.peers$.subscribe(async (peersSubject) => {
       await cryptoChatStore.isReadyPromise;
       await new Promise((resolve) => setTimeout(resolve, 1000)); // todo check why it is needed
       if (!cryptoChatStore.publicKey) {
-        console.assert(false, 'Public key is not generated');
+        console.error('Public key is not generated');
         // todo show error
         return;
       }
@@ -71,7 +77,7 @@ peerStore.messages$.subscribe(async (messageSubject) => {
   if (!messageSubject.payload) {
     return;
   }
-  const peerId = messageSubject.id;
+  const peerId = messageSubject.fromPeerId;
   const payload = v.safeParse(
     ChatTransportPayloadSchema,
     messageSubject.payload
@@ -84,7 +90,7 @@ peerStore.messages$.subscribe(async (messageSubject) => {
       if (!payload.output.message[userId]) {
         break;
       }
-      const message = await cryptoChatStore.unzipAndDecryptMessage(
+      const message = await cryptoChatStore.unzipAndDecryptMessageFromPeers(
         payload.output.message[userId]
       );
       chatStore.addMessage(peerId, message);
@@ -92,6 +98,9 @@ peerStore.messages$.subscribe(async (messageSubject) => {
       break;
     }
     case 'chatHandshake': {
+      if (cryptoChatStore.hasUser(peerId)) {
+        break;
+      }
       await cryptoChatStore.addUser(peerId, payload.output.publicKey);
       chatStore.addSystemMessageUserJoined(peerId);
       break;

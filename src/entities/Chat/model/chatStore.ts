@@ -25,6 +25,7 @@ export const useChatStore = defineStore('chat', () => {
   ) {
     messages.value.push({
       type,
+      // todo use id from peer request
       id: generateRandomId(),
       userId,
       content,

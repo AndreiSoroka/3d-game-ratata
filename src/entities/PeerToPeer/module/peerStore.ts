@@ -3,12 +3,22 @@ import { defineStore } from 'pinia';
 import { computed, ref, toRaw } from 'vue';
 import { Subject } from 'rxjs';
 import { generateRandomId } from '@/shared/libs/crypto/generateRandomId';
+import * as v from 'valibot';
 
 type PeerId = string;
+type RequestId = string;
 type MessagePayload = unknown;
 
+export const RequestSchema = v.object({
+  id: v.nullable(v.string()),
+  payload: v.unknown(),
+});
+
+type TRequest = v.InferOutput<typeof RequestSchema>;
+
 type MessageSubject = {
-  id: PeerId;
+  fromPeerId: PeerId;
+  reqId: RequestId | null;
   payload: MessagePayload;
 };
 type PeersSubject = {
@@ -56,19 +66,43 @@ export const usePeerStore = defineStore('peer', () => {
     delete peers.value[connection.peer];
   }
 
-  function sendToPeers(data: MessagePayload) {
-    Object.values(peers.value).forEach(({ connection }) => {
-      connection.send(data);
-    });
+  function sendToPeers(data: MessagePayload, isGuaranteed = false) {
+    for (const peerId of peersIds.value) {
+      sendToPeer(peerId, data, isGuaranteed);
+    }
+  }
+
+  /**
+   * Send data to peer
+   */
+  function sendToPeer(
+    peerId: string,
+    payload: MessagePayload,
+    isGuaranteed = false
+  ) {
+    const { connection } = peers.value[peerId];
+    if (!connection) {
+      console.error(`Peer with id ${peerId} not found`);
+      return;
+    }
+    const requestId = isGuaranteed ? generateRandomId() : null;
+    connection.send({ id: requestId, payload } satisfies TRequest);
   }
 
   function handleGetDataFromPeer(
     connection: DataConnection,
-    payload: MessagePayload
+    response: MessagePayload
   ) {
+    const { output, success, issues } = v.safeParse(RequestSchema, response);
+    if (!success) {
+      console.error('Invalid payload', response, issues);
+      return;
+    }
+
     messages$.next({
-      id: connection.peer,
-      payload,
+      fromPeerId: connection.peer,
+      reqId: output.id,
+      payload: output.payload,
     });
   }
 
@@ -108,8 +142,8 @@ export const usePeerStore = defineStore('peer', () => {
     connectToPeer,
     disconnectPeer,
     sendToPeers,
+    sendToPeer,
     peersIds,
-    peers,
     messages$,
     peers$,
   };
