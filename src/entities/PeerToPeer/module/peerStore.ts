@@ -1,9 +1,10 @@
 import { type DataConnection, Peer } from 'peerjs';
 import { defineStore } from 'pinia';
-import { computed, ref, toRaw } from 'vue';
+import { computed, nextTick, ref, toRaw } from 'vue';
 import { Subject } from 'rxjs';
 import { generateRandomId } from '@/shared/libs/crypto/generateRandomId';
 import * as v from 'valibot';
+import { PromiseWrapper } from '@/shared/libs/promise/PromiseWrapper';
 
 type PeerId = string;
 type RequestId = string;
@@ -32,6 +33,8 @@ export const usePeerStore = defineStore('peer', () => {
   const id = `ratata-player-${generateRandomId()}`;
   const peer = new Peer(id);
 
+  const guaranteedChannels: Map<PeerId, RTCDataChannel> = new Map();
+
   const peers$ = new Subject<PeersSubject>();
   const messages$ = new Subject<MessageSubject>();
   const peers = ref<Peers>({});
@@ -50,20 +53,27 @@ export const usePeerStore = defineStore('peer', () => {
   }
 
   function disconnectPeer(peerId: string) {
-    const connection = peers.value[peerId].connection;
-    connection.close();
+    const { connection } = peers.value[peerId];
+    if (!connection) {
+      return;
+    }
+    removePeer(connection);
   }
 
   function removePeer(connection: DataConnection) {
-    if (connection !== toRaw(peers.value[connection.peer].connection)) {
+    if (toRaw(connection) !== toRaw(peers.value[connection.peer].connection)) {
       throw new Error('Connection mismatch');
     }
     peers$.next({
       type: 'remove',
       id: connection.peer,
     });
+    const channelGuaranteed = guaranteedChannels.get(connection.peer);
+    channelGuaranteed?.close();
     connection.removeAllListeners();
+    connection.close();
     delete peers.value[connection.peer];
+    guaranteedChannels.delete(connection.peer);
   }
 
   function sendToPeers(data: MessagePayload, isGuaranteed = false) {
@@ -85,14 +95,23 @@ export const usePeerStore = defineStore('peer', () => {
       console.error(`Peer with id ${peerId} not found`);
       return;
     }
+
+    // todo remove?
     const requestId = isGuaranteed ? generateRandomId() : null;
-    connection.send({ id: requestId, payload } satisfies TRequest);
+
+    if (isGuaranteed) {
+      const channelGuaranteed = guaranteedChannels.get(peerId);
+      if (!channelGuaranteed) {
+        console.error('Channel not found');
+        return;
+      }
+      channelGuaranteed.send(JSON.stringify({ id: requestId, payload }));
+    } else {
+      connection.send({ id: requestId, payload } satisfies TRequest);
+    }
   }
 
-  function handleGetDataFromPeer(
-    connection: DataConnection,
-    response: MessagePayload
-  ) {
+  function handleGetDataFromPeer(fromPeerId: string, response: MessagePayload) {
     const { output, success, issues } = v.safeParse(RequestSchema, response);
     if (!success) {
       console.error('Invalid payload', response, issues);
@@ -100,41 +119,81 @@ export const usePeerStore = defineStore('peer', () => {
     }
 
     messages$.next({
-      fromPeerId: connection.peer,
+      fromPeerId,
       reqId: output.id,
       payload: output.payload,
     });
   }
 
-  function subscribeToPeerConnection(connection: DataConnection) {
-    connection.on('data', (data: MessagePayload) => {
-      handleGetDataFromPeer(connection, data);
+  function handlePeerConnection(connection: DataConnection) {
+    const isReadyChannelGuaranteed = new PromiseWrapper();
+    const isReadyChannelDefault = new PromiseWrapper();
+
+    const channelGuaranteed = connection.peerConnection.createDataChannel(
+      'guaranteed', // Уникальное имя канала
+      {
+        ordered: true,
+        maxRetransmits: 5,
+        negotiated: true, // important
+        id: 7, // important
+      }
+    );
+
+    // Receive message from "guaranteed"
+    channelGuaranteed.onmessage = (event) => {
+      try {
+        handleGetDataFromPeer(connection.peer, JSON.parse(event.data));
+      } catch (e) {
+        // noop, because it is not a valid message from peer
+      }
+    };
+    channelGuaranteed.onopen = () => {
+      isReadyChannelGuaranteed.resolve();
+    };
+
+    isReadyChannelGuaranteed.then(() => {
+      console.log('Channel is ready Guaranteed');
     });
+
+    isReadyChannelDefault.then(() => {
+      console.log('Channel is ready Default');
+    });
+
+    // Receive message from "default"
+    connection.on('data', (data: MessagePayload) => {
+      handleGetDataFromPeer(connection.peer, data);
+    });
+
+    // Other events
     connection.on('close', () => {
       removePeer(connection);
     });
     connection.on('iceStateChanged', (state) => {
-      console.log('iceStateChanged', state);
       switch (state) {
         case 'connected':
-          addPeer(connection);
+          isReadyChannelDefault.resolve();
           break;
-        case 'closed':
+        case 'closed': // not working is some reason (but connection.on('close') works instead of)
         case 'disconnected':
         case 'failed':
           removePeer(connection);
           break;
       }
     });
+
+    Promise.all([isReadyChannelGuaranteed, isReadyChannelDefault]).then(() => {
+      guaranteedChannels.set(connection.peer, channelGuaranteed);
+      addPeer(connection);
+    });
   }
 
   // if someone connects to us
-  peer.on('connection', subscribeToPeerConnection);
+  peer.on('connection', handlePeerConnection);
 
   // if we connect to someone
   function connectToPeer(id: string) {
-    const connection = peer.connect(id);
-    subscribeToPeerConnection(connection);
+    const connection = peer.connect(id, { label: 'default-channel' });
+    handlePeerConnection(connection);
   }
 
   return {

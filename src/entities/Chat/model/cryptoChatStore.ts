@@ -29,7 +29,6 @@ export const useCryptoChatStore = defineStore('cryptoChat', () => {
     }
 
     const messageForSend: Record<string, string> = {};
-
     await Promise.all(
       Object.entries(users.value).map(async ([user, publicKey]) => {
         const encryptedMessage = await encryptMessage(publicKey, message);

@@ -52,16 +52,18 @@ peerStore.peers$.subscribe(async (peersSubject) => {
   switch (peersSubject.type) {
     case 'add': {
       await cryptoChatStore.isReadyPromise;
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // todo check why it is needed
       if (!cryptoChatStore.publicKey) {
         console.error('Public key is not generated');
         // todo show error
         return;
       }
-      peerStore.sendToPeers({
-        type: 'chatHandshake',
-        publicKey: cryptoChatStore.publicKey,
-      } satisfies ChatTransportPayload);
+      peerStore.sendToPeers(
+        {
+          type: 'chatHandshake',
+          publicKey: cryptoChatStore.publicKey,
+        } satisfies ChatTransportPayload,
+        true
+      );
       break;
     }
     case 'remove': {
