@@ -1,6 +1,6 @@
 import { type DataConnection, Peer } from 'peerjs';
 import { defineStore } from 'pinia';
-import { computed, nextTick, ref, toRaw } from 'vue';
+import { computed, ref, toRaw } from 'vue';
 import { Subject } from 'rxjs';
 import { generateRandomId } from '@/shared/libs/crypto/generateRandomId';
 import * as v from 'valibot';
@@ -27,13 +27,17 @@ type PeersSubject = {
   id: PeerId;
 };
 
-type Peers = Record<PeerId, { connection: DataConnection }>;
+type Peers = Record<
+  PeerId,
+  {
+    connection: DataConnection;
+    channelGuaranteed: RTCDataChannel;
+  }
+>;
 
 export const usePeerStore = defineStore('peer', () => {
   const id = `ratata-player-${generateRandomId()}`;
   const peer = new Peer(id);
-
-  const guaranteedChannels: Map<PeerId, RTCDataChannel> = new Map();
 
   const peers$ = new Subject<PeersSubject>();
   const messages$ = new Subject<MessageSubject>();
@@ -42,9 +46,13 @@ export const usePeerStore = defineStore('peer', () => {
     return Object.keys(peers.value);
   });
 
-  function addPeer(connection: DataConnection) {
+  function addPeer(
+    connection: DataConnection,
+    channelGuaranteed: RTCDataChannel
+  ) {
     peers.value[connection.peer] = {
       connection,
+      channelGuaranteed,
     };
     peers$.next({
       type: 'add',
@@ -64,16 +72,15 @@ export const usePeerStore = defineStore('peer', () => {
     if (toRaw(connection) !== toRaw(peers.value[connection.peer].connection)) {
       throw new Error('Connection mismatch');
     }
+    const guaranteedChannel = peers.value[connection.peer].channelGuaranteed;
     peers$.next({
       type: 'remove',
       id: connection.peer,
     });
-    const channelGuaranteed = guaranteedChannels.get(connection.peer);
-    channelGuaranteed?.close();
+    guaranteedChannel.close();
     connection.removeAllListeners();
     connection.close();
     delete peers.value[connection.peer];
-    guaranteedChannels.delete(connection.peer);
   }
 
   function sendToPeers(data: MessagePayload, isGuaranteed = false) {
@@ -90,7 +97,7 @@ export const usePeerStore = defineStore('peer', () => {
     payload: MessagePayload,
     isGuaranteed = false
   ) {
-    const { connection } = peers.value[peerId];
+    const { connection, channelGuaranteed } = peers.value[peerId];
     if (!connection) {
       console.error(`Peer with id ${peerId} not found`);
       return;
@@ -100,11 +107,6 @@ export const usePeerStore = defineStore('peer', () => {
     const requestId = isGuaranteed ? generateRandomId() : null;
 
     if (isGuaranteed) {
-      const channelGuaranteed = guaranteedChannels.get(peerId);
-      if (!channelGuaranteed) {
-        console.error('Channel not found');
-        return;
-      }
       channelGuaranteed.send(JSON.stringify({ id: requestId, payload }));
     } else {
       connection.send({ id: requestId, payload } satisfies TRequest);
@@ -182,8 +184,7 @@ export const usePeerStore = defineStore('peer', () => {
     });
 
     Promise.all([isReadyChannelGuaranteed, isReadyChannelDefault]).then(() => {
-      guaranteedChannels.set(connection.peer, channelGuaranteed);
-      addPeer(connection);
+      addPeer(connection, channelGuaranteed);
     });
   }
 
