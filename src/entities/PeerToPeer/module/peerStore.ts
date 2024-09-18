@@ -1,10 +1,12 @@
-import { type DataConnection, Peer } from 'peerjs';
+import { type DataConnection, Peer, util } from 'peerjs';
 import { defineStore } from 'pinia';
 import { computed, ref, toRaw } from 'vue';
 import { Subject } from 'rxjs';
 import { generateRandomId } from '@/shared/libs/crypto/generateRandomId';
 import * as v from 'valibot';
 import { PromiseWrapper } from '@/shared/libs/promise/PromiseWrapper';
+import { getOnlineStun } from '@/entities/PeerToPeer/module/urils/getOnlineStun';
+import { publicStuns } from '@/entities/PeerToPeer/module/const/publicStuns';
 
 type PeerId = string;
 type RequestId = string;
@@ -37,7 +39,22 @@ type Peers = Record<
 
 export const usePeerStore = defineStore('peer', () => {
   const id = `ratata-player-${generateRandomId()}`;
-  const peer = new Peer(id);
+
+  const config = {
+    iceServers: [...publicStuns, ...util.defaultConfig.iceServers],
+    sdpSemantics: util.defaultConfig.sdpSemantics,
+  };
+  const peer = new Peer(id, {
+    config,
+  });
+
+  getOnlineStun()
+    .then((stunServers) => {
+      config.iceServers.unshift(...stunServers.slice(0, 3));
+    })
+    .catch((e) => {
+      console.error('Failed to get online stun servers', e);
+    });
 
   const peers$ = new Subject<PeersSubject>();
   const messages$ = new Subject<MessageSubject>();
