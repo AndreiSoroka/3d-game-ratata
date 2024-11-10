@@ -6,17 +6,13 @@ import ActionUpdraftButton from '@/entities/GameActions/ui/ActionButtons/ActionU
 import ActionRadialExplosionButton from '@/entities/GameActions/ui/ActionButtons/ActionRadialExplosionButton.vue';
 
 const actionTimestamp = ref<number>(Date.now());
-let interval: number | null = null;
 
-console.log('interval', interval);
-interval = setInterval(() => {
+const interval = setInterval(() => {
   actionTimestamp.value = Date.now();
 }, 10000);
 
 onUnmounted(() => {
-  if (interval) {
-    clearInterval(interval);
-  }
+  clearInterval(interval);
 });
 </script>
 

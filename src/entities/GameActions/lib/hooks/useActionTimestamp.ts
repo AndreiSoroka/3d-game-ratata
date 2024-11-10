@@ -8,7 +8,7 @@ export default function useActionTimestamp(cooldown: number = 100) {
 
   watch(actionStartTimestamp, () => {
     clearInterval(intervalId);
-    intervalId = setInterval(() => {
+    intervalId = window.setInterval(() => {
       now.value = Date.now();
       if (actionStartTimestamp.value + actionCooldown.value < now.value) {
         clearInterval(intervalId);

@@ -19,7 +19,7 @@ export default class Fog {
 
   private _initInterval() {
     this._clearInterval();
-    this._loopInterval = setInterval(this._loop.bind(this), 100);
+    this._loopInterval = window.setInterval(this._loop.bind(this), 100);
   }
 
   private _clearInterval() {

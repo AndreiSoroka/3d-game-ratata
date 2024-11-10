@@ -39,20 +39,20 @@ export default abstract class AbstractAction {
       throw new Error('intervalLoopAction must be greater than 0');
     }
 
-    this.timeoutStartActionId = setTimeout(() => {
+    this.timeoutStartActionId = window.setTimeout(() => {
       this.startAction();
       this.status = 'started';
     }, options.delayStartAction);
-    this.timeoutEndActionId = setTimeout(() => {
+    this.timeoutEndActionId = window.setTimeout(() => {
       this.endAction();
       this.status = 'ended';
     }, options.delayEndAction);
-    this.timeoutDisposeActionId = setTimeout(
+    this.timeoutDisposeActionId = window.setTimeout(
       () => this.dispose(),
       options.delayDisposeAction ?? options.delayEndAction + 1
     );
     this.intervalLoopActionId = options.intervalLoopAction
-      ? setInterval(() => this.loopAction(), options.intervalLoopAction)
+      ? window.setInterval(() => this.loopAction(), options.intervalLoopAction)
       : null;
   }
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
 import { ElTabPane, ElTabs } from 'element-plus';
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 import Game from '@/entities/Game/Game';
 import HavokPhysics from '@babylonjs/havok';
 import { usePeerStore } from '@/entities/PeerToPeer/module/peerStore';
@@ -73,9 +73,9 @@ onMounted(() => {
     });
 
     // todo add zod instead on (payload as any)
-    store.messages$.subscribe(({ id, payload }) => {
+    store.messages$.subscribe(({ fromPeerId, payload }) => {
       if ((payload as any).type === 'PLAYER_POSITION') {
-        game.setMultiPlayerPosition(id, (payload as any).data);
+        game.setMultiPlayerPosition(fromPeerId, (payload as any).data);
       }
       if ((payload as any).type === 'WORLD_ACTION') {
         game.callWordAction((payload as any).data);
@@ -90,12 +90,6 @@ onBeforeUnmount(() => {
   adapterController.destroy();
 });
 
-watch(
-  () => store.peers,
-  () => {
-    console.log('multiplayerPeers changed');
-  }
-);
 window.addEventListener('resize', function () {
   if (!gameCanvas.value) {
     return;

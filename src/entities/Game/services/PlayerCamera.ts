@@ -69,8 +69,8 @@ export default class PlayerCamera {
       rayHelperUp.show(scene);
     }
 
-    this._slowLoopInterval = setInterval(this._slowLoop.bind(this), 200);
-    this._loopInterval = setInterval(this._loop.bind(this), 15);
+    this._slowLoopInterval = window.setInterval(this._slowLoop.bind(this), 200);
+    this._loopInterval = window.setInterval(this._loop.bind(this), 15);
   }
 
   private _updateRaysPosition() {
