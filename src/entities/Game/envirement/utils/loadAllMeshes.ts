@@ -12,11 +12,15 @@ export default function loadAllMeshes(scene: Scene) {
     mergeAll(),
     scan(
       (acc, meshData) => {
-        if (acc[meshData.name]) {
+        // todo instead of removing the hash, we should create map for the each mesh
+        const name = import.meta.env.DEV
+          ? meshData.name
+          : meshData.name.slice(0, -9);
+        if (acc[name]) {
           throw new Error(`Duplicate name ${meshData.name}`);
         }
 
-        return { ...acc, [meshData.name]: meshData };
+        return { ...acc, [name]: meshData };
       },
       {} as {
         [key: string]: Awaited<ReturnType<typeof loadMesh>> | undefined;
