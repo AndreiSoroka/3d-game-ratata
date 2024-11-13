@@ -1,71 +1,34 @@
 # 3d-game-ratata
 
-This template should help get you started developing with Vue 3 in Vite.
+## Why am I publishing this repository?
 
-## Recommended IDE Setup
+I don’t really know.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+Originally, my task was simply to try out Babylon.js. That meant just reading the documentation, writing a bit of code,
+and forgetting about it. I did the initial quick-and-dirty job, tried what I wanted. Then I did another quick pass -
+just straightforward code, without any thought that I’d have to maintain it. No structure, no planning. For some reason,
+though, I kept coming back to it over time, adding another quick fix.
 
-## Type Support for `.vue` Imports in TS
+Why? I don’t know. Some kind of anomaly.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+I should remove it, but instead, I’m publishing it 🤷
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+## What is this?
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+This is a simple 3D game where you control a ball. You can connect with friends or play solo.
+There’s no objective in this game, so do whatever you want.
 
-## Customize configuration
+### Features
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+- 3D Game
+- P2P Multiplayer based on WebRTC
+- Chat with DTLS and RSA-OAEP encryption
 
-## Project Setup
+## Technologies
 
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
-
-### Run End-to-End Tests with [Playwright](https://playwright.dev)
-
-```sh
-# Install browsers for the first run
-npx playwright install
-
-# When testing on CI, must build the project first
-npm run build
-
-# Runs the end-to-end tests
-npm run test:e2e
-# Runs the tests only on Chromium
-npm run test:e2e -- --project=chromium
-# Runs the tests of a specific file
-npm run test:e2e -- tests/example.spec.ts
-# Runs the tests in debug mode
-npm run test:e2e -- --debug
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+- Babylon.js
+- PeerJS (WebRTC)
+- Vite
+- Vue 3
+- TypeScript
+- RxJs
