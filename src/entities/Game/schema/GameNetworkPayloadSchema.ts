@@ -36,8 +36,14 @@ const VortexPayloadSchema = v.object({
 });
 
 const MultiPlayerActionSchema = v.variant('name', [
-  v.object({ name: v.literal('GRAVITATION'), payload: GravitationPayloadSchema }),
-  v.object({ name: v.literal('RADIAL_EXPLOSION'), payload: RadialExplosionPayloadSchema }),
+  v.object({
+    name: v.literal('GRAVITATION'),
+    payload: GravitationPayloadSchema,
+  }),
+  v.object({
+    name: v.literal('RADIAL_EXPLOSION'),
+    payload: RadialExplosionPayloadSchema,
+  }),
   v.object({ name: v.literal('UPDRAFT'), payload: UpdraftPayloadSchema }),
   v.object({ name: v.literal('VORTEX'), payload: VortexPayloadSchema }),
 ]);

@@ -1,6 +1,9 @@
 import { usePeerStore } from '@/entities/PeerToPeer';
 import type Game from '@/entities/Game/Game';
-import { GameNetworkPayloadSchema, type GameNetworkPayload } from '@/entities/Game/schema';
+import {
+  GameNetworkPayloadSchema,
+  type GameNetworkPayload,
+} from '@/entities/Game/schema';
 import * as v from 'valibot';
 
 export function initGameNetwork(game: Game) {

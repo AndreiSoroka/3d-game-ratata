@@ -1,4 +1,4 @@
-```python3
+````python3
 import bpy
 import json
 
@@ -33,3 +33,4 @@ path_to_file = "src/entities/Game/envirement/coordinates.json"
 with open(path_to_project + path_to_file, "w") as file:
     file.write(json_data)
     ```
+````
