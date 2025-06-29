@@ -13,9 +13,9 @@ import {
 import flareTexture from '@/shared/assets/flare.png';
 
 export default class MultiPlayer {
-  readonly #scene: Scene;
-  readonly #material: StandardMaterial;
-  readonly #shadow: ShadowGenerator;
+  private readonly _scene: Scene;
+  private readonly _material: StandardMaterial;
+  private readonly _shadow: ShadowGenerator;
   public readonly playerMesh: Mesh;
 
   constructor(options: {
@@ -25,29 +25,29 @@ export default class MultiPlayer {
     shadow: ShadowGenerator;
   }) {
     const name = options.playerName ?? Math.random().toString(16);
-    this.#scene = options.scene;
-    this.#shadow = options.shadow;
-    this.#material = this.#createMaterial();
+    this._scene = options.scene;
+    this._shadow = options.shadow;
+    this._material = this.#createMaterial();
 
     this.playerMesh = this.#createPlayerMesh(name);
     this.playerMesh.position = options.startPosition;
-    this.playerMesh.material = this.#material;
+    this.playerMesh.material = this._material;
     // new TrailMesh(
     //   `MultiPlayerTrail-${name}`,
     //   this.playerMesh,
-    //   this.#scene,
+    //   this._scene,
     //   1,
     //   100,
     //   true
     // );
 
-    this.#shadow.addShadowCaster(this.playerMesh);
-    const particleSystem = new ParticleSystem('particles', 2000, this.#scene);
-    particleSystem.particleTexture = new Texture(flareTexture, this.#scene);
+    this._shadow.addShadowCaster(this.playerMesh);
+    const particleSystem = new ParticleSystem('particles', 2000, this._scene);
+    particleSystem.particleTexture = new Texture(flareTexture, this._scene);
 
     // Position where the particles are emiited from
-    // const particleSystem = new ParticleSystem('particles', 2000, this.#scene);
-    particleSystem.particleTexture = new Texture(flareTexture, this.#scene);
+    // const particleSystem = new ParticleSystem('particles', 2000, this._scene);
+    particleSystem.particleTexture = new Texture(flareTexture, this._scene);
     particleSystem.minSize = 0.1;
     particleSystem.maxSize = 1;
     particleSystem.maxLifeTime = 1.5;
@@ -64,7 +64,7 @@ export default class MultiPlayer {
   }
 
   #createMaterial() {
-    const material = new StandardMaterial('material', this.#scene);
+    const material = new StandardMaterial('material', this._scene);
     material.diffuseColor = new Color3(0, 0, 0);
     material.alpha = 0.2;
     return material;
@@ -78,7 +78,7 @@ export default class MultiPlayer {
         diameter: 2,
         sideOrientation: Mesh.FRONTSIDE,
       },
-      this.#scene
+      this._scene
     );
   }
 
@@ -99,11 +99,11 @@ export default class MultiPlayer {
     this.playerMesh.animations = [];
     this.playerMesh.animations.push(animation);
 
-    this.#scene.beginAnimation(this.playerMesh, 0, 30, false);
+    this._scene.beginAnimation(this.playerMesh, 0, 30, false);
   }
 
   public dispose() {
     this.playerMesh.dispose();
-    this.#material.dispose();
+    this._material.dispose();
   }
 }

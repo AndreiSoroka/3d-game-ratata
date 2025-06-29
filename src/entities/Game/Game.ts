@@ -113,40 +113,40 @@ export type MultiPlayerActions =
   | MultiPlayerActionVortex;
 
 export default class Game {
-  #canvas: HTMLCanvasElement;
-  #player!: Player;
-  #engine: Engine;
-  #scene: Scene;
-  #fog: Fog;
-  #cameraAngle = 0;
-  playerCamera: PlayerCamera;
-  #havokInstance: HavokPhysicsWithBindings;
-  #checkPointPosition: Vector3 = new Vector3(0, 30, 0);
-  #shadow: ShadowGenerator;
-  #movementDirection: Set<MOVEMENT_DIRECTION> = new Set([]);
-  #cameraDirection: Set<CAMERA_DIRECTION> = new Set([]);
-  #physicsHelper: PhysicsHelper | null = null;
-  readonly #levelEnvironment: LevelEnvironment;
+  private _canvas: HTMLCanvasElement;
+  private _player!: Player;
+  private _engine: Engine;
+  private _scene: Scene;
+  private _fog: Fog;
+  private _cameraAngle = 0;
+  public playerCamera: PlayerCamera;
+  private _havokInstance: HavokPhysicsWithBindings;
+  private _checkPointPosition: Vector3 = new Vector3(0, 30, 0);
+  private _shadow: ShadowGenerator;
+  private _movementDirection: Set<MOVEMENT_DIRECTION> = new Set([]);
+  private _cameraDirection: Set<CAMERA_DIRECTION> = new Set([]);
+  private _physicsHelper: PhysicsHelper | null = null;
+  private readonly _levelEnvironment: LevelEnvironment;
 
-  #checkPointServices: CheckPointService[] = [];
+  private _checkPointServices: CheckPointService[] = [];
 
-  #skillGravitation = startGravitationLevel;
-  #skillRadialExplosion = startRadialExplosionLevel;
-  #skillUpdraft = startUpdraftLevel;
-  #skillVortex = startVortexLevel;
+  private _skillGravitation = startGravitationLevel;
+  private _skillRadialExplosion = startRadialExplosionLevel;
+  private _skillUpdraft = startUpdraftLevel;
+  private _skillVortex = startVortexLevel;
 
-  #actions: Record<string, AbstractAction> = {};
-  #playerCancelableActions: Record<string, AbstractAction> = {};
+  private _actions: Record<string, AbstractAction> = {};
+  private _playerCancelableActions: Record<string, AbstractAction> = {};
 
   public multiplayerSubject$ = new Subject<MultiPlayerActions>();
 
-  #playerPositionSubject = new Subject<{
+  private _playerPositionSubject = new Subject<{
     x: number;
     y: number;
     z: number;
   }>();
 
-  #actionState: ActionState = {
+  private _actionState: ActionState = {
     ACTION1: {
       cooldown: 0,
       timestamp: 0,
@@ -172,46 +172,46 @@ export default class Game {
   public actionStateSubject$ = new Subject<ActionState>();
 
   private _updateActionState(action: PLAYER_ACTION) {
-    this.#actionState[action].timestamp = Date.now();
-    this.#actionState[action].cooldown = actionsCoolDown[action];
-    this.actionStateSubject$.next(this.#actionState);
+    this._actionState[action].timestamp = Date.now();
+    this._actionState[action].cooldown = actionsCoolDown[action];
+    this.actionStateSubject$.next(this._actionState);
   }
 
   private _cooldownAllActions(time: number) {
     const now = Date.now();
-    (Object.keys(this.#actionState) as PLAYER_ACTION[]).forEach((action) => {
+    (Object.keys(this._actionState) as PLAYER_ACTION[]).forEach((action) => {
       const actionEndTime =
-        this.#actionState[action].timestamp +
-        this.#actionState[action].cooldown;
+        this._actionState[action].timestamp +
+        this._actionState[action].cooldown;
       const newEndTime = now + time;
 
       if (actionEndTime < newEndTime) {
-        this.#actionState[action].timestamp = now;
-        this.#actionState[action].cooldown = time;
+        this._actionState[action].timestamp = now;
+        this._actionState[action].cooldown = time;
       }
     });
-    this.actionStateSubject$.next(this.#actionState);
+    this.actionStateSubject$.next(this._actionState);
   }
 
   private isActionReady(action: PLAYER_ACTION) {
     return (
-      this.#actionState[action].timestamp + this.#actionState[action].cooldown <
+      this._actionState[action].timestamp + this._actionState[action].cooldown <
       Date.now()
     );
   }
 
-  public playerPositionSubject$ = this.#playerPositionSubject
+  public playerPositionSubject$ = this._playerPositionSubject
     .asObservable()
     .pipe(throttle(() => interval(100)));
 
-  #multiplayers: Record<string, MultiPlayer> = {};
+  private _multiplayers: Record<string, MultiPlayer> = {};
 
   constructor(
     canvas: HTMLCanvasElement,
     havokInstance: HavokPhysicsWithBindings
   ) {
-    this.#canvas = canvas;
-    this.#engine = new Engine(canvas, true, {
+    this._canvas = canvas;
+    this._engine = new Engine(canvas, true, {
       preserveDrawingBuffer: true,
       stencil: true,
       deterministicLockstep: true,
@@ -219,16 +219,16 @@ export default class Game {
       // timeStep: 1 / 60,
     });
 
-    this.#havokInstance = havokInstance;
-    this.#scene = this.#createScene();
-    this.#physicsHelper = new PhysicsHelper(this.#scene);
+    this._havokInstance = havokInstance;
+    this._scene = this.#createScene();
+    this._physicsHelper = new PhysicsHelper(this._scene);
 
     this.#setFps(1000 / 60);
 
     if (IS_DEBUGING) {
       import('@babylonjs/inspector')
         .then(({ Inspector }) => {
-          Inspector.Show(this.#scene, {
+          Inspector.Show(this._scene, {
             embedMode: true,
             showExplorer: true,
             showInspector: true,
@@ -245,19 +245,19 @@ export default class Game {
     // const pointLight = new PointLight(
     //   'pointLight',
     //   new Vector3(0, 30, 10),
-    //   this.#scene
+    //   this._scene
     // );
     // pointLight.intensity = 1;
     const hemisphericLight = new HemisphericLight(
       'hemiLight',
       new Vector3(0, 1, 0),
-      this.#scene
+      this._scene
     );
     hemisphericLight.intensity = 0.005;
     const light = new DirectionalLight(
       'dirLight',
       new Vector3(-1, -2, -1),
-      this.#scene
+      this._scene
     );
     light.specular = new Color3(0, 0, 0);
     light.intensity = 1;
@@ -265,96 +265,96 @@ export default class Game {
     // light.shadowMaxZ = 10;
 
     light.position = new Vector3(20, 40, 20);
-    this.#shadow = new ShadowGenerator(4096, light);
-    this.#shadow.usePoissonSampling = true;
-    this.#shadow.bias = 0.0001;
+    this._shadow = new ShadowGenerator(4096, light);
+    this._shadow.usePoissonSampling = true;
+    this._shadow.bias = 0.0001;
 
-    this.#levelEnvironment = new LevelEnvironment({
-      scene: this.#scene,
-      shadow: this.#shadow,
+    this._levelEnvironment = new LevelEnvironment({
+      scene: this._scene,
+      shadow: this._shadow,
     });
-    this.playerCamera = new PlayerCamera(this.#scene);
-    // this.generalLight = new GeneralLight(this.#scene);
+    this.playerCamera = new PlayerCamera(this._scene);
+    // this.generalLight = new GeneralLight(this._scene);
     this.initNewPlayer();
 
-    this.#levelEnvironment.isReadyPromise.then(() => {
+    this._levelEnvironment.isReadyPromise.then(() => {
       // todo add method .getCheckPointsCoordinates(): Promise<Vector3> instead this one:
-      this.#levelEnvironment.checkPointsCoordinates.forEach((position) => {
+      this._levelEnvironment.checkPointsCoordinates.forEach((position) => {
         const checkPoint = new CheckPointService({
-          scene: this.#scene,
+          scene: this._scene,
           position,
         });
-        this.#checkPointServices.push(checkPoint);
+        this._checkPointServices.push(checkPoint);
       });
     });
 
     // new Vector3(0, 30, 0),
 
-    this.#engine.runRenderLoop(this.#loop.bind(this));
+    this._engine.runRenderLoop(this.#loop.bind(this));
     // this.#createGround();
 
     // const envTexture = new CubeTexture(
     //   'https://playground.babylonjs.com/textures/SpecularHDR.dds',
-    //   this.#scene
+    //   this._scene
     // );
-    // this.#scene.createDefaultSkybox(envTexture, true, 1000);
+    // this._scene.createDefaultSkybox(envTexture, true, 1000);
 
-    const env = this.#scene.createDefaultEnvironment({
+    const env = this._scene.createDefaultEnvironment({
       createGround: false,
       createSkybox: false,
       setupImageProcessing: false,
       toneMappingEnabled: false,
     });
 
-    this.#fog = new Fog({
-      scene: this.#scene,
+    this._fog = new Fog({
+      scene: this._scene,
     });
 
-    // this.#scene.environmentTexture = CubeTexture.CreateFromPrefilteredData(
+    // this._scene.environmentTexture = CubeTexture.CreateFromPrefilteredData(
     //   'https://playground.babylonjs.com/textures/environment.env',
-    //   this.#scene
+    //   this._scene
     // );
   }
 
   onBeforeRenderObservable() {
-    this.#playerPositionSubject.next({
-      x: this.#player.playerMesh.position.x,
-      y: this.#player.playerMesh.position.y,
-      z: this.#player.playerMesh.position.z,
+    this._playerPositionSubject.next({
+      x: this._player.playerMesh.position.x,
+      y: this._player.playerMesh.position.y,
+      z: this._player.playerMesh.position.z,
     });
 
-    if (this.#player.playerMesh.position.y < -2) {
+    if (this._player.playerMesh.position.y < -2) {
       this.initNewPlayer();
     }
   }
 
   initNewPlayer() {
-    this.#player?.dispose();
-    this.#skillGravitation = downGravitationLevel(this.#skillGravitation);
-    this.#skillRadialExplosion = downRadialExplosionLevel(
-      this.#skillRadialExplosion
+    this._player?.dispose();
+    this._skillGravitation = downGravitationLevel(this._skillGravitation);
+    this._skillRadialExplosion = downRadialExplosionLevel(
+      this._skillRadialExplosion
     );
-    this.#skillUpdraft = downUpdraftLevel(this.#skillUpdraft);
-    this.#skillVortex = startVortexLevel;
+    this._skillUpdraft = downUpdraftLevel(this._skillUpdraft);
+    this._skillVortex = startVortexLevel;
 
-    this.#player = new Player({
-      scene: this.#scene,
-      startPosition: this.#checkPointPosition,
+    this._player = new Player({
+      scene: this._scene,
+      startPosition: this._checkPointPosition,
       // startPosition: new Vector3(-90, 15, 60),
-      shadow: this.#shadow,
+      shadow: this._shadow,
     });
-    this.playerCamera.setTarget(this.#player.playerMesh);
+    this.playerCamera.setTarget(this._player.playerMesh);
 
-    this.#player.playerMesh.onBeforeRenderObservable.add(
+    this._player.playerMesh.onBeforeRenderObservable.add(
       this.onBeforeRenderObservable.bind(this)
     );
   }
 
   #createScene() {
     const gravityVector = new Vector3(0, -20, 0);
-    const physicsPlugin = new HavokPlugin(true, this.#havokInstance);
+    const physicsPlugin = new HavokPlugin(true, this._havokInstance);
 
-    const scene = new Scene(this.#engine);
+    const scene = new Scene(this._engine);
 
     scene.enablePhysics(gravityVector, physicsPlugin);
 
@@ -371,10 +371,10 @@ export default class Game {
         subdivisions: 2,
         updatable: false,
       },
-      this.#scene
+      this._scene
     );
-    const material = new PBRMaterial('material1', this.#scene);
-    material.albedoTexture = new Texture(groundTexture, this.#scene);
+    const material = new PBRMaterial('material1', this._scene);
+    material.albedoTexture = new Texture(groundTexture, this._scene);
     // material.diffuseColor = new Color3(0.1, 0.5, 0.5);
     material.metallic = 0;
     ground.material = material;
@@ -383,7 +383,7 @@ export default class Game {
       ground,
       PhysicsShapeType.BOX,
       { mass: 0, friction: 1 },
-      this.#scene
+      this._scene
     );
     // Return the created scene
   }
@@ -392,14 +392,14 @@ export default class Game {
    * https://forum.babylonjs.com/t/inconsistent-physics-behavior-in-babylon-js-on-different-fps/46475
    */
   #syncFpsAndPhysics() {
-    this.#scene.getPhysicsEngine()?.setTimeStep(1 / this.#engine.getFps());
+    this._scene.getPhysicsEngine()?.setTimeStep(1 / this._engine.getFps());
   }
 
   #setFps(frameDuration: number) {
     let lastTime = 0;
     let accumulatedTime = 0;
 
-    this.#engine.customAnimationFrameRequester = {
+    this._engine.customAnimationFrameRequester = {
       requestAnimationFrame(boundedRenderFunction: () => void) {
         function frameRequestCallback(time: number) {
           accumulatedTime += time - lastTime;
@@ -422,35 +422,35 @@ export default class Game {
     this.#syncFpsAndPhysics();
     this.#handleChangeCameraAngle();
     // move player
-    this.#player.move(-this.#cameraAngle, this.#movementDirection);
+    this._player.move(-this._cameraAngle, this._movementDirection);
     // rotate camera
-    this.playerCamera.setAngle(this.#cameraAngle);
+    this.playerCamera.setAngle(this._cameraAngle);
     // render scene
-    this.#scene.render();
+    this._scene.render();
 
-    this.#checkPointServices.forEach((checkPoint) => {
-      if (checkPoint.mesh.intersectsMesh(this.#player.playerMesh, true)) {
-        this.#checkPointPosition = checkPoint.mesh.position.clone();
+    this._checkPointServices.forEach((checkPoint) => {
+      if (checkPoint.mesh.intersectsMesh(this._player.playerMesh, true)) {
+        this._checkPointPosition = checkPoint.mesh.position.clone();
       }
     });
   }
 
   #handleChangeCameraAngle() {
     // convert milliseconds to seconds
-    const deltaTime = this.#scene.deltaTime / 1000;
+    const deltaTime = this._scene.deltaTime / 1000;
     // angle in degrees per second
     const rotationSpeed = 2;
 
-    if (this.#cameraDirection.has('CAMERA_LEFT')) {
-      this.#cameraAngle += rotationSpeed * deltaTime;
+    if (this._cameraDirection.has('CAMERA_LEFT')) {
+      this._cameraAngle += rotationSpeed * deltaTime;
     }
-    if (this.#cameraDirection.has('CAMERA_RIGHT')) {
-      this.#cameraAngle -= rotationSpeed * deltaTime;
+    if (this._cameraDirection.has('CAMERA_RIGHT')) {
+      this._cameraAngle -= rotationSpeed * deltaTime;
     }
   }
 
   public resize() {
-    this.#engine.resize();
+    this._engine.resize();
   }
 
   public setMultiPlayerPosition(
@@ -462,14 +462,14 @@ export default class Game {
     }
   ) {
     const Vector3Position = new Vector3(position.x, position.y, position.z);
-    if (!this.#multiplayers[id]) {
-      this.#multiplayers[id] = new MultiPlayer({
-        scene: this.#scene,
+    if (!this._multiplayers[id]) {
+      this._multiplayers[id] = new MultiPlayer({
+        scene: this._scene,
         startPosition: Vector3Position,
-        shadow: this.#shadow,
+        shadow: this._shadow,
       });
     }
-    this.#multiplayers[id].setPosition(Vector3Position);
+    this._multiplayers[id].setPosition(Vector3Position);
   }
 
   public callWordAction(data: MultiPlayerActions) {
@@ -489,23 +489,23 @@ export default class Game {
 
   public setPlayerDirection(direction: DIRECTION, isPressed: boolean) {
     if (direction === 'JUMP' && isPressed) {
-      Object.values(this.#playerCancelableActions).forEach((action) => {
+      Object.values(this._playerCancelableActions).forEach((action) => {
         action.callEndActionStatus();
       });
     }
     // todo refactor
     if (direction === 'CAMERA_LEFT' || direction === 'CAMERA_RIGHT') {
       if (isPressed) {
-        this.#cameraDirection.add(direction);
+        this._cameraDirection.add(direction);
       } else {
-        this.#cameraDirection.delete(direction);
+        this._cameraDirection.delete(direction);
       }
       return;
     }
     if (isPressed) {
-      this.#movementDirection.add(direction);
+      this._movementDirection.add(direction);
     } else {
-      this.#movementDirection.delete(direction);
+      this._movementDirection.delete(direction);
     }
   }
 
@@ -524,11 +524,11 @@ export default class Game {
         break;
       case 'ACTION3':
         this.#callPlayerUpdraftAction();
-        this.#fog.addVisibility();
+        this._fog.addVisibility();
         break;
       case 'ACTION4':
         this.#callPlayerVortexAction();
-        this.#fog.addVisibility();
+        this._fog.addVisibility();
         this._cooldownAllActions(1500);
         break;
       case 'ACTION5':
@@ -538,13 +538,13 @@ export default class Game {
   }
 
   #callPlayerGravitationAction() {
-    const gravitationLevel = this.#skillGravitation;
-    this.#skillGravitation = upGravitationLevel(this.#skillGravitation);
+    const gravitationLevel = this._skillGravitation;
+    this._skillGravitation = upGravitationLevel(this._skillGravitation);
     if (IS_DEBUGING) {
       console.log('gravitationLevel', gravitationLevel);
     }
 
-    const playerPosition = this.#player.playerMesh.getAbsolutePosition();
+    const playerPosition = this._player.playerMesh.getAbsolutePosition();
     const { maxRandomPosition } = gravitationLevel;
 
     const payload: GravitationPayload = {
@@ -561,28 +561,28 @@ export default class Game {
     const action = this.#callGravitationAction(payload);
     if (action) {
       const key = Date.now();
-      this.#playerCancelableActions[key] = action;
+      this._playerCancelableActions[key] = action;
       action.onDispose(() => {
-        delete this.#playerCancelableActions[key];
+        delete this._playerCancelableActions[key];
       });
     }
   }
 
   #autoClearFromActionsList(action: AbstractAction) {
     const key = Date.now();
-    this.#actions[key] = action;
+    this._actions[key] = action;
     action.onDispose(() => {
-      delete this.#actions[key];
+      delete this._actions[key];
     });
   }
 
   #callGravitationAction(payload: GravitationPayload) {
-    if (!this.#physicsHelper) {
+    if (!this._physicsHelper) {
       return;
     }
     const action = new GravitationAction({
-      physicsHelper: this.#physicsHelper,
-      scene: this.#scene,
+      physicsHelper: this._physicsHelper,
+      scene: this._scene,
       payload,
     });
     this.#autoClearFromActionsList(action);
@@ -590,14 +590,14 @@ export default class Game {
   }
 
   #callPlayerRadialExplosionAction() {
-    const radialExplosionLevel = this.#skillRadialExplosion;
+    const radialExplosionLevel = this._skillRadialExplosion;
 
-    this.#skillRadialExplosion = upRadialExplosionLevel(radialExplosionLevel);
+    this._skillRadialExplosion = upRadialExplosionLevel(radialExplosionLevel);
     if (IS_DEBUGING) {
       console.log('radialExplosionLevel', radialExplosionLevel);
     }
 
-    const playerPosition = this.#player.playerMesh.getAbsolutePosition();
+    const playerPosition = this._player.playerMesh.getAbsolutePosition();
     const payload: RadialExplosionPayload = {
       radius: radialExplosionLevel.radius,
       strength: radialExplosionLevel.strength,
@@ -614,12 +614,12 @@ export default class Game {
   }
 
   #callRadialExplosionAction(payload: RadialExplosionPayload) {
-    if (!this.#physicsHelper) {
+    if (!this._physicsHelper) {
       return;
     }
     const action = new RadialExplosionAction({
-      physicsHelper: this.#physicsHelper,
-      scene: this.#scene,
+      physicsHelper: this._physicsHelper,
+      scene: this._scene,
       payload,
     });
     this.#autoClearFromActionsList(action);
@@ -627,16 +627,16 @@ export default class Game {
   }
 
   #callPlayerUpdraftAction() {
-    if (!this.#physicsHelper) {
+    if (!this._physicsHelper) {
       return;
     }
-    const updraftLevel = this.#skillUpdraft;
-    this.#skillUpdraft = upUpdraftLevel(updraftLevel);
+    const updraftLevel = this._skillUpdraft;
+    this._skillUpdraft = upUpdraftLevel(updraftLevel);
     if (IS_DEBUGING) {
       console.log('updraftLevel', updraftLevel);
     }
 
-    const playerPosition = this.#player.playerMesh.getAbsolutePosition();
+    const playerPosition = this._player.playerMesh.getAbsolutePosition();
     const { maxRandomPosition } = updraftLevel;
     const position = calculateRandomPosition(playerPosition, maxRandomPosition);
     const payload: UpdraftPayload = {
@@ -654,12 +654,12 @@ export default class Game {
   }
 
   #callUpdraftAction(payload: UpdraftPayload) {
-    if (!this.#physicsHelper) {
+    if (!this._physicsHelper) {
       return;
     }
     const action = new UpdraftAction({
-      physicsHelper: this.#physicsHelper,
-      scene: this.#scene,
+      physicsHelper: this._physicsHelper,
+      scene: this._scene,
       payload,
     });
     this.#autoClearFromActionsList(action);
@@ -667,16 +667,16 @@ export default class Game {
   }
 
   #callPlayerVortexAction() {
-    if (!this.#physicsHelper) {
+    if (!this._physicsHelper) {
       return;
     }
-    const vortexLevel = this.#skillVortex;
-    this.#skillVortex = upVortexLevel(vortexLevel);
+    const vortexLevel = this._skillVortex;
+    this._skillVortex = upVortexLevel(vortexLevel);
     if (IS_DEBUGING) {
       console.log('vortexLevel', vortexLevel);
     }
 
-    const playerPosition = this.#player.playerMesh.getAbsolutePosition();
+    const playerPosition = this._player.playerMesh.getAbsolutePosition();
     const { maxRandomPosition } = vortexLevel;
     const position = calculateRandomPosition(playerPosition, maxRandomPosition);
     const payload: VortexPayload = {
@@ -694,15 +694,15 @@ export default class Game {
   }
 
   #callVortexAction(payload: VortexPayload) {
-    if (!this.#physicsHelper) {
+    if (!this._physicsHelper) {
       return;
     }
     const action = new VortexAction({
-      physicsHelper: this.#physicsHelper,
-      scene: this.#scene,
+      physicsHelper: this._physicsHelper,
+      scene: this._scene,
       payload,
       vortexInLoopFn: (vortex) => {
-        if (vortex.intersectsMesh(this.#player.playerMesh, true)) {
+        if (vortex.intersectsMesh(this._player.playerMesh, true)) {
           this._cooldownAllActions(1000);
         }
       },
@@ -712,17 +712,17 @@ export default class Game {
   }
 
   public dispose() {
-    this.#engine.stopRenderLoop();
-    this.#scene.dispose();
-    this.#engine.dispose();
+    this._engine.stopRenderLoop();
+    this._scene.dispose();
+    this._engine.dispose();
     this.playerCamera.dispose();
-    this.#player.dispose();
-    this.#fog.dispose();
-    this.#levelEnvironment.dispose().then();
-    Object.values(this.#actions).forEach((action) => action.dispose());
+    this._player.dispose();
+    this._fog.dispose();
+    this._levelEnvironment.dispose().then();
+    Object.values(this._actions).forEach((action) => action.dispose());
   }
 
   #callPlayerForwardImpulseAction() {
-    this.#player.forwardImpulse(this.#cameraAngle);
+    this._player.forwardImpulse(this._cameraAngle);
   }
 }

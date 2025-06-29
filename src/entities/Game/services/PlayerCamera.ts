@@ -21,6 +21,10 @@ const CAMERA_BETA_SPEED =
   (CAMERA_MAX_BETA - CAMERA_MIN_BETA) / CAMERA_ZOOM_STEPS;
 const CAMERA_ADJUST_DELAY = 500;
 
+type MeshHit = {
+  originMaterial: AbstractMesh['material'];
+};
+
 export default class PlayerCamera {
   private readonly _scene: Scene;
   private readonly _camera: ArcRotateCamera;
@@ -31,12 +35,7 @@ export default class PlayerCamera {
   private readonly _loopInterval: number;
   private _isZooming = false;
   private lastAdjustmentTime = Date.now();
-  private readonly _hits = new Map<
-    AbstractMesh,
-    {
-      originMaterial: AbstractMesh['material'];
-    }
-  >();
+  private readonly _hits = new Map<AbstractMesh, MeshHit>();
 
   constructor(scene: Scene) {
     this._scene = scene;

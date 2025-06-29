@@ -28,19 +28,18 @@ const PLAYER_RADIUS = 1;
 const PLAYER_RESTITUTION = 0.5;
 const JUMP_IMPULSE = 15;
 
+type CollisionInfo = {
+  allowImmediateJump: boolean;
+  correctPositionForJump: boolean;
+};
+
 export default class Player {
-  readonly #scene: Scene;
-  readonly #material: PBRMaterial;
+  private readonly _scene: Scene;
+  private readonly _material: PBRMaterial;
   public playerPhysics: PhysicsAggregate | null = null;
   readonly #moveSpeed = 10;
-  #collisionList = new Map<
-    string,
-    {
-      allowImmediateJump: boolean;
-      correctPositionForJump: boolean;
-    }
-  >();
-  #shadow: ShadowGenerator;
+  #collisionList = new Map<string, CollisionInfo>();
+  private readonly _shadow: ShadowGenerator;
 
   public readonly playerMesh: Mesh;
 
@@ -50,20 +49,20 @@ export default class Player {
     playerName?: string;
     shadow: ShadowGenerator;
   }) {
-    this.#scene = options.scene;
-    this.#shadow = options.shadow;
-    this.#material = this.#createMaterial();
+    this._scene = options.scene;
+    this._shadow = options.shadow;
+    this._material = this.#createMaterial();
 
     this.playerMesh = this.#createPlayerMesh(options.playerName);
 
-    this.playerMesh.material = this.#material;
+    this.playerMesh.material = this._material;
     this.playerMesh.position = options.startPosition;
     this.playerMesh.applyFog = false;
 
-    this.#shadow.addShadowCaster(this.playerMesh);
+    this._shadow.addShadowCaster(this.playerMesh);
 
-    const particleSystem = new ParticleSystem('particles', 2000, this.#scene);
-    particleSystem.particleTexture = new Texture(flareTexture, this.#scene);
+    const particleSystem = new ParticleSystem('particles', 2000, this._scene);
+    particleSystem.particleTexture = new Texture(flareTexture, this._scene);
     particleSystem.minSize = 0.1;
     particleSystem.maxSize = 0.3;
 
@@ -72,7 +71,7 @@ export default class Player {
     particleSystem.emitRate = 5;
     particleSystem.start();
 
-    this.#scene.whenReadyAsync().then(() => {
+    this._scene.whenReadyAsync().then(() => {
       this.playerPhysics = this.#createPlayerPhysics();
 
       // todo: detach the observable
@@ -93,8 +92,8 @@ export default class Player {
   }
 
   #createMaterial() {
-    const material = new PBRMaterial('playerMaterial', this.#scene);
-    material.albedoTexture = new Texture(sphereTexture, this.#scene);
+    const material = new PBRMaterial('playerMaterial', this._scene);
+    material.albedoTexture = new Texture(sphereTexture, this._scene);
     material.metallic = 0;
     material.maxSimultaneousLights = 10;
     return material;
@@ -108,7 +107,7 @@ export default class Player {
         diameter: PLAYER_RADIUS * 2,
         sideOrientation: Mesh.FRONTSIDE,
       },
-      this.#scene
+      this._scene
     );
   }
 
@@ -121,7 +120,7 @@ export default class Player {
         restitution: PLAYER_RESTITUTION,
         friction: 1,
       },
-      this.#scene
+      this._scene
     );
 
     physicsAggregate.body.setAngularDamping(5);
@@ -256,9 +255,9 @@ export default class Player {
   }
 
   public dispose() {
-    this.#shadow.removeShadowCaster(this.playerMesh);
+    this._shadow.removeShadowCaster(this.playerMesh);
     this.playerPhysics?.dispose();
     this.playerMesh.dispose();
-    this.#material.dispose();
+    this._material.dispose();
   }
 }
