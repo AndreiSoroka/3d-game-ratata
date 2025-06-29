@@ -1,19 +1,19 @@
 import PlayerCamera from '@/entities/Game/services/PlayerCamera';
-import groundTexture from '@/shared/assets/ground_bg.png';
+// import groundTexture from '@/shared/assets/ground_bg.png';
 import {
   Color3,
   DirectionalLight,
   Engine,
   HavokPlugin,
   HemisphericLight,
-  MeshBuilder,
-  PBRMaterial,
-  PhysicsAggregate,
+  // MeshBuilder,
+  // PBRMaterial,
+  // PhysicsAggregate,
   PhysicsHelper,
-  PhysicsShapeType,
+  // PhysicsShapeType,
   Scene,
   ShadowGenerator,
-  Texture,
+  // Texture,
   Vector3,
 } from '@babylonjs/core';
 import { type HavokPhysicsWithBindings } from '@babylonjs/havok';
@@ -299,7 +299,8 @@ export default class Game {
     // );
     // this._scene.createDefaultSkybox(envTexture, true, 1000);
 
-    const env = this._scene.createDefaultEnvironment({
+    // const env = this._scene.createDefaultEnvironment({
+    this._scene.createDefaultEnvironment({
       createGround: false,
       createSkybox: false,
       setupImageProcessing: false,
@@ -361,32 +362,32 @@ export default class Game {
     return scene;
   }
 
-  #createGround() {
-    // Create a built-in "ground" shape;
-    const ground = MeshBuilder.CreateGround(
-      'ground1',
-      {
-        width: 100,
-        height: 100,
-        subdivisions: 2,
-        updatable: false,
-      },
-      this._scene
-    );
-    const material = new PBRMaterial('material1', this._scene);
-    material.albedoTexture = new Texture(groundTexture, this._scene);
-    // material.diffuseColor = new Color3(0.1, 0.5, 0.5);
-    material.metallic = 0;
-    ground.material = material;
-    ground.receiveShadows = true;
-    new PhysicsAggregate(
-      ground,
-      PhysicsShapeType.BOX,
-      { mass: 0, friction: 1 },
-      this._scene
-    );
-    // Return the created scene
-  }
+  // #createGround() {
+  //   // Create a built-in "ground" shape;
+  //   const ground = MeshBuilder.CreateGround(
+  //     'ground1',
+  //     {
+  //       width: 100,
+  //       height: 100,
+  //       subdivisions: 2,
+  //       updatable: false,
+  //     },
+  //     this._scene
+  //   );
+  //   const material = new PBRMaterial('material1', this._scene);
+  //   material.albedoTexture = new Texture(groundTexture, this._scene);
+  //   // material.diffuseColor = new Color3(0.1, 0.5, 0.5);
+  //   material.metallic = 0;
+  //   ground.material = material;
+  //   ground.receiveShadows = true;
+  //   new PhysicsAggregate(
+  //     ground,
+  //     PhysicsShapeType.BOX,
+  //     { mass: 0, friction: 1 },
+  //     this._scene
+  //   );
+  //   // Return the created scene
+  // }
 
   /**
    * https://forum.babylonjs.com/t/inconsistent-physics-behavior-in-babylon-js-on-different-fps/46475

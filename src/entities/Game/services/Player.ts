@@ -8,7 +8,7 @@ import {
   PhysicsShapeType,
   Scene,
   ShadowGenerator,
-  StandardMaterial,
+  // StandardMaterial,
   Texture,
   Vector3,
 } from '@babylonjs/core';
