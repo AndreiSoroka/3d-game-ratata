@@ -78,7 +78,11 @@ export const usePeerStore = defineStore('peer', () => {
   }
 
   function disconnectPeer(peerId: string) {
-    const { connection } = peers.value[peerId];
+    const peer = peers.value[peerId];
+    if (!peer) {
+      return;
+    }
+    const { connection } = peer;
     if (!connection) {
       return;
     }
@@ -114,7 +118,12 @@ export const usePeerStore = defineStore('peer', () => {
     payload: MessagePayload,
     isGuaranteed = false
   ) {
-    const { connection, channelGuaranteed } = peers.value[peerId];
+    const peer = peers.value[peerId];
+    if (!peer) {
+      console.error(`Peer with id ${peerId} not found`);
+      return;
+    }
+    const { connection, channelGuaranteed } = peer;
     if (!connection) {
       console.error(`Peer with id ${peerId} not found`);
       return;
