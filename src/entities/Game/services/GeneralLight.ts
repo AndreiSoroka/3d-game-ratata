@@ -2,26 +2,26 @@ import type { Scene } from '@babylonjs/core';
 import { HemisphericLight, Vector3 } from '@babylonjs/core';
 
 export default class GeneralLight {
-  #scene: Scene;
-  #light: HemisphericLight;
-  #intensity = 0.3;
+  private _scene: Scene;
+  private _light: HemisphericLight;
+  private _intensity = 0.3;
 
   constructor(scene: Scene) {
-    this.#scene = scene;
-    this.#light = this.#createLight();
+    this._scene = scene;
+    this._light = this.#createLight();
 
-    this.#light.intensity = this.#intensity;
+    this._light.intensity = this._intensity;
   }
 
   get light() {
-    return this.#light;
+    return this._light;
   }
 
   #createLight() {
     return new HemisphericLight(
       'GeneralLight',
       new Vector3(0, 1, 0),
-      this.#scene
+      this._scene
     );
   }
 }
