@@ -4,7 +4,7 @@ import { ElTabPane, ElTabs } from 'element-plus';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import Game from '@/entities/Game/Game';
 import HavokPhysics from '@babylonjs/havok';
-import { usePeerStore } from '@/entities/PeerToPeer/module/peerStore';
+import { initGameNetwork } from '@/app/interactors/gameNetworkInteractor';
 import ActionsWrapper from '@/entities/GameActions/ui/ActionsWrapper/ActionsWrapper.vue';
 import ActionVortexButton from '@/entities/GameActions/ui/ActionButtons/ActionVortexButton.vue';
 import ActionUpdraftButton from '@/entities/GameActions/ui/ActionButtons/ActionUpdraftButton.vue';
@@ -19,8 +19,6 @@ import router from '@/app/router';
 const gameCanvas = ref<HTMLCanvasElement>();
 let game: Game;
 let adapterController: ReturnType<typeof AdapterControllerWithGame>;
-
-const store = usePeerStore();
 
 // controller
 const buttonAction1Timestamp = ref<number>(0);
@@ -44,20 +42,7 @@ onMounted(() => {
     gameCanvas.value.width = window.innerWidth;
     gameCanvas.value.height = window.innerHeight;
     game = new Game(gameCanvas.value, HK);
-
-    game.multiplayerSubject$.subscribe((data) => {
-      store.sendToPeers({
-        type: 'WORLD_ACTION',
-        data,
-      });
-    });
-
-    game.playerPositionSubject$.subscribe((data) => {
-      store.sendToPeers({
-        type: 'PLAYER_POSITION',
-        data,
-      });
-    });
+    initGameNetwork(game);
 
     game.actionStateSubject$.subscribe((data) => {
       buttonAction1Timestamp.value = data.ACTION1.timestamp;
@@ -72,15 +57,6 @@ onMounted(() => {
       COOLDOWN_ACTION5.value = data.ACTION5.cooldown;
     });
 
-    // todo add zod instead on (payload as any)
-    store.messages$.subscribe(({ fromPeerId, payload }) => {
-      if ((payload as any).type === 'PLAYER_POSITION') {
-        game.setMultiPlayerPosition(fromPeerId, (payload as any).data);
-      }
-      if ((payload as any).type === 'WORLD_ACTION') {
-        game.callWordAction((payload as any).data);
-      }
-    });
     adapterController = AdapterControllerWithGame(KeyBoardController, game);
   });
 });
