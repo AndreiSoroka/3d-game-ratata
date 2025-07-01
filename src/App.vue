@@ -12,6 +12,7 @@ import ActionRadialExplosionButton from '@/entities/GameActions/ui/ActionButtons
 import ActionGravitationButton from '@/entities/GameActions/ui/ActionButtons/ActionGravitationButton.vue';
 import ActionForwardImpulseButton from '@/entities/GameActions/ui/ActionButtons/ActionForwardImpulseButton.vue';
 import KeyBoardController from '@/entities/Game/controllers/KeyBoardController';
+import GamepadController from '@/entities/Game/controllers/GamepadController';
 import AdapterControllerWithGame from '@/entities/Game/AdapterControllerWithGame';
 import GameContainer from '@/shared/UiKit/GameContainer/GameContainer.vue';
 import router from '@/app/router';
@@ -19,6 +20,7 @@ import router from '@/app/router';
 const gameCanvas = ref<HTMLCanvasElement>();
 let game: Game;
 let adapterController: ReturnType<typeof AdapterControllerWithGame>;
+let adapterGamepad: ReturnType<typeof AdapterControllerWithGame>;
 
 // controller
 const buttonAction1Timestamp = ref<number>(0);
@@ -58,12 +60,14 @@ onMounted(() => {
     });
 
     adapterController = AdapterControllerWithGame(KeyBoardController, game);
+    adapterGamepad = AdapterControllerWithGame(GamepadController, game);
   });
 });
 
 onBeforeUnmount(() => {
   game.dispose();
   adapterController.destroy();
+  adapterGamepad.destroy();
 });
 
 window.addEventListener('resize', function () {
