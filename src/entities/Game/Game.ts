@@ -5,7 +5,6 @@ import {
   DirectionalLight,
   Engine,
   HavokPlugin,
-  HemisphericLight,
   // MeshBuilder,
   // PBRMaterial,
   // PhysicsAggregate,
@@ -57,10 +56,12 @@ import VortexAction from '@/entities/Game/effects/VortexAction';
 import type AbstractAction from '@/entities/Game/effects/AbstractAction';
 import calculateRandomPosition from '@/entities/Game/utils/calculateRandomPosition';
 import Fog from '@/entities/Game/services/Fog';
+import DayNightCycle from '@/entities/Game/services/DayNightCycle';
+import { DAY_DURATION } from '@/entities/Game/model/dayNightStore';
 import LevelEnvironment from '@/entities/Game/envirement/LevelEnvironment';
 import { CheckPointService } from '@/entities/Game/services/CheckPointService';
 
-const IS_DEBUGING = document.location.hash === '#debug';
+const IS_DEBUGING = document.location.hash.includes('debug');
 
 export type CAMERA_DIRECTION = 'CAMERA_LEFT' | 'CAMERA_RIGHT';
 export type DIRECTION = MOVEMENT_DIRECTION | CAMERA_DIRECTION;
@@ -118,6 +119,8 @@ export default class Game {
   private _engine: Engine;
   private _scene: Scene;
   private _fog: Fog;
+  private _dayNightCycle!: DayNightCycle;
+  private _currentTime = 0;
   private _cameraAngle = 0;
   public playerCamera: PlayerCamera;
   private _havokInstance: HavokPhysicsWithBindings;
@@ -129,6 +132,7 @@ export default class Game {
   private readonly _levelEnvironment: LevelEnvironment;
 
   private _checkPointServices: CheckPointService[] = [];
+  private _activeCheckPoint: CheckPointService | null = null;
 
   private _skillGravitation = startGravitationLevel;
   private _skillRadialExplosion = startRadialExplosionLevel;
@@ -248,12 +252,6 @@ export default class Game {
     //   this._scene
     // );
     // pointLight.intensity = 1;
-    const hemisphericLight = new HemisphericLight(
-      'hemiLight',
-      new Vector3(0, 1, 0),
-      this._scene
-    );
-    hemisphericLight.intensity = 0.005;
     const light = new DirectionalLight(
       'dirLight',
       new Vector3(-1, -2, -1),
@@ -261,20 +259,20 @@ export default class Game {
     );
     light.specular = new Color3(0, 0, 0);
     light.intensity = 1;
-    // light.shadowMinZ = 0;
-    // light.shadowMaxZ = 10;
+    light.shadowMinZ = 1;
+    light.shadowMaxZ = 250;
 
     light.position = new Vector3(20, 40, 20);
-    this._shadow = new ShadowGenerator(4096, light);
-    this._shadow.usePoissonSampling = true;
-    this._shadow.bias = 0.0001;
+    this._shadow = new ShadowGenerator(8192, light);
+    this._shadow.usePercentageCloserFiltering = true;
+    this._shadow.filteringQuality = ShadowGenerator.QUALITY_HIGH;
+    this._shadow.bias = 0.00005;
 
     this._levelEnvironment = new LevelEnvironment({
       scene: this._scene,
       shadow: this._shadow,
     });
     this.playerCamera = new PlayerCamera(this._scene);
-    // this.generalLight = new GeneralLight(this._scene);
     this.initNewPlayer();
 
     this._levelEnvironment.isReadyPromise.then(() => {
@@ -284,6 +282,7 @@ export default class Game {
           scene: this._scene,
           position,
         });
+        checkPoint.setTime(this._currentTime);
         this._checkPointServices.push(checkPoint);
       });
     });
@@ -309,7 +308,18 @@ export default class Game {
 
     this._fog = new Fog({
       scene: this._scene,
+      dayDuration: DAY_DURATION,
     });
+
+    this._dayNightCycle = new DayNightCycle({
+      scene: this._scene,
+      sunLight: light,
+      targetMesh: this._player.playerMesh,
+      dayDuration: DAY_DURATION,
+    });
+
+    this._dayNightCycle.setTime(this._currentTime);
+    this._fog.setTime(this._currentTime);
 
     // this._scene.environmentTexture = CubeTexture.CreateFromPrefilteredData(
     //   'https://playground.babylonjs.com/textures/environment.env',
@@ -345,6 +355,9 @@ export default class Game {
       shadow: this._shadow,
     });
     this.playerCamera.setTarget(this._player.playerMesh);
+    if (this._dayNightCycle) {
+      this._dayNightCycle.setTarget(this._player.playerMesh);
+    }
 
     this._player.playerMesh.onBeforeRenderObservable.add(
       this.onBeforeRenderObservable.bind(this)
@@ -424,14 +437,24 @@ export default class Game {
     this.#handleChangeCameraAngle();
     // move player
     this._player.move(-this._cameraAngle, this._movementDirection);
+    // update time dependent systems after player position changed
+    this._dayNightCycle.setTime(this._currentTime);
+    this._fog.setTime(this._currentTime);
     // rotate camera
     this.playerCamera.setAngle(this._cameraAngle);
     // render scene
     this._scene.render();
 
     this._checkPointServices.forEach((checkPoint) => {
+      checkPoint.setTime(this._currentTime);
       if (checkPoint.mesh.intersectsMesh(this._player.playerMesh, true)) {
-        this._checkPointPosition = checkPoint.mesh.position.clone();
+        checkPoint.burst();
+        if (this._activeCheckPoint !== checkPoint) {
+          this._activeCheckPoint?.deactivate();
+          this._activeCheckPoint = checkPoint;
+          checkPoint.activate();
+          this._checkPointPosition = checkPoint.mesh.position.clone();
+        }
       }
     });
   }
@@ -454,6 +477,10 @@ export default class Game {
 
   public resize() {
     this._engine.resize();
+  }
+
+  public setTime(milliseconds: number) {
+    this._currentTime = milliseconds;
   }
 
   public setMultiPlayerPosition(
@@ -725,6 +752,7 @@ export default class Game {
     this.playerCamera.dispose();
     this._player.dispose();
     this._fog.dispose();
+    this._dayNightCycle?.dispose();
     this._levelEnvironment.dispose().then();
     Object.values(this._actions).forEach((action) => action.dispose());
   }

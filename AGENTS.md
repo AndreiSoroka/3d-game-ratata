@@ -75,6 +75,17 @@ In your main app layout (e.g. App.vue), use:
 - Write full words, not abbreviations. For example, use `controller` instead of `ctrl`
   or "dependencies" instead of "deps".
 
+### Store usage
+
+Stores may only be connected in **pages**, **widgets** and **features**. Do not
+use stores directly inside **entities** or **shared** modules. Pass data via
+props to components from these layers instead.
+
+### Styling
+
+Global styles belong to the **shared** layer or to specific **entity** modules.
+Avoid adding `<style>` blocks in pages, widgets or features.
+
 ## Prepare code for review
 
 ```bash

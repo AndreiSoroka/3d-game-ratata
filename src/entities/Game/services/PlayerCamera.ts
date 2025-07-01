@@ -8,7 +8,7 @@ import {
   Vector3,
 } from '@babylonjs/core';
 
-const IS_DEBUGING = document.location.hash === '#debug';
+const IS_DEBUGING = document.location.hash.includes('debug');
 
 const CAMERA_ZOOM_STEPS = 30;
 const CAMERA_MAX_RADIUS = 30;
