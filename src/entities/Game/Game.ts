@@ -123,8 +123,8 @@ export default class Game {
   private _havokInstance: HavokPhysicsWithBindings;
   private _checkPointPosition: Vector3 = new Vector3(0, 30, 0);
   private _shadow: ShadowGenerator;
-  private _movementDirection: Set<MOVEMENT_DIRECTION> = new Set([]);
-  private _cameraDirection: Set<CAMERA_DIRECTION> = new Set([]);
+  private _movementDirection: Map<MOVEMENT_DIRECTION, number> = new Map();
+  private _cameraDirection: Map<CAMERA_DIRECTION, number> = new Map();
   private _physicsHelper: PhysicsHelper | null = null;
   private readonly _levelEnvironment: LevelEnvironment;
 
@@ -442,11 +442,13 @@ export default class Game {
     // angle in degrees per second
     const rotationSpeed = 2;
 
-    if (this._cameraDirection.has('CAMERA_LEFT')) {
-      this._cameraAngle += rotationSpeed * deltaTime;
+    const leftSpeed = this._cameraDirection.get('CAMERA_LEFT');
+    if (leftSpeed) {
+      this._cameraAngle += rotationSpeed * deltaTime * leftSpeed;
     }
-    if (this._cameraDirection.has('CAMERA_RIGHT')) {
-      this._cameraAngle -= rotationSpeed * deltaTime;
+    const rightSpeed = this._cameraDirection.get('CAMERA_RIGHT');
+    if (rightSpeed) {
+      this._cameraAngle -= rotationSpeed * deltaTime * rightSpeed;
     }
   }
 
@@ -488,7 +490,11 @@ export default class Game {
     }
   }
 
-  public setPlayerDirection(direction: DIRECTION, isPressed: boolean) {
+  public setPlayerDirection(
+    direction: DIRECTION,
+    isPressed: boolean,
+    speed: number = 1
+  ) {
     if (direction === 'JUMP' && isPressed) {
       Object.values(this._playerCancelableActions).forEach((action) => {
         action.callEndActionStatus();
@@ -497,14 +503,14 @@ export default class Game {
     // todo refactor
     if (direction === 'CAMERA_LEFT' || direction === 'CAMERA_RIGHT') {
       if (isPressed) {
-        this._cameraDirection.add(direction);
+        this._cameraDirection.set(direction, speed);
       } else {
         this._cameraDirection.delete(direction);
       }
       return;
     }
     if (isPressed) {
-      this._movementDirection.add(direction);
+      this._movementDirection.set(direction, speed);
     } else {
       this._movementDirection.delete(direction);
     }

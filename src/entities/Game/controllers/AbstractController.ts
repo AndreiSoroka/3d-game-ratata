@@ -5,6 +5,7 @@ export type PlayerActionPayload = PLAYER_ACTION;
 export type MovementPayload = {
   direction: DIRECTION;
   isPressed: boolean;
+  speed?: number;
 };
 
 export default abstract class AbstractController {
