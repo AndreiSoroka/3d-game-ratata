@@ -94,4 +94,6 @@ npm run lint
 npm run type-check
 ```
 
+- TODO: add point here about warnings. Try to avoid warnings in the code.
+
 If you have any errors, fix them before creating a PR.

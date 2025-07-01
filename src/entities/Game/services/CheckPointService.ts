@@ -89,6 +89,7 @@ export class CheckPointService implements ICheckPointService {
     ps.maxSize = 0.2;
     ps.emitter = this.mesh;
     ps.gravity = new Vector3(0, 1, 0);
+    // @TODO: Color like in _createBurstParticles, you can create a constant for it
     ps.emitRate = 3;
     return ps;
   }
@@ -117,6 +118,7 @@ export class CheckPointService implements ICheckPointService {
 
   /** Trigger a burst of particles regardless of activation state. */
   burst() {
+    // @TODO: Should activate with first touch. And when animation is ready, we can activate again.
     this._burstParticles?.stop();
     this._burstParticles?.dispose();
     this._burstParticles = this._createBurstParticles();
@@ -141,5 +143,7 @@ export class CheckPointService implements ICheckPointService {
 
   // Checkpoints no longer blink when activated; they simply emit particles.
 
-  dispose() {}
+  dispose() {
+    // @TODO dispose particles and some other resources
+  }
 }

@@ -8,6 +8,8 @@ import {
   Vector3,
 } from '@babylonjs/core';
 
+// @todo: not correct initial moon position. Where sun finishes, moon starts. At the moment it is one side of the scene.
+
 export default class DayNightCycle {
   private readonly _scene: Scene;
   private readonly _sunLight: DirectionalLight;
