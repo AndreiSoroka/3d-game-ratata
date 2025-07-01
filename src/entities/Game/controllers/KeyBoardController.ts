@@ -9,9 +9,7 @@ import {
   distinctUntilChanged,
   scan,
 } from 'rxjs';
-import AbstractController, {
-  type PlayerActionPayload,
-} from '@/entities/Game/controllers/AbstractController';
+import AbstractController from '@/entities/Game/controllers/AbstractController';
 
 type BindActionsKeys = Record<string, PLAYER_ACTION>;
 type BindDoubleActionsKeys = Record<string, PLAYER_ACTION>;
@@ -113,10 +111,13 @@ export default class KeyBoardController extends AbstractController {
     map((keyCode) => ({
       direction: this._bindDirectionKeys[keyCode],
       isPressed: !!this._pressedKeys.get(keyCode),
+      speed: 1,
     })),
     distinctUntilChanged(
       (prev, curr) =>
-        prev.direction === curr.direction && prev.isPressed === curr.isPressed
+        prev.direction === curr.direction &&
+        prev.isPressed === curr.isPressed &&
+        prev.speed === curr.speed
     )
   );
 

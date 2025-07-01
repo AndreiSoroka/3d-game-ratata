@@ -179,7 +179,10 @@ export default class Player {
     this.#collisionList.delete(collidedObjectId);
   }
 
-  public move(cameraViewAngle: number, directions: Set<MOVEMENT_DIRECTION>) {
+  public move(
+    cameraViewAngle: number,
+    directions: Map<MOVEMENT_DIRECTION, number>
+  ) {
     if (directions.size === 0) {
       return;
     }
@@ -193,27 +196,37 @@ export default class Player {
 
     let x = 0;
     let z = 0;
-    if (directions.has('FORWARD')) {
-      x += Math.sin(cameraViewAngle);
-      z += Math.cos(cameraViewAngle);
+    const forward = directions.get('FORWARD') ?? 0;
+    const backward = directions.get('BACKWARD') ?? 0;
+    const left = directions.get('LEFT') ?? 0;
+    const right = directions.get('RIGHT') ?? 0;
+
+    if (forward) {
+      x += Math.sin(cameraViewAngle) * forward;
+      z += Math.cos(cameraViewAngle) * forward;
     }
-    if (directions.has('BACKWARD')) {
-      x -= Math.sin(cameraViewAngle);
-      z -= Math.cos(cameraViewAngle);
+    if (backward) {
+      x -= Math.sin(cameraViewAngle) * backward;
+      z -= Math.cos(cameraViewAngle) * backward;
     }
-    if (directions.has('LEFT')) {
-      x -= Math.cos(cameraViewAngle);
-      z += Math.sin(cameraViewAngle);
+    if (left) {
+      x -= Math.cos(cameraViewAngle) * left;
+      z += Math.sin(cameraViewAngle) * left;
     }
-    if (directions.has('RIGHT')) {
-      x += Math.cos(cameraViewAngle);
-      z -= Math.sin(cameraViewAngle);
+    if (right) {
+      x += Math.cos(cameraViewAngle) * right;
+      z -= Math.sin(cameraViewAngle) * right;
     }
     const directionVector = new Vector3(x, 0, z);
 
+    const speed = Math.min(1, directionVector.length());
+    if (speed === 0) {
+      this.playerPhysics.body.setAngularVelocity(Vector3.Zero());
+      return;
+    }
     directionVector.normalize();
     this.playerPhysics.body.setAngularVelocity(
-      directionVector.scale(this.#moveSpeed)
+      directionVector.scale(this.#moveSpeed * speed)
     );
   }
 

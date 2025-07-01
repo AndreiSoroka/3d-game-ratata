@@ -12,7 +12,11 @@ export default function AdapterControllerWithGame(
   });
 
   const movementEvents = controller.movementEvents$.subscribe((payload) => {
-    game.setPlayerDirection(payload.direction, payload.isPressed);
+    game.setPlayerDirection(
+      payload.direction,
+      payload.isPressed,
+      payload.speed ?? 1
+    );
   });
 
   return {

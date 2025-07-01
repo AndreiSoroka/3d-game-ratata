@@ -72,13 +72,15 @@ In your main app layout (e.g. App.vue), use:
 ## Code style
 
 - use `this._privateMethod()` instead of `this.#privateMethod()` for private methods
+- Write full words, not abbreviations. For example, use `controller` instead of `ctrl`
+  or "dependencies" instead of "deps".
 
 ## Prepare code for review
 
 ```bash
-npm run lint
 npm run format
-nom run type-check
+npm run lint
+npm run type-check
 ```
 
 If you have any errors, fix them before creating a PR.
