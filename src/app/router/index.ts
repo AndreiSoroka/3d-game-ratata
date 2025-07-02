@@ -19,6 +19,11 @@ const router = createRouter({
       name: 'ChatPage',
       component: () => import('@/pages/ChatPage.vue'),
     },
+    {
+      path: '/settings',
+      name: 'SettingsPage',
+      component: () => import('@/pages/SettingsPage.vue'),
+    },
   ],
 });
 

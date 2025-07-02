@@ -74,6 +74,7 @@ In your main app layout (e.g. App.vue), use:
 - use `this._privateMethod()` instead of `this.#privateMethod()` for private methods
 - Write full words, not abbreviations. For example, use `controller` instead of `ctrl`
   or "dependencies" instead of "deps".
+- When using `setTimeout` or `setInterval`, clear them in `dispose()` if the module implements one.
 
 ### Store usage
 

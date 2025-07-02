@@ -8,8 +8,6 @@ import {
   Vector3,
 } from '@babylonjs/core';
 
-// @todo: not correct initial moon position. Where sun finishes, moon starts. At the moment it is one side of the scene.
-
 export default class DayNightCycle {
   private readonly _scene: Scene;
   private readonly _sunLight: DirectionalLight;
@@ -21,7 +19,6 @@ export default class DayNightCycle {
   private _targetMesh: Mesh;
   private _time = 0;
   private _lastUpdate = 0;
-  private _fogCoefficient = 1;
   private readonly _twilight = 0.2;
 
   constructor(options: {
@@ -45,6 +42,12 @@ export default class DayNightCycle {
     this._moonLight.specular = new Color3(0, 0, 0);
     this._moonLight.diffuse = new Color3(0.6, 0.6, 1);
     this._moonLight.intensity = 0;
+    this._moonLight.position = new Vector3(
+      this._targetMesh.position.x - this._radius,
+      this._targetMesh.position.y,
+      this._targetMesh.position.z
+    );
+    this._moonLight.setDirectionToTarget(this._targetMesh.position);
 
     this._ambientLight = new HemisphericLight(
       'ambientLight',
@@ -128,18 +131,12 @@ export default class DayNightCycle {
       Color3.White(),
       dayStrength
     );
-
-    this._fogCoefficient = (sunHeight + 1) / 2;
   }
 
   dispose() {
     this._ambientLight.dispose();
     this._moonLight.dispose();
     this._glowLight.dispose();
-  }
-
-  get fogCoefficient() {
-    return this._fogCoefficient;
   }
 
   get dayDuration() {

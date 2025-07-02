@@ -2,7 +2,9 @@ import { Scene } from '@babylonjs/core';
 import { DAY_DURATION } from '../model/dayNightStore';
 
 const FOG_RADIUS = 50;
+// Minimum fog distance so nearby objects remain visible
 const MIN_FOG_START = 10;
+// Maximum fog distance so distant objects fade smoothly
 const MAX_FOG_START = 75;
 
 export default class Fog {

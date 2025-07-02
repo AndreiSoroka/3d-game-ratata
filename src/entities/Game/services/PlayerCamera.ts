@@ -8,8 +8,6 @@ import {
   Vector3,
 } from '@babylonjs/core';
 
-const IS_DEBUGING = document.location.hash.includes('debug');
-
 const CAMERA_ZOOM_STEPS = 30;
 const CAMERA_MAX_RADIUS = 30;
 const CAMERA_MIN_RADIUS = 20;
@@ -36,9 +34,11 @@ export default class PlayerCamera {
   private _isZooming = false;
   private lastAdjustmentTime = Date.now();
   private readonly _hits = new Map<AbstractMesh, MeshHit>();
+  private readonly _isDebugging: boolean;
 
-  constructor(scene: Scene) {
+  constructor(scene: Scene, options?: { isDebugging?: boolean }) {
     this._scene = scene;
+    this._isDebugging = options?.isDebugging ?? false;
     this._camera = new ArcRotateCamera(
       'PlayerCamera',
       Math.PI * 1.3,
@@ -57,7 +57,7 @@ export default class PlayerCamera {
     );
     this._payerUpRay = new Ray(Vector3.Zero(), Vector3.Up(), 10);
 
-    if (IS_DEBUGING) {
+    if (this._isDebugging) {
       const rayHelper = new RayHelper(this._ray);
       rayHelper.show(scene);
       this._diagonalRays.forEach((ray) => {

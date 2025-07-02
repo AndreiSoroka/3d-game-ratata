@@ -12,6 +12,9 @@ import {
 import flareTexture from '@/shared/assets/flare.png';
 import { DAY_DURATION } from '../model/dayNightStore';
 
+const PARTICLE_COLOR1 = new Color4(0.5, 0.5, 1, 1);
+const PARTICLE_COLOR2 = new Color4(0.2, 0.8, 1, 1);
+
 const CHECKPOINT_RADIUS = 2;
 
 interface ICheckPointService {}
@@ -27,6 +30,9 @@ export class CheckPointService implements ICheckPointService {
   private _baseAlpha = 0.1;
   private _burstParticles: ParticleSystem | null = null;
   private _idleParticles: ParticleSystem | null = null;
+  private _isBursting = false;
+  private _stopBurstTimeoutId: number | null = null;
+  private _disposeBurstTimeoutId: number | null = null;
   readonly mesh: Mesh;
 
   constructor(options: { scene: Scene; position: Vector3 }) {
@@ -60,7 +66,7 @@ export class CheckPointService implements ICheckPointService {
     this._material.alpha = value;
   }
 
-  _createMaterial() {
+  private _createMaterial() {
     const material = new StandardMaterial('CheckPointMaterial', this._scene);
     material.diffuseColor = Color3.FromHexString('#FF0000');
     material.emissiveColor = Color3.FromHexString('#438dc3');
@@ -70,7 +76,7 @@ export class CheckPointService implements ICheckPointService {
     return material;
   }
 
-  _createPlayerMesh(name: string = 'CheckPoint' + Math.random()) {
+  private _createPlayerMesh(name: string = 'CheckPoint' + Math.random()) {
     return MeshBuilder.CreateSphere(
       name,
       {
@@ -89,7 +95,8 @@ export class CheckPointService implements ICheckPointService {
     ps.maxSize = 0.2;
     ps.emitter = this.mesh;
     ps.gravity = new Vector3(0, 1, 0);
-    // @TODO: Color like in _createBurstParticles, you can create a constant for it
+    ps.color1 = PARTICLE_COLOR1;
+    ps.color2 = PARTICLE_COLOR2;
     ps.emitRate = 3;
     return ps;
   }
@@ -107,8 +114,8 @@ export class CheckPointService implements ICheckPointService {
     ps.createSphereEmitter(CHECKPOINT_RADIUS, 0);
     ps.minEmitPower = 3;
     ps.maxEmitPower = 6;
-    ps.color1 = new Color4(0.5, 0.5, 1, 1);
-    ps.color2 = new Color4(0.2, 0.8, 1, 1);
+    ps.color1 = PARTICLE_COLOR1;
+    ps.color2 = PARTICLE_COLOR2;
     // Stronger upward gravity for a more energetic effect
     ps.gravity = new Vector3(0, 8, 0);
     ps.emitRate = 80;
@@ -118,11 +125,39 @@ export class CheckPointService implements ICheckPointService {
 
   /** Trigger a burst of particles regardless of activation state. */
   burst() {
-    // @TODO: Should activate with first touch. And when animation is ready, we can activate again.
-    this._burstParticles?.stop();
-    this._burstParticles?.dispose();
-    this._burstParticles = this._createBurstParticles();
+    if (this._isBursting) {
+      return;
+    }
+
+    if (!this._burstParticles) {
+      this._burstParticles = this._createBurstParticles();
+    } else if (this._disposeBurstTimeoutId !== null) {
+      clearTimeout(this._disposeBurstTimeoutId);
+      this._disposeBurstTimeoutId = null;
+    }
+
     this._burstParticles.start();
+    this._isBursting = true;
+
+    if (this._stopBurstTimeoutId !== null) {
+      clearTimeout(this._stopBurstTimeoutId);
+    }
+
+    this._stopBurstTimeoutId = window.setTimeout(
+      () => {
+        this._burstParticles?.stop();
+        this._isBursting = false;
+
+        this._disposeBurstTimeoutId = window.setTimeout(() => {
+          this._burstParticles?.dispose();
+          this._burstParticles = null;
+          this._disposeBurstTimeoutId = null;
+        }, 1000);
+
+        this._stopBurstTimeoutId = null;
+      },
+      (this._burstParticles.targetStopDuration ?? 0) * 1000
+    );
   }
 
   /**
@@ -144,6 +179,23 @@ export class CheckPointService implements ICheckPointService {
   // Checkpoints no longer blink when activated; they simply emit particles.
 
   dispose() {
-    // @TODO dispose particles and some other resources
+    if (this._idleParticles) {
+      this._idleParticles.stop();
+      this._idleParticles.dispose();
+      this._idleParticles = null;
+    }
+    if (this._burstParticles) {
+      this._burstParticles.stop();
+      this._burstParticles.dispose();
+      this._burstParticles = null;
+    }
+    if (this._stopBurstTimeoutId !== null) {
+      clearTimeout(this._stopBurstTimeoutId);
+      this._stopBurstTimeoutId = null;
+    }
+    if (this._disposeBurstTimeoutId !== null) {
+      clearTimeout(this._disposeBurstTimeoutId);
+      this._disposeBurstTimeoutId = null;
+    }
   }
 }
