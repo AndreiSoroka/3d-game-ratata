@@ -74,6 +74,18 @@ In your main app layout (e.g. App.vue), use:
 - use `this._privateMethod()` instead of `this.#privateMethod()` for private methods
 - Write full words, not abbreviations. For example, use `controller` instead of `ctrl`
   or "dependencies" instead of "deps".
+- When using `setTimeout` or `setInterval`, clear them in `dispose()` if the module implements one.
+
+### Store usage
+
+Stores may only be connected in **pages**, **widgets** and **features**. Do not
+use stores directly inside **entities** or **shared** modules. Pass data via
+props to components from these layers instead.
+
+### Styling
+
+Global styles belong to the **shared** layer or to specific **entity** modules.
+Avoid adding `<style>` blocks in pages, widgets or features.
 
 ## Prepare code for review
 
@@ -82,5 +94,7 @@ npm run format
 npm run lint
 npm run type-check
 ```
+
+- TODO: add point here about warnings. Try to avoid warnings in the code.
 
 If you have any errors, fix them before creating a PR.

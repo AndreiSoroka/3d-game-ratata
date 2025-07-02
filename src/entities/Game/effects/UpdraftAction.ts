@@ -3,12 +3,9 @@ import {
   Mesh,
   MeshBuilder,
   PhysicsHelper,
-  PhysicsRadialImpulseFalloff,
   PhysicsUpdraftMode,
-  StandardMaterial,
   Vector3,
 } from '@babylonjs/core';
-import type { PhysicsRadialExplosionEventOptions } from '@babylonjs/core';
 import AbstractAction from '@/entities/Game/effects/AbstractAction';
 import flareTexture from '@/shared/assets/flare.png';
 

@@ -1,9 +1,17 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
 import { ElTabPane, ElTabs } from 'element-plus';
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import {
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
+  type WatchStopHandle,
+} from 'vue';
 import Game from '@/entities/Game/Game';
 import HavokPhysics from '@babylonjs/havok';
+import { useDayNightStore } from '@/entities/Game/model/dayNightStore';
+import { useSettingsStore } from '@/stores/settingsStore';
 import { initGameNetwork } from '@/app/interactors/gameNetworkInteractor';
 import ActionsWrapper from '@/entities/GameActions/ui/ActionsWrapper/ActionsWrapper.vue';
 import ActionVortexButton from '@/entities/GameActions/ui/ActionButtons/ActionVortexButton.vue';
@@ -18,6 +26,10 @@ import GameContainer from '@/shared/UiKit/GameContainer/GameContainer.vue';
 import router from '@/app/router';
 
 const gameCanvas = ref<HTMLCanvasElement>();
+const dayNightStore = useDayNightStore();
+const settingsStore = useSettingsStore();
+let stopDayNightWatch: WatchStopHandle | null = null;
+let stopInspectorWatch: WatchStopHandle | null = null;
 let game: Game;
 let adapterController: ReturnType<typeof AdapterControllerWithGame>;
 let adapterGamepad: ReturnType<typeof AdapterControllerWithGame>;
@@ -43,7 +55,23 @@ onMounted(() => {
     }
     gameCanvas.value.width = window.innerWidth;
     gameCanvas.value.height = window.innerHeight;
-    game = new Game(gameCanvas.value, HK);
+    game = new Game(gameCanvas.value, HK, {
+      isDebugging: settingsStore.isDebugging,
+    });
+    stopDayNightWatch = watch(
+      () => dayNightStore.timeMilliseconds,
+      (value) => {
+        game.setTime(value);
+      },
+      { immediate: true }
+    );
+    stopInspectorWatch = watch(
+      () => settingsStore.showInspector,
+      (value) => {
+        game.toggleInspector(value);
+      },
+      { immediate: true }
+    );
     initGameNetwork(game);
 
     game.actionStateSubject$.subscribe((data) => {
@@ -68,6 +96,8 @@ onBeforeUnmount(() => {
   game.dispose();
   adapterController.destroy();
   adapterGamepad.destroy();
+  stopDayNightWatch?.();
+  stopInspectorWatch?.();
 });
 
 window.addEventListener('resize', function () {
@@ -92,8 +122,17 @@ const tabs = {
     label: 'Chat',
     page: '/chat',
   },
+  settings: {
+    label: 'Settings',
+    page: '/settings',
+  },
 };
-const tabsOrder: (keyof typeof tabs)[] = ['game', 'multiplayer', 'chat'];
+const tabsOrder: (keyof typeof tabs)[] = [
+  'game',
+  'multiplayer',
+  'chat',
+  'settings',
+];
 
 function handleChangeTab(tabIndex: number | string) {
   if (!(tabIndex in tabs)) {
